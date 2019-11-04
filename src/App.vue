@@ -1,28 +1,79 @@
 <template>
   <div id="app">
-    <img alt="Vue logo" src="./assets/logo.png">
-    <HelloWorld msg="Welcome to Your Vue.js App"/>
+    <div class="header"></div>
+    <div class="content">
+      <div class="left">
+        <Template />
+      </div>
+      <div class="center">
+        <Screen />
+      </div>
+      <div class="right">
+        <Config />
+      </div>
+    </div>
   </div>
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld.vue';
+import Screen from './views/screen/index.vue';
+import Template from './views/template/index.vue';
+import Config from './views/config/index.vue';
 
 export default {
   name: 'app',
   components: {
-    HelloWorld,
+    Screen,
+    Template,
+    Config,
   },
 };
 </script>
 
 <style lang="less">
 #app {
-  font-family: 'Avenir', Helvetica, Arial, sans-serif;
+  display: flex;
+  flex-flow: column nowrap;
+  justify-content: flex-start;
+  align-items: stretch;
+  height: 100vh;
+  width: 100vw;
+  font-family: "Avenir", Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  text-align: center;
   color: #2c3e50;
-  margin-top: 60px;
+  background: whitesmoke;
+}
+
+.header {
+  flex: none;
+  height: 54px;
+  background: rebeccapurple;
+}
+
+.content {
+  display: flex;
+  flex-flow: row nowrap;
+  justify-content: space-between;
+  height: 100%;
+  width: 100vw;
+}
+
+.left {
+  flex: none;
+  width: 240px;
+  background: #fafafa;
+}
+
+.center {
+  width: 100%;
+  overflow: auto;
+  background: white;
+}
+
+.right {
+  flex: none;
+  width: 320px;
+  background: #fafafa;
 }
 </style>
