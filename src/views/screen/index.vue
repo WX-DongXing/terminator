@@ -4,7 +4,9 @@
 
     </div>
     <div class="page" ref="page">
-      <div class="view" ref="view"></div>
+      <div class="view" ref="view">
+        <div id="chart"></div>
+      </div>
     </div>
     <div class="scale-bar">
       <a-tooltip placement="top">
@@ -24,12 +26,12 @@
 import { fromEvent, merge, Subject } from 'rxjs';
 import { startWith, mapTo, takeWhile } from 'rxjs/operators';
 import { mapState, mapMutations } from 'vuex';
+import G2 from '@antv/g2';
 import { ScreenMutations } from '@/store/modules/screen';
 import { Screen } from '@/views/model';
 
 export default {
   name: 'Screen',
-  domStreams: ['slider$'],
   subscriptions() {
     this.slider$ = new Subject();
     return {
@@ -41,6 +43,44 @@ export default {
     subscribed: true,
   }),
   mounted() {
+    const data = [{
+      year: '1951 年',
+      sales: 38,
+    }, {
+      year: '1952 年',
+      sales: 52,
+    }, {
+      year: '1956 年',
+      sales: 61,
+    }, {
+      year: '1957 年',
+      sales: 145,
+    }, {
+      year: '1958 年',
+      sales: 48,
+    }, {
+      year: '1959 年',
+      sales: 38,
+    }, {
+      year: '1960 年',
+      sales: 38,
+    }, {
+      year: '1962 年',
+      sales: 38,
+    }];
+    const chart = new G2.Chart({
+      container: 'chart',
+      forceFit: true,
+      height: 500,
+    });
+    chart.source([]);
+    chart.interval().position('year*sales');
+    chart.render();
+
+    setTimeout(() => {
+      chart.changeData(data);
+    }, 2000);
+
     this.resize$ = merge(
       fromEvent(window, 'resize').pipe(mapTo('')),
       this.slider$,
@@ -67,6 +107,10 @@ export default {
     ...mapMutations('screen', {
       setScreen: ScreenMutations.SET_SCREEN,
     }),
+    /**
+     * 设置视图缩放
+     * @param scale
+     */
     setScale(scale) {
       if (!scale) {
         const { width, height } = this.$refs.page.getBoundingClientRect();
@@ -76,10 +120,7 @@ export default {
       } else {
         this.scale = scale;
       }
-      console.log(this.scale);
       this.$refs.view.style.transform = `scale(${this.scale})`;
-      // this.$refs.view.style.width = `${1920 * this.scale}px`;
-      // this.$refs.view.style.height = `${1080 * this.scale}px`;
     },
   },
   beforeDestroy() {

@@ -5,7 +5,8 @@
     </div>
 
     <div class="template__list">
-      <div class="template__item" ref="item" v-for="(item, index) in templateList" :key="index">
+      <div class="template__item" v-stream:mousedown="{ subject: itemMouseDown$, data: item }"
+           ref="item" v-for="(item, index) in templateList" :key="index">
         <a-icon :type="item.icon" />
         <p>{{ item.name }}</p>
       </div>
@@ -14,12 +15,13 @@
 </template>
 
 <script>
-import { fromEvent, merge } from 'rxjs';
+import { fromEvent, merge, Subject } from 'rxjs';
 import {
   map, takeWhile, takeUntil,
-  tap, mergeMap, first, filter,
+  tap, mergeMap, first, filter, withLatestFrom,
 } from 'rxjs/operators';
 import { mapState, mapMutations } from 'vuex';
+import anime from 'animejs';
 import { ScreenMutations } from '@/store/modules/screen';
 
 export default {
@@ -31,57 +33,85 @@ export default {
     yDistance: 0,
     screenUp$: null,
     templateList: [
-      { name: '文本', icon: 'font-colors' },
-      { name: '饼图', icon: 'pie-chart' },
-      { name: '折线图', icon: 'line-chart' },
-      { name: '柱形图', icon: 'bar-chart' },
-      { name: '区域图', icon: 'area-chart' },
+      {
+        name: '文本', icon: 'font-colors', belong: 'element', type: 'text', width: 300, height: 48,
+      },
+      {
+        name: '饼图', icon: 'pie-chart', belong: 'chart', type: 'pie', width: 300, height: 300,
+      },
+      {
+        name: '折线图', icon: 'line-chart', belong: 'chart', type: 'line', width: 500, height: 400,
+      },
+      {
+        name: '柱形图', icon: 'bar-chart', belong: 'chart', type: 'bar', width: 500, height: 400,
+      },
+      {
+        name: '区域图', icon: 'area-chart', belong: 'chart', type: 'area', width: 500, height: 400,
+      },
     ],
   }),
   subscriptions() {
-    this.itemMouseDown$ = this.$fromDOMEvent('.template__item', 'mousedown');
+    // 模板 mousedown 事件
+    this.itemMouseDown$ = new Subject();
+    // 全局 mousemove 事件
     this.documentMove$ = fromEvent(document, 'mousemove');
+    // 全局 mouseup 事件
     this.documentUp$ = fromEvent(document, 'mouseup');
     return {};
   },
   mounted() {
+    // 视图 mouseup 事件
     this.screenUp$ = fromEvent(document.getElementsByClassName('view')[0], 'mouseup');
 
+    // 模板移动至视图操作
     this.itemMouseDown$
       .pipe(
         takeWhile(() => this.subscribed),
-        tap((event) => {
+        tap(({ event }) => {
           this.cloneNode = event.target.cloneNode(true);
           const { x, y } = event.target.getBoundingClientRect();
           const { pageX, pageY } = event;
           this.xDistance = Math.abs(pageX - x);
           this.yDistance = Math.abs(pageY - y);
-          this.setStyle(this.cloneNode, 'position', 'fixed')
-            .addStyle('margin', 0)
-            .addStyle('top', `${y}px`)
-            .addStyle('left', `${x}px`);
+          anime.set(this.cloneNode, {
+            position: 'fixed',
+            margin: 0,
+            top: y,
+            left: x,
+          });
           document.body.append(this.cloneNode);
           event.preventDefault();
         }),
-        map(() => this.documentMove$.pipe(takeUntil(this.documentUp$))),
+        map(() => this.documentMove$.pipe(
+          takeUntil(this.documentUp$),
+        )),
         mergeMap(move$ => merge(this.documentUp$.pipe(first()), move$)),
-        tap((event) => {
+        withLatestFrom(this.itemMouseDown$, (event, { data }) => ({ event, data })),
+        tap(({ event, data }) => {
           const { pageX, pageY } = event;
-          this.setStyle(this.cloneNode, 'top', `${pageY - this.yDistance}px`)
-            .addStyle('left', `${pageX - this.xDistance}px`);
-          if (this.isWithinScope(event)) {
-            this.setStyle(this.cloneNode, 'transform', `scale(${this.screen.scale}`);
-          } else {
-            this.setStyle(this.cloneNode, 'transform', 'scale(1)');
-          }
+          const { width, height } = data;
+          // 设置克隆节点的位置
+          anime.set(this.cloneNode, {
+            transformOrigin: '0 0',
+            top: pageY - this.yDistance,
+            left: pageX - this.xDistance,
+          });
+          // 设置克隆节点在视图区域的动画效果
+          anime({
+            targets: this.cloneNode,
+            width: this.isWithinScope(event) ? width : 96,
+            height: this.isWithinScope(event) ? height : 96,
+            scale: this.isWithinScope(event) ? this.screen.scale : 1,
+            duration: 35,
+            easing: 'linear',
+          });
         }),
-        filter(({ type }) => type === 'mouseup'),
+        filter(({ event }) => event.type === 'mouseup'),
       )
-      .subscribe((event) => {
+      .subscribe(({ event, data }) => {
         if (this.isWithinScope(event)) {
-          this.activeWidget({ widget: null });
+          this.activeWidget({ widget: data });
           document.body.removeChild(this.cloneNode);
-          this.screen.el.appendChild(this.cloneNode);
         } else {
           document.body.removeChild(this.cloneNode);
         }
@@ -94,21 +124,6 @@ export default {
     ...mapMutations('screen', {
       activeWidget: ScreenMutations.ACTIVE_WIDGET,
     }),
-    setStyle(node, style, styleValue) {
-      const targetNode = node;
-      if (style && styleValue) {
-        targetNode.style[style] = styleValue;
-      }
-      targetNode.addStyle = (styleName, styleNameValue) => {
-        targetNode.style[styleName] = styleNameValue;
-        return targetNode;
-      };
-      targetNode.addClass = (className) => {
-        targetNode.className += ` ${className || 'clone'}`;
-        return targetNode;
-      };
-      return targetNode;
-    },
     isWithinScope({ pageX, pageY }) {
       const { xRange, yRange } = this.screen.area;
       return (pageX >= xRange.min && pageX <= xRange.max)
@@ -163,7 +178,7 @@ export default {
     cursor: pointer;
     box-shadow: 0 2px 1px -1px rgba(0, 0, 0, 0.2), 0 1px 1px 0 rgba(0, 0, 0, 0.14),
       0 1px 3px 0 rgba(0, 0, 0, 0.12);
-    transition: transform 300ms cubic-bezier(0, 1, 0.85, 1);
+    /*transition: transform, width, height 1350ms cubic-bezier(0, 1, 0.85, 1);*/
 
     i {
       pointer-events: none;
