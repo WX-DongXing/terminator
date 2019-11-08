@@ -31,7 +31,7 @@ export default {
     cloneNode: null,
     xDistance: 0,
     yDistance: 0,
-    screenUp$: null,
+    viewUp$: null,
     templateList: [
       {
         name: '文本', icon: 'font-colors', belong: 'element', type: 'text', width: 300, height: 48,
@@ -60,8 +60,7 @@ export default {
     return {};
   },
   mounted() {
-    // 视图 mouseup 事件
-    this.screenUp$ = fromEvent(document.getElementsByClassName('view')[0], 'mouseup');
+    this.viewUp$ = fromEvent(document.getElementsByClassName('view')[0], 'mouseup');
 
     // 模板移动至视图操作
     this.itemMouseDown$
@@ -101,7 +100,7 @@ export default {
             targets: this.cloneNode,
             width: this.isWithinScope(event) ? width : 96,
             height: this.isWithinScope(event) ? height : 96,
-            scale: this.isWithinScope(event) ? this.screen.scale : 1,
+            scale: this.isWithinScope(event) ? this.view.scale : 1,
             duration: 35,
             easing: 'linear',
           });
@@ -118,14 +117,15 @@ export default {
       });
   },
   computed: {
-    ...mapState('screen', ['screen']),
+    ...mapState('screen', ['view']),
   },
   methods: {
     ...mapMutations('screen', {
       activeWidget: ScreenMutations.ACTIVE_WIDGET,
     }),
     isWithinScope({ pageX, pageY }) {
-      const { xRange, yRange } = this.screen.area;
+      console.log(this.view.area);
+      const { xRange, yRange } = this.view.area;
       return (pageX >= xRange.min && pageX <= xRange.max)
         && (pageY >= yRange.min && pageY <= yRange.max);
     },
