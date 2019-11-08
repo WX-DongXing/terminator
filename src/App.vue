@@ -1,6 +1,8 @@
 <template>
   <div id="app">
-    <div class="header"></div>
+    <div class="header">
+      <p>Terminator</p>
+    </div>
     <div class="content">
       <div class="left">
         <Template />
@@ -47,8 +49,21 @@ export default {
 
 .header {
   flex: none;
+  display: flex;
+  flex-flow: row nowrap;
+  justify-content: flex-start;
+  align-items: center;
   height: 54px;
+  box-sizing: border-box;
+  padding: 0 24px;
   background: rebeccapurple;
+
+  p {
+    color: whitesmoke;
+    font-weight: bold;
+    font-size: 18px;
+    margin: 0;
+  }
 }
 
 .content {

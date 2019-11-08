@@ -28,7 +28,10 @@ class View {
   }
 }
 
+class Wrapper {
+}
+
 export {
-  // eslint-disable-next-line import/prefer-default-export
   View,
+  Wrapper,
 };

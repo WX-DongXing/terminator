@@ -18,7 +18,7 @@
 import { fromEvent, merge, Subject } from 'rxjs';
 import {
   map, takeWhile, takeUntil,
-  tap, mergeMap, first, filter, withLatestFrom,
+  tap, switchMap, first, filter, withLatestFrom,
 } from 'rxjs/operators';
 import { mapState, mapMutations } from 'vuex';
 import anime from 'animejs';
@@ -81,10 +81,8 @@ export default {
           document.body.append(this.cloneNode);
           event.preventDefault();
         }),
-        map(() => this.documentMove$.pipe(
-          takeUntil(this.documentUp$),
-        )),
-        mergeMap(move$ => merge(this.documentUp$.pipe(first()), move$)),
+        map(() => this.documentMove$.pipe(takeUntil(this.documentUp$))),
+        switchMap(move$ => merge(this.documentUp$.pipe(first()), move$)),
         withLatestFrom(this.itemMouseDown$, (event, { data }) => ({ event, data })),
         tap(({ event, data }) => {
           const { pageX, pageY } = event;
@@ -124,7 +122,6 @@ export default {
       activeWidget: ScreenMutations.ACTIVE_WIDGET,
     }),
     isWithinScope({ pageX, pageY }) {
-      console.log(this.view.area);
       const { xRange, yRange } = this.view.area;
       return (pageX >= xRange.min && pageX <= xRange.max)
         && (pageY >= yRange.min && pageY <= yRange.max);

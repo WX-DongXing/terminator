@@ -14,8 +14,10 @@
       <div class="gauge" ref="gauge"></div>
       <!-- / 标尺 -->
 
-      <div class="view" ref="view"></div>
-      <!-- / 标尺 -->
+      <div class="view" ref="view">
+        <Wrapper />
+      </div>
+      <!-- / 视图 -->
 
     </div>
     <!-- E 画板 -->
@@ -41,9 +43,13 @@ import { mapState, mapMutations } from 'vuex';
 import anime from 'animejs';
 import { ScreenMutations } from '@/store/modules/screen';
 import { View } from '@/model/view';
+import Wrapper from '@/components/wrapper/index.vue';
 
 export default {
   name: 'Screen',
+  components: {
+    Wrapper,
+  },
   domStreams: ['widthChange$', 'heightChange$'],
   subscriptions() {
     this.slider$ = new Subject();
@@ -81,7 +87,6 @@ export default {
             this.scale,
           ),
         });
-        console.log(this.view.area);
       });
   },
   computed: {
