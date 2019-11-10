@@ -100,7 +100,7 @@ export default {
             // 等比例缩放
             eventType = 'SCALE';
             // 对于等比例缩放，选择移动最小距离
-            distance = Math.abs(xDistance) > Math.abs(yDistance) ? xDistance : yDistance;
+            distance = Math.abs(xDistance) < Math.abs(yDistance) ? xDistance : yDistance;
             switch (type) {
               case 'tl':
                 if (xDistance >= 0 && yDistance >= 0) {
