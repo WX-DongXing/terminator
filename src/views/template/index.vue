@@ -127,6 +127,9 @@ export default {
         && (pageY >= yRange.min && pageY <= yRange.max);
     },
   },
+  beforeDestroy() {
+    this.subscribed = false;
+  },
 };
 </script>
 

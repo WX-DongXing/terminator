@@ -95,7 +95,6 @@ export default {
           const xDistance = pageX - event.pageX;
           // 纵坐标方向移动距离
           const yDistance = pageY - event.pageY;
-          // console.log('position: ', xDistance, yDistance);
           if (['tl', 'tr', 'br', 'bl'].includes(type)) {
             // 等比例缩放
             eventType = 'SCALE';

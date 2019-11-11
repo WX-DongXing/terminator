@@ -1,13 +1,30 @@
 <template>
   <div class="config">
-    <div class="config__header"></div>
-    <div class="config__content"></div>
+    <div class="config__header">
+      <p>窗口配置</p>
+    </div>
+    <div class="config__content">
+      <component v-if="activeWidget" :is="activeWidget.config.type" />
+      <div class="config__none" v-else>
+        <a-icon type="disconnect" />
+        <p>无激活窗口配置</p>
+      </div>
+    </div>
   </div>
 </template>
 
 <script>
+import { mapState } from 'vuex';
+import ViewConfig from './view/index.vue';
+
 export default {
   name: 'Config',
+  components: {
+    ViewConfig,
+  },
+  computed: {
+    ...mapState('screen', ['activeWidget']),
+  },
 };
 </script>
 
@@ -17,15 +34,40 @@ export default {
   flex-flow: column nowrap;
   justify-content: space-between;
   align-content: stretch;
+  height: 100%;
 
   &__header {
     flex: none;
+    display: flex;
+    flex-flow: row nowrap;
+    justify-content: space-between;
+    align-items: center;
     height: 48px;
     border-bottom: 1px solid rgba(0, 0, 0, 0.23);
+    box-sizing: border-box;
+    padding: 0 16px;
+    p {
+      margin: 0;
+    }
   }
 
   &__content {
+    display: flex;
+    flex-flow: row nowrap;
+    justify-content: center;
+    align-items: center;
     height: 100%;
+  }
+
+  &__none {
+    width: 100%;
+    text-align: center;
+
+    i {
+      color: rgba(0, 0, 0, .56);
+      font-size: 36px;
+      margin-bottom: 16px;
+    }
   }
 }
 </style>

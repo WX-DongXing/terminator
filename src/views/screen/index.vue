@@ -3,8 +3,16 @@
     <div class="screen__header">
       <p>画板</p>
       <div class="screen__size">
-        <a-input type="number" addonBefore="宽" v-stream:change="widthChange$" v-model="width" />
-        <a-input type="number" addonBefore="高" v-stream:change="heightChange$" v-model="height" />
+        <a-input
+          type="number"
+          addonBefore="宽"
+          v-model="width"
+          @change="() => change$.next({ type: 'width', value: Number(width) })" />
+        <a-input
+          type="number"
+          addonBefore="高"
+          v-model="height"
+          @change="() => change$.next({ type: 'height', value: Number(height) })" />
       </div>
     </div>
 
@@ -27,9 +35,12 @@
         <template slot="title">
           自动比例：{{autoResize ? '已开启' : '已关闭'}}
         </template>
-        <a-switch size="small" v-model="autoResize" @change="() => autoResize && this.setScale()" />
+        <a-switch
+          size="small"
+          v-model="autoResize"
+          @change="() => autoResize && change$.next({ type: 'resize' })" />
       </a-tooltip>
-      <a-slider class="scale-bar__slider" @change="(scale) => slider$.next(scale)"
+      <a-slider class="scale-bar__slider" @change="() => slider$.next(scale)"
                 :disabled="autoResize" :min="0" :max="1" :step="0.01" v-model="scale" />
       <p class="scale-bar__number">缩放比：{{this.scale.toFixed(2)}}</p>
     </div>
@@ -38,12 +49,16 @@
 
 <script>
 import { fromEvent, merge, Subject } from 'rxjs';
-import { startWith, mapTo, takeWhile } from 'rxjs/operators';
+import {
+  startWith, mapTo, takeWhile, pluck,
+  map,
+} from 'rxjs/operators';
 import { mapState, mapMutations } from 'vuex';
 import anime from 'animejs';
 import { ScreenMutations } from '@/store/modules/screen';
 import { View } from '@/model/view';
 import Wrapper from '@/components/wrapper/index.vue';
+import ViewService from '../config/view';
 
 export default {
   name: 'Screen',
@@ -53,6 +68,7 @@ export default {
   domStreams: ['widthChange$', 'heightChange$'],
   subscriptions() {
     this.slider$ = new Subject();
+    this.change$ = new Subject();
     return {
     };
   },
@@ -64,19 +80,20 @@ export default {
     subscribed: true,
   }),
   mounted() {
-    this.resize$ = merge(
-      fromEvent(window, 'resize').pipe(mapTo('')),
-      this.slider$,
-      this.widthChange$.pipe(mapTo('')),
-      this.heightChange$.pipe(mapTo('')),
+    const viewService = new ViewService();
+    merge(
+      fromEvent(window, 'resize').pipe(mapTo({ type: 'resize' })),
+      this.slider$.pipe(map(scale => ({ type: 'scale', value: scale }))),
+      this.change$,
+      viewService.change$,
     )
       .pipe(
         takeWhile(() => this.subscribed),
-        startWith(''),
+        startWith({ type: 'resize' }),
       )
-      .subscribe((scale) => {
+      .subscribe((event) => {
         // 设置缩放
-        this.setScale(scale);
+        this.setScale(event);
         // 设置屏幕对象
         this.setView({
           view: new View(
@@ -88,6 +105,25 @@ export default {
           ),
         });
       });
+
+    fromEvent(document, 'click')
+      .pipe(
+        takeWhile(() => this.subscribed),
+        pluck('target', 'classList'),
+        map(list => [...list]),
+      )
+      .subscribe((classList) => {
+        if (classList.includes('view')) {
+          // 设置当前激活部件为当前画板视图
+          this.activeWidget({
+            widget: this.view,
+          });
+        } else if (classList.includes('page')) {
+          this.activeWidget({
+            widget: null,
+          });
+        }
+      });
   },
   computed: {
     ...mapState('screen', ['view']),
@@ -95,19 +131,26 @@ export default {
   methods: {
     ...mapMutations('screen', {
       setView: ScreenMutations.SET_VIEW,
+      activeWidget: ScreenMutations.ACTIVE_WIDGET,
     }),
     /**
      * 设置视图缩放
-     * @param scale
+     * @param event
      */
-    setScale(scale) {
+    setScale(event) {
       const { width, height } = this.$refs.page.getBoundingClientRect();
-      if (!scale) {
-        const xScale = ((width - 32) / this.width);
-        const yScale = ((height - 32) / this.height);
-        this.scale = Math.min(xScale, yScale);
-      } else {
-        this.scale = scale;
+      const xScale = ((width - 32) / this.width);
+      const yScale = ((height - 32) / this.height);
+      switch (event.type) {
+        case 'resize':
+          this.scale = Math.min(xScale, yScale);
+          break;
+        case 'scale':
+          this.scale = event.value;
+          break;
+        default:
+          this[event.type] = event.value;
+          break;
       }
       anime({
         targets: this.$refs.view,

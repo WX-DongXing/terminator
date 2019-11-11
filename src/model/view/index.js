@@ -1,3 +1,5 @@
+import Config from '../base';
+
 class Range {
   constructor(min, max) {
     this.min = min;
@@ -25,6 +27,7 @@ class View {
       yRange: new Range(y, y + screenHeight * scale),
     };
     this.scale = scale;
+    this.config = new Config('ViewConfig', this.width, this.height);
   }
 }
 
