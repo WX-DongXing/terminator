@@ -33,7 +33,6 @@ export default {
     config: null,
     viewService: new ViewService(),
   }),
-  domStreams: ['widthChange$', 'widthChange$'],
   subscriptions() {
     this.change$ = new Subject();
     merge(this.change$)
@@ -44,7 +43,7 @@ export default {
     return {};
   },
   created() {
-    this.config = _.cloneDeep(this.activeWidget.config);
+    this.config = _.cloneDeep(this.activeWidget.config.commonConfig);
   },
   computed: {
     ...mapState('screen', ['activeWidget']),

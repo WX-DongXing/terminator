@@ -1,8 +1,15 @@
+import CommonConfig from './commonConfig';
+
 class Config {
-  constructor(type, width, height) {
+  constructor({
+    type, container, commonConfig, proprietaryConfig,
+    data,
+  }) {
     this.type = type;
-    this.width = width;
-    this.height = height;
+    this.container = container;
+    this.commonConfig = new CommonConfig(commonConfig);
+    this.proprietaryConfig = proprietaryConfig;
+    this.data = data;
   }
 }
 

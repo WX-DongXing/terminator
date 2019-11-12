@@ -287,6 +287,7 @@ export default {
   box-sizing: border-box;
   padding: 5px;
   border: 1px solid #0098f7;
+  z-index: 1000;
 
   &__move {
     height: 100%;

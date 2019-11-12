@@ -40,7 +40,8 @@
           v-model="autoResize"
           @change="() => autoResize && change$.next({ type: 'resize' })" />
       </a-tooltip>
-      <a-slider class="scale-bar__slider" @change="() => slider$.next(scale)"
+      <a-slider class="scale-bar__slider"
+                @change="() => change$.next({ type: 'scale', value: scale })"
                 :disabled="autoResize" :min="0" :max="1" :step="0.01" v-model="scale" />
       <p class="scale-bar__number">缩放比：{{this.scale.toFixed(2)}}</p>
     </div>
@@ -55,6 +56,7 @@ import {
 } from 'rxjs/operators';
 import { mapState, mapMutations } from 'vuex';
 import anime from 'animejs';
+// import uuid from 'uuid/v4';
 import { ScreenMutations } from '@/store/modules/screen';
 import { View } from '@/model/view';
 import Wrapper from '@/components/wrapper/index.vue';
@@ -65,9 +67,7 @@ export default {
   components: {
     Wrapper,
   },
-  domStreams: ['widthChange$', 'heightChange$'],
   subscriptions() {
-    this.slider$ = new Subject();
     this.change$ = new Subject();
     return {
     };
@@ -83,7 +83,6 @@ export default {
     const viewService = new ViewService();
     merge(
       fromEvent(window, 'resize').pipe(mapTo({ type: 'resize' })),
-      this.slider$.pipe(map(scale => ({ type: 'scale', value: scale }))),
       this.change$,
       viewService.change$,
     )

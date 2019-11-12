@@ -27,7 +27,13 @@ class View {
       yRange: new Range(y, y + screenHeight * scale),
     };
     this.scale = scale;
-    this.config = new Config('ViewConfig', this.width, this.height);
+    this.config = new Config({
+      type: 'ViewConfig',
+      commonConfig: {
+        height: this.height,
+        width: this.width,
+      },
+    });
   }
 }
 

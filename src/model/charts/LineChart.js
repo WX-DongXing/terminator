@@ -1,4 +1,2 @@
-import Chart from './Chart';
-
-export default class LineChart extends Chart {
+export default class LineChart {
 }
