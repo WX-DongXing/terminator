@@ -1,3 +1,10 @@
+/**
+* 部件选择器
+* Author: dong xing
+* Date: 2019/11/13
+* Time: 5:27 下午
+* Email: dong.xing@outlook.com
+*/
 <template>
   <div class="wrapper" ref="wrapper">
     <div class="wrapper__handler wrapper__handler--tl"></div>
@@ -271,6 +278,27 @@ export default {
       });
     return {};
   },
+  methods: {
+    /**
+     * 设置
+     * @param display
+     * @param top
+     * @param left
+     * @param width
+     * @param height
+     */
+    setSize({
+      display, top, left, width, height,
+    }) {
+      anime.set(this.$refs.wrapper, {
+        display,
+        top,
+        left,
+        width,
+        height,
+      });
+    },
+  },
   beforeDestroy() {
     this.subscribed = false;
   },
@@ -279,15 +307,16 @@ export default {
 
 <style scoped lang="less">
 .wrapper {
-  top: 300px;
-  left: 500px;
-  height: 500px;
-  width: 500px;
+  top: 0;
+  left: 0;
+  height: 300px;
+  width: 300px;
   position: absolute;
   box-sizing: border-box;
   padding: 5px;
   border: 1px solid #0098f7;
   z-index: 1000;
+  display: none;
 
   &__move {
     height: 100%;

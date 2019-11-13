@@ -1,10 +1,10 @@
 import LineChart from '../charts/LineChart';
 
 export default class ChartFactory {
-  create(type) {
+  static create(type, element, widget) {
     switch (type) {
-      case 'line':
-        return new LineChart();
+      case 'Lines':
+        return new LineChart(element, widget);
       default:
         return null;
     }

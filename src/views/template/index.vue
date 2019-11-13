@@ -29,6 +29,7 @@ import {
 } from 'rxjs/operators';
 import { mapState, mapMutations } from 'vuex';
 import anime from 'animejs';
+import _ from 'lodash';
 import { ScreenMutations } from '@/store/modules/screen';
 import TEMPLATES from './templates';
 import Widget from '../../model/widget';
@@ -100,8 +101,18 @@ export default {
       )
       .subscribe(({ event, data }) => {
         if (this.isWithinScope(event)) {
+          const { x, y, scale } = this.view;
+          const rect = event.target.getBoundingClientRect();
+          const zIndexList = this.widgets.map(widget => widget.zIndex);
+          // 部件层级
+          const zIndex = _.isEmpty(zIndexList) ? 0 : Math.max(...zIndexList) + 1;
           // 将模板对应为部件
-          const widget = new Widget({ ...data });
+          const widget = new Widget({
+            ...data,
+            x: (rect.x - x) / scale,
+            y: (rect.y - y) / scale,
+            zIndex,
+          });
           // 将当期拖动的模板添加到视图的部件库中
           this.addWidget({ widget });
           // 将当前的部件状态激活
@@ -112,7 +123,7 @@ export default {
       });
   },
   computed: {
-    ...mapState('screen', ['view']),
+    ...mapState('screen', ['view', 'widgets']),
   },
   methods: {
     ...mapMutations('screen', {

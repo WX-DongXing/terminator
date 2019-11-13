@@ -2,7 +2,9 @@ import ChartFactory from './chartFactory';
 import ElementFactory from './elementFactory';
 
 export default class Factory {
-  createChart = () => new ChartFactory()
+  // 图表工厂
+  static createChartFactory = () => ChartFactory
 
-  createElement = () => new ElementFactory()
+  // 元素工厂
+  static createElementFactory = () => ElementFactory
 }

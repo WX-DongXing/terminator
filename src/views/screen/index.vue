@@ -24,21 +24,22 @@
     </div>
 
     <!-- S 画板 -->
-    <div class="page" ref="page">
+    <div class="page" ref="page" @click.self="() => select$.next({ el: 'page' })">
 
       <div class="gauge" ref="gauge"></div>
       <!-- / 标尺 -->
 
-      <div class="view" ref="view">
+      <div class="view" ref="view" @click.self="() => select$.next({ el: 'view' })">
 
-        <div class="widget"
-             v-for="widget in widgets"
-             :id="widget.widgetId"
-             :key="widget.widgetId">
-        </div>
+        <Widget
+          v-for="widget in widgets"
+          :widget="widget"
+          :key="widget.widgetId"
+          @select="() => select$.next({ el: 'widget', widget })"
+        />
         <!-- / 部件渲染 -->
 
-        <Wrapper />
+        <Wrapper ref="wrapper" />
       </div>
       <!-- / 视图 -->
 
@@ -66,8 +67,7 @@
 <script>
 import { fromEvent, merge, Subject } from 'rxjs';
 import {
-  startWith, mapTo, takeWhile, pluck,
-  map,
+  startWith, mapTo, takeWhile,
 } from 'rxjs/operators';
 import { mapState, mapMutations } from 'vuex';
 import anime from 'animejs';
@@ -75,14 +75,17 @@ import { ScreenMutations } from '@/store/modules/screen';
 import { View } from '@/model/view';
 import Wrapper from '@/components/wrapper/index.vue';
 import ViewService from '../config/view';
+import Widget from './widget/index.vue';
 
 export default {
   name: 'Screen',
   components: {
     Wrapper,
+    Widget,
   },
   subscriptions() {
     this.change$ = new Subject();
+    this.select$ = new Subject();
     return {
     };
   },
@@ -119,23 +122,47 @@ export default {
         });
       });
 
-    fromEvent(document, 'click')
+    // 选择激活的部件
+    this.select$
       .pipe(
         takeWhile(() => this.subscribed),
-        pluck('target', 'classList'),
-        map(list => [...list]),
       )
-      .subscribe((classList) => {
-        if (classList.includes('view')) {
-          // 设置当前激活部件为当前画板视图
-          this.activeWidget({
-            widget: this.view,
+      .subscribe(({ el, widget }) => {
+        let activeWidget = null;
+        switch (el) {
+          case 'view':
+            activeWidget = this.view;
+            break;
+          case 'page':
+            activeWidget = null;
+            break;
+          case 'widget':
+            activeWidget = widget;
+            break;
+          default:
+            activeWidget = null;
+            break;
+        }
+        if (el === 'widget') {
+          const {
+            width, height, x, y,
+          } = widget;
+          this.$refs.wrapper.setSize({
+            display: 'block',
+            width,
+            height,
+            top: y,
+            left: x,
           });
-        } else if (classList.includes('page')) {
-          this.activeWidget({
-            widget: null,
+        } else {
+          this.$refs.wrapper.setSize({
+            display: 'none',
           });
         }
+        // 设置激活的部件
+        this.activeWidget({
+          widget: activeWidget,
+        });
       });
   },
   computed: {
