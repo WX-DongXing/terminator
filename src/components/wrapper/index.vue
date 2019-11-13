@@ -279,8 +279,8 @@ export default {
 
 <style scoped lang="less">
 .wrapper {
-  top: 100px;
-  left: 100px;
+  top: 300px;
+  left: 500px;
   height: 500px;
   width: 500px;
   position: absolute;

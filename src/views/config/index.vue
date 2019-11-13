@@ -1,10 +1,17 @@
+/**
+* 配置模板
+* Author: dong xing
+* Date: 2019/11/13
+* Time: 1:44 下午
+* Email: dong.xing@outlook.com
+*/
 <template>
   <div class="config">
     <div class="config__header">
       <p>窗口配置</p>
     </div>
     <div class="config__content">
-      <component v-if="activeWidget" :is="activeWidget.config.type" />
+      <component v-if="activeWidget" :is="activeWidget.type" />
       <div class="config__none" v-else>
         <a-icon type="disconnect" />
         <p>无激活窗口配置</p>
@@ -15,12 +22,12 @@
 
 <script>
 import { mapState } from 'vuex';
-import ViewConfig from './view/index.vue';
+import CONFIGCOMPONENTS from './configComponents';
 
 export default {
   name: 'Config',
   components: {
-    ViewConfig,
+    ...CONFIGCOMPONENTS,
   },
   computed: {
     ...mapState('screen', ['activeWidget']),

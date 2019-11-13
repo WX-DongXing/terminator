@@ -1,4 +1,4 @@
-import Config from '../base';
+import Config from '../config';
 
 class Range {
   constructor(min, max) {
@@ -11,6 +11,7 @@ class View {
   constructor(el, screenWidth, screenHeight, {
     x, y, width, height, top, left, bottom, right,
   }, scale) {
+    this.type = 'ViewConfig';
     this.el = el;
     this.x = x;
     this.y = y;
@@ -28,7 +29,6 @@ class View {
     };
     this.scale = scale;
     this.config = new Config({
-      type: 'ViewConfig',
       commonConfig: {
         height: this.height,
         width: this.width,

@@ -2,11 +2,13 @@
  * 标题
  */
 class Title {
-  constructor({ show, text }) {
+  constructor({ show, text, link }) {
     // 是否显示标题
     this.show = show;
     // 标题内容
     this.text = text;
+    // 标题链接
+    this.link = link;
   }
 }
 
@@ -58,11 +60,11 @@ export default class CommonConfig {
     this.height = height || 0;
     this.x = x || 0;
     this.y = y || 0;
-    this.title = new Title(title || { show: false, title: '' });
+    this.title = new Title(title || { show: false, title: '', link: '' });
     this.border = new Border(border || {
       borderType: 'none',
       borderColor: 'black',
-      borderWidth: 0,
+      borderWidth: 1,
       borderRadius: 0,
       borderTypeOptions: [
         new BorderTypeOption('无边框', 'none'),

@@ -1,3 +1,10 @@
+/**
+* 视图配置模板
+* Author: dong xing
+* Date: 2019/11/13
+* Time: 1:44 下午
+* Email: dong.xing@outlook.com
+*/
 <template>
   <div class="comment-template">
     <p class="comment-template__name">画板</p>

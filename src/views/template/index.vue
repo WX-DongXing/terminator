@@ -1,3 +1,10 @@
+/**
+* 组件库模板
+* Author: dong xing
+* Date: 2019/11/13
+* Time: 1:43 下午
+* Email: dong.xing@outlook.com
+*/
 <template>
   <div class="template">
     <div class="template__header">
@@ -6,7 +13,7 @@
 
     <div class="template__list">
       <div class="template__item" v-stream:mousedown="{ subject: itemMouseDown$, data: item }"
-           ref="item" v-for="(item, index) in templateList" :key="index">
+           ref="item" v-for="(item, index) in templates" :key="index">
         <a-icon :type="item.icon" />
         <p>{{ item.name }}</p>
       </div>
@@ -23,6 +30,8 @@ import {
 import { mapState, mapMutations } from 'vuex';
 import anime from 'animejs';
 import { ScreenMutations } from '@/store/modules/screen';
+import TEMPLATES from './templates';
+import Widget from '../../model/widget';
 
 export default {
   name: 'Template',
@@ -32,23 +41,7 @@ export default {
     xDistance: 0,
     yDistance: 0,
     viewUp$: null,
-    templateList: [
-      {
-        name: '文本', icon: 'font-colors', belong: 'element', type: 'text', width: 300, height: 48,
-      },
-      {
-        name: '饼图', icon: 'pie-chart', belong: 'chart', type: 'pie', width: 300, height: 300,
-      },
-      {
-        name: '折线图', icon: 'line-chart', belong: 'chart', type: 'line', width: 500, height: 400,
-      },
-      {
-        name: '柱形图', icon: 'bar-chart', belong: 'chart', type: 'bar', width: 500, height: 400,
-      },
-      {
-        name: '区域图', icon: 'area-chart', belong: 'chart', type: 'area', width: 500, height: 400,
-      },
-    ],
+    templates: TEMPLATES,
   }),
   subscriptions() {
     // 模板 mousedown 事件
@@ -107,11 +100,15 @@ export default {
       )
       .subscribe(({ event, data }) => {
         if (this.isWithinScope(event)) {
-          this.activeWidget({ widget: data });
-          document.body.removeChild(this.cloneNode);
-        } else {
-          document.body.removeChild(this.cloneNode);
+          // 将模板对应为部件
+          const widget = new Widget({ ...data });
+          // 将当期拖动的模板添加到视图的部件库中
+          this.addWidget({ widget });
+          // 将当前的部件状态激活
+          this.activeWidget({ widget });
         }
+        // 从当前文档中移除该dom节点
+        document.body.removeChild(this.cloneNode);
       });
   },
   computed: {
@@ -119,6 +116,7 @@ export default {
   },
   methods: {
     ...mapMutations('screen', {
+      addWidget: ScreenMutations.ADD_WIDGET,
       activeWidget: ScreenMutations.ACTIVE_WIDGET,
     }),
     isWithinScope({ pageX, pageY }) {

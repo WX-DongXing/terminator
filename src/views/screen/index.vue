@@ -1,3 +1,10 @@
+/**
+* 视图及操作
+* Author: dong xing
+* Date: 2019/11/13
+* Time: 1:44 下午
+* Email: dong.xing@outlook.com
+*/
 <template>
   <div class="screen">
     <div class="screen__header">
@@ -23,6 +30,14 @@
       <!-- / 标尺 -->
 
       <div class="view" ref="view">
+
+        <div class="widget"
+             v-for="widget in widgets"
+             :id="widget.widgetId"
+             :key="widget.widgetId">
+        </div>
+        <!-- / 部件渲染 -->
+
         <Wrapper />
       </div>
       <!-- / 视图 -->
@@ -56,7 +71,6 @@ import {
 } from 'rxjs/operators';
 import { mapState, mapMutations } from 'vuex';
 import anime from 'animejs';
-// import uuid from 'uuid/v4';
 import { ScreenMutations } from '@/store/modules/screen';
 import { View } from '@/model/view';
 import Wrapper from '@/components/wrapper/index.vue';
@@ -125,7 +139,7 @@ export default {
       });
   },
   computed: {
-    ...mapState('screen', ['view']),
+    ...mapState('screen', ['view', 'widgets']),
   },
   methods: {
     ...mapMutations('screen', {
