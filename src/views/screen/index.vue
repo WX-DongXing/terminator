@@ -29,7 +29,7 @@
       <div class="gauge" ref="gauge"></div>
       <!-- / 标尺 -->
 
-      <div class="view" ref="view" @click.self="() => select$.next({ el: 'view' })">
+      <div class="view" ref="view">
 
         <Widget
           v-for="widget in widgets"
@@ -49,23 +49,25 @@
     <div class="scale-bar">
       <a-tooltip placement="top">
         <template slot="title">
-          自动比例：{{autoResize ? '已开启' : '已关闭'}}
+          自动比例：{{isAutoResize ? '已开启' : '已关闭'}}
         </template>
         <a-switch
           size="small"
-          v-model="autoResize"
-          @change="() => autoResize && change$.next({ type: 'resize' })" />
+          v-model="isAutoResize"
+          @change="() => isAutoResize && change$.next({ type: 'resize' })" />
       </a-tooltip>
       <a-slider class="scale-bar__slider"
                 @change="() => change$.next({ type: 'scale', value: scale })"
-                :disabled="autoResize" :min="0" :max="1" :step="0.01" v-model="scale" />
+                :disabled="isAutoResize" :min="0" :max="1" :step="0.01" v-model="scale" />
       <p class="scale-bar__number">缩放比：{{this.scale.toFixed(2)}}</p>
     </div>
   </div>
 </template>
 
 <script>
-import { fromEvent, merge, Subject } from 'rxjs';
+import {
+  fromEvent, merge, Subject, zip,
+} from 'rxjs';
 import {
   startWith, mapTo, takeWhile,
 } from 'rxjs/operators';
@@ -93,8 +95,9 @@ export default {
     width: 1920,
     height: 1080,
     scale: 1,
-    autoResize: true,
-    subscribed: true,
+    isAutoResize: true,
+    isSubscribed: true,
+    isResize: false,
   }),
   mounted() {
     const viewService = new ViewService();
@@ -104,7 +107,7 @@ export default {
       viewService.change$,
     )
       .pipe(
-        takeWhile(() => this.subscribed),
+        takeWhile(() => this.isSubscribed),
         startWith({ type: 'resize' }),
       )
       .subscribe((event) => {
@@ -123,46 +126,51 @@ export default {
       });
 
     // 选择激活的部件
-    this.select$
+    merge(
+      this.select$,
+      // 作为子元素的选择器事件取消冒泡，只有 mousedown 和 mouseup 时间逐次在 view 视图上触发时，才响应为一次事件
+      zip(
+        fromEvent(this.$refs.view, 'mousedown', { capture: false }).pipe(mapTo({ el: 'mousedown' })),
+        fromEvent(this.$refs.view, 'mouseup', { capture: false }).pipe(mapTo({ el: 'mouseup' })),
+      ).pipe(mapTo({ el: 'view' })),
+    )
       .pipe(
-        takeWhile(() => this.subscribed),
+        takeWhile(() => this.isSubscribed),
       )
       .subscribe(({ el, widget }) => {
         let activeWidget = null;
+        let styles = {};
         switch (el) {
           case 'view':
             activeWidget = this.view;
+            styles = { display: 'none' };
             break;
           case 'page':
             activeWidget = null;
+            styles = { display: 'none' };
             break;
           case 'widget':
             activeWidget = widget;
+            styles = {
+              display: 'block',
+              width: widget.width,
+              height: widget.height,
+              top: widget.y,
+              left: widget.x,
+            };
             break;
           default:
             activeWidget = null;
             break;
         }
-        if (el === 'widget') {
-          const {
-            width, height, x, y,
-          } = widget;
-          this.$refs.wrapper.setSize({
-            display: 'block',
-            width,
-            height,
-            top: y,
-            left: x,
+        if (el !== 'adjust') {
+          // 设置激活的部件
+          this.activeWidget({
+            widget: activeWidget,
           });
-        } else {
-          this.$refs.wrapper.setSize({
-            display: 'none',
-          });
+          // 设置选择器样式
+          this.$refs.wrapper.setSize(styles);
         }
-        // 设置激活的部件
-        this.activeWidget({
-          widget: activeWidget,
-        });
       });
   },
   computed: {
@@ -210,7 +218,7 @@ export default {
     },
   },
   beforeDestroy() {
-    this.subscribed = false;
+    this.isSubscribed = false;
   },
 };
 </script>

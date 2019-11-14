@@ -9,7 +9,7 @@ export default class ChartConfig {
           left: 0,
           bottom: 0,
           right: 0,
-          backgroundColor: 'white',
+          backgroundColor: 'transparent',
           borderColor: 'black',
           borderWidth: 1,
         },
