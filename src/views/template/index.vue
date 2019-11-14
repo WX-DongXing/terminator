@@ -37,7 +37,7 @@ import Widget from '../../model/widget';
 export default {
   name: 'Template',
   data: () => ({
-    subscribed: true,
+    isSubscribed: true,
     cloneNode: null,
     xDistance: 0,
     yDistance: 0,
@@ -59,7 +59,7 @@ export default {
     // 模板移动至视图操作
     this.itemMouseDown$
       .pipe(
-        takeWhile(() => this.subscribed),
+        takeWhile(() => this.isSubscribed),
         tap(({ event }) => {
           this.cloneNode = event.target.cloneNode(true);
           const { x, y } = event.target.getBoundingClientRect();
@@ -137,7 +137,7 @@ export default {
     },
   },
   beforeDestroy() {
-    this.subscribed = false;
+    this.isSubscribed = false;
   },
 };
 </script>

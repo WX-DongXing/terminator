@@ -6,7 +6,8 @@
 * Email: dong.xing@outlook.com
 */
 <template>
-  <div class="widget" :id="widget.widgetId" :ref="widget.widgetId" @click="() => $emit('select')">
+  <div class="widget"
+       :id="widget.widgetId" :ref="widget.widgetId" @click.stop="() => $emit('select')">
   </div>
 </template>
 

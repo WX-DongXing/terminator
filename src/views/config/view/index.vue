@@ -36,7 +36,7 @@ import ViewService from './index';
 export default {
   name: 'ViewConfig',
   data: () => ({
-    subscribed: true,
+    isSubscribed: true,
     config: null,
     viewService: new ViewService(),
   }),
@@ -44,7 +44,7 @@ export default {
     this.change$ = new Subject();
     merge(this.change$)
       .pipe(
-        takeWhile(() => this.subscribed),
+        takeWhile(() => this.isSubscribed),
       )
       .subscribe(event => this.viewService.next(event));
     return {};
@@ -56,7 +56,7 @@ export default {
     ...mapState('screen', ['activeWidget']),
   },
   beforeDestroy() {
-    this.subscribed = false;
+    this.isSubscribed = false;
   },
 };
 </script>
