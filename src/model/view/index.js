@@ -10,7 +10,7 @@ class Range {
 class View {
   constructor(el, screenWidth, screenHeight, {
     x, y, width, height, top, left, bottom, right,
-  }, scale) {
+  }, scale, parent) {
     this.type = 'ViewConfig';
     this.el = el;
     this.x = x;
@@ -28,6 +28,7 @@ class View {
       yRange: new Range(y, y + screenHeight * scale),
     };
     this.scale = scale;
+    this.parent = parent;
     this.config = new Config({
       commonConfig: {
         height: this.height,

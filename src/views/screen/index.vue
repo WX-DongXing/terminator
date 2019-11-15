@@ -130,6 +130,7 @@ export default {
             this.height,
             this.$refs.view.getBoundingClientRect(),
             this.scale,
+            this.parent = this.$refs.page,
           ),
         });
       });

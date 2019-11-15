@@ -101,7 +101,9 @@ export default {
       )
       .subscribe(({ event, data }) => {
         if (this.isWithinScope(event)) {
-          const { x, y, scale } = this.view;
+          const {
+            x, y, scale, parent,
+          } = this.view;
           const rect = event.target.getBoundingClientRect();
           const zIndexList = this.widgets.map(widget => widget.zIndex);
           // 部件层级
@@ -109,8 +111,8 @@ export default {
           // 将模板对应为部件
           const widget = new Widget({
             ...data,
-            top: (rect.y - y) / scale,
-            left: (rect.x - x) / scale,
+            top: (rect.y + parent.scrollTop - y) / scale,
+            left: (rect.x + parent.scrollLeft - x) / scale,
             zIndex,
           });
           // 将当期拖动的模板添加到视图的部件库中
