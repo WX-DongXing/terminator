@@ -11,14 +11,15 @@ import Template from '../template';
 export default class Widget extends Template {
   constructor({
     category, name, type, icon, height,
-    width, x, y, zIndex,
+    width, top, left, zIndex, render = null,
   }) {
     super({
       category, name, type, icon, height, width,
     });
     this.widgetId = uuid();
-    this.x = x;
-    this.y = y;
+    this.top = top;
+    this.left = left;
     this.zIndex = zIndex;
+    this.render = render;
   }
 }

@@ -25,9 +25,10 @@ import { Subject, fromEvent, merge } from 'rxjs';
 import {
   takeWhile, takeUntil, switchMap,
   tap, map, withLatestFrom, filter,
+  first,
 } from 'rxjs/operators';
 import anime from 'animejs';
-import { mapState } from 'vuex';
+import AdjustMixins from './AdjustMixins.vue';
 
 export default {
   name: 'Wrapper',
@@ -35,9 +36,7 @@ export default {
     isSubscribed: true,
     originalState: null,
   }),
-  computed: {
-    ...mapState('screen', ['view']),
-  },
+  mixins: [AdjustMixins],
   mounted() {
     this.change$ = new Subject();
     this.documentMove$ = fromEvent(document, 'mousemove');
@@ -91,8 +90,12 @@ export default {
             height: Number(height.split('px')[0]) || 0,
           };
         }),
-        switchMap(() => this.documentMove$.pipe(takeUntil(this.documentUp$))),
-        withLatestFrom(this.all$, ({ pageX, pageY }, { type, event }) => {
+        map(() => this.documentMove$.pipe(takeUntil(this.documentUp$))),
+        switchMap(move$ => merge(this.documentUp$.pipe(first()), move$)),
+        withLatestFrom(this.all$, (events, { type, event }) => {
+          const { pageX, pageY } = events;
+          // 鼠标事件类型
+          const mouseType = events.type;
           // 缩放类型
           let eventType = null;
           // 缩放方向
@@ -178,8 +181,8 @@ export default {
             eventType = 'MOVE';
             direction = 'ANY';
             position = {
-              x: xDistance,
-              y: yDistance,
+              top: yDistance,
+              left: xDistance,
             };
           }
           return {
@@ -188,96 +191,21 @@ export default {
             direction,
             distance,
             position,
+            mouseType,
           };
         }),
         filter(({ direction }) => direction),
       )
       .subscribe((event) => {
-        this.$emit('resize', event);
-        // 缩放比例
-        const { scale } = this.view;
-        const {
-          eventType, position, distance, type, direction,
-        } = event;
-        // 初始位置
-        const {
-          top, left, width, height,
-        } = this.originalState;
-        switch (eventType) {
-          case 'MOVE':
-            anime.set(this.$refs.wrapper, {
-              top: top + position.y / scale,
-              left: left + position.x / scale,
-            });
-            break;
-          case 'SINGLE':
-            switch (type) {
-              case 'tc':
-                anime.set(this.$refs.wrapper, {
-                  top: top - distance / scale,
-                  height: height + distance / scale,
-                });
-                break;
-              case 'cr':
-                anime.set(this.$refs.wrapper, {
-                  width: width + distance / scale,
-                });
-                break;
-              case 'bc':
-                anime.set(this.$refs.wrapper, {
-                  height: height + distance / scale,
-                });
-                break;
-              case 'cl':
-                anime.set(this.$refs.wrapper, {
-                  left: left - distance / scale,
-                  width: height + distance / scale,
-                });
-                break;
-              default:
-                break;
-            }
-            break;
-          case 'SCALE':
-            // eslint-disable-next-line no-case-declarations
-            const absDistance = direction === 'EXPAND'
-              ? Math.abs(distance) : -Math.abs(distance);
-            switch (type) {
-              case 'tl':
-                anime.set(this.$refs.wrapper, {
-                  top: top + distance / scale,
-                  left: left + distance / scale,
-                  width: width - distance / scale,
-                  height: height - distance / scale,
-                });
-                break;
-              case 'tr':
-                anime.set(this.$refs.wrapper, {
-                  top: top - absDistance / scale,
-                  width: width + absDistance / scale,
-                  height: height + absDistance / scale,
-                });
-                break;
-              case 'br':
-                anime.set(this.$refs.wrapper, {
-                  width: width + distance / scale,
-                  height: height + distance / scale,
-                });
-                break;
-              case 'bl':
-                anime.set(this.$refs.wrapper, {
-                  left: left - absDistance / scale,
-                  width: width + absDistance / scale,
-                  height: height + absDistance / scale,
-                });
-                break;
-              default:
-                break;
-            }
-            break;
-          default:
-            break;
-        }
+        const mutation = {
+          event,
+          originalState: this.originalState,
+        };
+        this.$emit('adjust', mutation);
+        this.adjust({
+          target: this.$refs.wrapper,
+          mutation,
+        });
       });
     return {};
   },

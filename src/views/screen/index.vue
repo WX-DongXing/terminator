@@ -35,11 +35,12 @@
           v-for="widget in widgets"
           :widget="widget"
           :key="widget.widgetId"
+          :ref="widget.widgetId"
           @select="() => select$.next({ el: 'widget', widget })"
         />
         <!-- / 部件渲染 -->
 
-        <Wrapper ref="wrapper" />
+        <Wrapper ref="wrapper" v-stream:adjust="adjust$" />
       </div>
       <!-- / 视图 -->
 
@@ -70,6 +71,7 @@ import {
 } from 'rxjs';
 import {
   startWith, mapTo, takeWhile,
+  pluck,
 } from 'rxjs/operators';
 import { mapState, mapMutations } from 'vuex';
 import anime from 'animejs';
@@ -78,6 +80,7 @@ import { View } from '@/model/view';
 import Wrapper from '@/components/wrapper/index.vue';
 import ViewService from '../config/view';
 import Widget from './widget/index.vue';
+import AdjustMixins from '@/components/wrapper/AdjustMixins.vue';
 
 export default {
   name: 'Screen',
@@ -85,8 +88,13 @@ export default {
     Wrapper,
     Widget,
   },
+  mixins: [AdjustMixins],
+  // 选择器调整事件流
+  domStreams: ['adjust$'],
   subscriptions() {
+    // 画板change事件流
     this.change$ = new Subject();
+    // 画板上元素触发事件流
     this.select$ = new Subject();
     return {
     };
@@ -101,6 +109,7 @@ export default {
   }),
   mounted() {
     const viewService = new ViewService();
+    // 视图change事件处理
     merge(
       fromEvent(window, 'resize').pipe(mapTo({ type: 'resize' })),
       this.change$,
@@ -155,8 +164,8 @@ export default {
               display: 'block',
               width: widget.width,
               height: widget.height,
-              top: widget.y,
-              left: widget.x,
+              top: widget.top,
+              left: widget.left,
             };
             break;
           default:
@@ -165,21 +174,57 @@ export default {
         }
         if (el !== 'adjust') {
           // 设置激活的部件
-          this.activeWidget({
+          this.activationWidget({
             widget: activeWidget,
           });
           // 设置选择器样式
           this.$refs.wrapper.setSize(styles);
         }
       });
+
+    // 部件尺寸调整
+    this.adjust$
+      .pipe(
+        takeWhile(() => this.isSubscribed),
+        pluck('event', 'msg'),
+      )
+      .subscribe((mutation) => {
+        const { widgetId, render } = this.activeWidget;
+        const [targetComponent] = this.$refs[widgetId];
+        const { event } = mutation;
+        // 当鼠标抬起时更新部件位置状态
+        if (event.mouseType === 'mouseup') {
+          const {
+            top, left, width, height,
+          } = window.getComputedStyle(targetComponent.$el, null);
+          const widgetPositionState = {
+            top: Number(top.split('px')[0]) || 0,
+            left: Number(left.split('px')[0]) || 0,
+            width: Number(width.split('px')[0]) || 0,
+            height: Number(height.split('px')[0]) || 0,
+          };
+          // 更新部件位置信息
+          this.activationWidget({
+            widget: Object.assign(this.activeWidget, widgetPositionState),
+          });
+          return;
+        }
+        // 调整部件大小
+        this.adjust({
+          target: targetComponent.$el,
+          mutation,
+        });
+        // 调整图表尺寸
+        render.chart.resize();
+      });
   },
   computed: {
-    ...mapState('screen', ['view', 'widgets']),
+    ...mapState('screen', ['view', 'widgets', 'activeWidget']),
   },
   methods: {
     ...mapMutations('screen', {
       setView: ScreenMutations.SET_VIEW,
-      activeWidget: ScreenMutations.ACTIVE_WIDGET,
+      activationWidget: ScreenMutations.ACTIVATION_WIDGET,
     }),
     /**
      * 设置视图缩放

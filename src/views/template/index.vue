@@ -109,14 +109,14 @@ export default {
           // 将模板对应为部件
           const widget = new Widget({
             ...data,
-            x: (rect.x - x) / scale,
-            y: (rect.y - y) / scale,
+            top: (rect.y - y) / scale,
+            left: (rect.x - x) / scale,
             zIndex,
           });
           // 将当期拖动的模板添加到视图的部件库中
           this.addWidget({ widget });
           // 将当前的部件状态激活
-          this.activeWidget({ widget });
+          this.activationWidget({ widget });
         }
         // 从当前文档中移除该dom节点
         document.body.removeChild(this.cloneNode);
@@ -128,7 +128,7 @@ export default {
   methods: {
     ...mapMutations('screen', {
       addWidget: ScreenMutations.ADD_WIDGET,
-      activeWidget: ScreenMutations.ACTIVE_WIDGET,
+      activationWidget: ScreenMutations.ACTIVATION_WIDGET,
     }),
     isWithinScope({ pageX, pageY }) {
       const { xRange, yRange } = this.view.area;

@@ -12,6 +12,8 @@
 </template>
 
 <script>
+import { mapMutations, mapState } from 'vuex';
+import { ScreenMutations } from '@/store/modules/screen';
 import Factory from '@/model/factory/factory';
 
 export default {
@@ -20,6 +22,9 @@ export default {
   data: () => ({
     chart: null,
   }),
+  computed: {
+    ...mapState('screen', ['widgets']),
+  },
   mounted() {
     const widgetFactory = this.widget.category === 'CHART'
       ? Factory.createChartFactory()
@@ -28,7 +33,15 @@ export default {
       container: this.$refs[this.widget.widgetId],
       widget: this.widget,
     });
-    console.log(this.chart);
+    // 将渲染的元素更新至部件
+    this.activationWidget({
+      widget: Object.assign(this.widget, { render: this.chart }),
+    });
+  },
+  methods: {
+    ...mapMutations('screen', {
+      activationWidget: ScreenMutations.ACTIVATION_WIDGET,
+    }),
   },
 };
 </script>

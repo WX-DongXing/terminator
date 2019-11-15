@@ -7,7 +7,7 @@ export const ScreenMutations = {
   SET_VIEW: 'SET_VIEW[设置视图对象]',
   ADD_WIDGET: 'ADD_WIDGET[添加部件]',
   REMOVE_WIDGET: 'REMOVE_WIDGET[添加部件]',
-  ACTIVE_WIDGET: 'ACTIVE_WIDGET[设置激活的窗口]',
+  ACTIVATION_WIDGET: 'ACTIVATION_WIDGET[设置激活的窗口]',
 };
 
 export default {
@@ -34,7 +34,7 @@ export default {
       state.widgets = state.widgets.filter(widget => widget.id !== payload.widgetId);
     },
     // 设置激活的部件
-    [ScreenMutations.ACTIVE_WIDGET](state, payload) {
+    [ScreenMutations.ACTIVATION_WIDGET](state, payload) {
       state.activeWidget = payload.widget;
     },
   },
