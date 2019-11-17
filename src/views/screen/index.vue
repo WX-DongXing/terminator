@@ -71,7 +71,7 @@ import {
 } from 'rxjs';
 import {
   startWith, mapTo, takeWhile,
-  pluck,
+  pluck, map, filter,
 } from 'rxjs/operators';
 import { mapState, mapMutations } from 'vuex';
 import anime from 'animejs';
@@ -140,9 +140,16 @@ export default {
       this.select$,
       // 作为子元素的选择器事件取消冒泡，只有 mousedown 和 mouseup 时间逐次在 view 视图上触发时，才响应为一次事件
       zip(
-        fromEvent(this.$refs.view, 'mousedown', { capture: false }).pipe(mapTo({ el: 'mousedown' })),
-        fromEvent(this.$refs.view, 'mouseup', { capture: false }).pipe(mapTo({ el: 'mouseup' })),
-      ).pipe(mapTo({ el: 'view' })),
+        fromEvent(this.$refs.view, 'mousedown', { capture: false }),
+        fromEvent(this.$refs.view, 'mouseup', { capture: false }),
+      ).pipe(
+        map(events => ({ el: 'view', events })),
+        filter(({ events }) => {
+          // 过滤鼠标 mousedown 事件不在当前视图的事件，仅留下触发再视图上的事件
+          const [mousedownEvent] = events;
+          return [...mousedownEvent.target.classList].includes('view');
+        }),
+      ),
     )
       .pipe(
         takeWhile(() => this.isSubscribed),

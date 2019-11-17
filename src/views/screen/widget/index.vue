@@ -29,6 +29,7 @@ export default {
     const widgetFactory = this.widget.category === 'CHART'
       ? Factory.createChartFactory()
       : Factory.createElementFactory();
+    // 根据类型创建图表
     this.chart = widgetFactory.create(this.widget.type, {
       container: this.$refs[this.widget.widgetId],
       widget: this.widget,

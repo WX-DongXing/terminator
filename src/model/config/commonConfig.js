@@ -53,13 +53,13 @@ class Background {
  */
 export default class CommonConfig {
   constructor({
-    title, border, width, height, x, y, padding,
+    title, border, width, height, top, left, padding,
     background,
   }) {
     this.width = width || 0;
     this.height = height || 0;
-    this.x = x || 0;
-    this.y = y || 0;
+    this.top = top || 0;
+    this.left = left || 0;
     this.title = new Title(title || { show: false, title: '', link: '' });
     this.border = new Border(border || {
       borderType: 'none',

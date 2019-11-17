@@ -7,10 +7,10 @@ export default class LineChart extends ChartConfig {
     super();
     this.container = container;
     this.setContainer(widget);
-    this.init();
+    this.init(widget);
   }
 
-  // 设置图表位置大小
+  // 设置图表位置尺寸
   setContainer({
     width, height, top, left, zIndex,
   }) {
@@ -23,15 +23,23 @@ export default class LineChart extends ChartConfig {
     });
   }
 
-  init() {
+  /**
+   * 初始化图表
+   * @param widget
+   */
+  init(widget) {
     this.chart = echarts.init(this.container, '', {
       renderer: 'svg',
-      width: 'auto',
-      height: 'auto',
     });
-    this.chart.setOption(this.initConfig);
+    // 初始化没有配置项的情况下使用默认配置
+    if (!widget.config) {
+      this.chart.setOption(this.initConfig);
+      return;
+    }
+    this.mergeOption(widget.config);
   }
 
+  // 图表resize
   resize() {
     this.chart.resize();
   }

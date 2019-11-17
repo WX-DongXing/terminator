@@ -11,7 +11,7 @@ import Template from '../template';
 export default class Widget extends Template {
   constructor({
     category, name, type, icon, height,
-    width, top, left, zIndex, render = null,
+    width, top, left, zIndex, config, render = null,
   }) {
     super({
       category, name, type, icon, height, width,
@@ -20,6 +20,7 @@ export default class Widget extends Template {
     this.top = top;
     this.left = left;
     this.zIndex = zIndex;
+    this.config = config;
     this.render = render;
   }
 }
