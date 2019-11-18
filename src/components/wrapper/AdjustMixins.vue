@@ -26,6 +26,7 @@ export default {
      * @param target dom元素
      * @param mutation wrapper选择器标准事件流
      */
+    // Todo 修改事件流格式，格式化为绝对位置进行修改
     adjust({ target, mutation }) {
       const { scale } = this.view;
       const { event, originalState } = mutation;

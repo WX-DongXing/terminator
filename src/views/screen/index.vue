@@ -75,7 +75,6 @@ import {
 } from 'rxjs/operators';
 import { mapState, mapMutations } from 'vuex';
 import anime from 'animejs';
-import _ from 'lodash';
 import { ScreenMutations } from '@/store/modules/screen';
 import { View } from '@/model/view';
 import Wrapper from '@/components/wrapper/index.vue';
@@ -215,10 +214,9 @@ export default {
             height: Number(height.split('px')[0]) || 0,
           };
           // 更新部件位置信息
-          const widget = _.cloneDeep(this.activeWidget);
-          Object.assign(widget.config.commonConfig, widgetPositionState);
+          Object.assign(this.activeWidget.config.commonConfig, widgetPositionState);
           this.activationWidget({
-            widget,
+            widget: this.activeWidget,
           });
           return;
         }

@@ -34,6 +34,7 @@ export default {
       state.widgets = state.widgets.filter(widget => widget.id !== payload.widgetId);
     },
     // 设置激活的部件
+    // Todo 目前的设计模式下会不通过mutation而修改state，虽然可实现功能，但是违反了状态管理的思想，有待后续进行整体重构
     [ScreenMutations.ACTIVATION_WIDGET](state, payload) {
       state.activeWidget = payload.widget;
     },

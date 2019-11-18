@@ -6,7 +6,7 @@
 * Email: dong.xing@outlook.com
 */
 <template>
-  <div class="wrapper" ref="wrapper">
+  <div id="wrapper" class="wrapper" ref="wrapper">
     <div class="wrapper__mask" ref="mask"></div>
     <div class="wrapper__handler wrapper__handler--tl" ref="tl"></div>
     <div class="wrapper__handler wrapper__handler--tc" ref="tc"></div>
