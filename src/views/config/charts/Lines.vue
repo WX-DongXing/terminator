@@ -25,7 +25,6 @@
 
 <script>
 import '@/assets/less/template.less';
-import _ from 'lodash';
 import { mapState, mapMutations } from 'vuex';
 import { ScreenMutations } from '@/store/modules/screen';
 import CommonTemplate from '../common/index.vue';
@@ -43,12 +42,12 @@ export default {
       activationWidget: ScreenMutations.ACTIVATION_WIDGET,
     }),
     commonConfigChange(config) {
-      const widget = _.cloneDeep(this.activeWidget);
-      Object.assign(widget.config.commonConfig, config);
-      console.log('change!', widget);
+      Object.assign(this.activeWidget.config.commonConfig, config);
+      // 更新部件配置
       this.activationWidget({
-        widget,
+        widget: this.activeWidget,
       });
+      this.activeWidget.render.mergeOption(this.activeWidget.config);
     },
   },
 };

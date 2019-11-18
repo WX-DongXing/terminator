@@ -52,10 +52,10 @@ export default class LineChart {
       grid: [
         {
           show: true,
-          top,
-          right,
-          bottom,
-          left,
+          top: 0,
+          right: 0,
+          bottom: 0,
+          left: 0,
           backgroundColor,
           borderColor: border.color,
           borderWidth: border.width,

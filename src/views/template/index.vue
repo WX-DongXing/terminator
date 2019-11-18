@@ -123,6 +123,7 @@ export default {
           // 将当期拖动的模板添加到视图的部件库中
           this.addWidget({ widget });
           // 将当前的部件状态激活
+          console.log(widget);
           this.activationWidget({ widget });
         }
         // 从当前文档中移除该dom节点

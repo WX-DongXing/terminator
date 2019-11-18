@@ -159,6 +159,7 @@ export default {
   },
   watch: {
     config(v) {
+      console.log('change');
       this.innerConfig = _.cloneDeep(v);
     },
   },
