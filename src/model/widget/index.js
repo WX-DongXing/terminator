@@ -6,21 +6,17 @@
 * Email: dong.xing@outlook.com
 */
 import uuid from 'uuid/v4';
-import Template from '../template';
+import Config from '../config';
 
-export default class Widget extends Template {
+export default class Widget {
   constructor({
-    category, name, type, icon, height,
-    width, top, left, zIndex, config, render = null,
+    category, type, config, container = null, render = null,
   }) {
-    super({
-      category, name, type, icon, height, width,
-    });
     this.widgetId = uuid();
-    this.top = top;
-    this.left = left;
-    this.zIndex = zIndex;
-    this.config = config;
+    this.category = category;
+    this.type = type;
+    this.config = new Config(config);
+    this.container = container;
     this.render = render;
   }
 }

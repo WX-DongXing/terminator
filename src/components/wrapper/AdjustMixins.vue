@@ -36,7 +36,6 @@ export default {
       const {
         top, left, width, height,
       } = originalState;
-
       switch (eventType) {
         case 'MOVE':
           anime.set(target, {

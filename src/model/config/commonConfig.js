@@ -1,18 +1,4 @@
 /**
- * 标题
- */
-class Title {
-  constructor({ show, text, link }) {
-    // 是否显示标题
-    this.show = show;
-    // 标题内容
-    this.text = text;
-    // 标题链接
-    this.link = link;
-  }
-}
-
-/**
  * 边框类型
  */
 class BorderTypeOption {
@@ -27,24 +13,15 @@ class BorderTypeOption {
  */
 class Border {
   constructor({
-    borderType, borderColor, borderWidth, borderRadius,
+    type, color, width,
   }) {
-    this.borderType = borderType;
-    this.borderTypeOptions = [
+    this.type = type;
+    this.typeOptions = [
       new BorderTypeOption('无边框', 'none'),
       new BorderTypeOption('直线', 'solid'),
     ];
-    this.borderColor = borderColor;
-    this.borderWidth = borderWidth;
-    this.borderRadius = borderRadius;
-  }
-}
-
-// 背景
-class Background {
-  constructor({ backgroundColor, backgroundOpacity }) {
-    this.backgroundColor = backgroundColor;
-    this.backgroundOpacity = backgroundOpacity;
+    this.color = color;
+    this.width = width;
   }
 }
 
@@ -53,27 +30,23 @@ class Background {
  */
 export default class CommonConfig {
   constructor({
-    title, border, width, height, top, left, padding,
-    background,
+    border, width, height, top, left, padding,
+    backgroundColor, zIndex,
   }) {
     this.width = width || 0;
     this.height = height || 0;
     this.top = top || 0;
     this.left = left || 0;
-    this.title = new Title(title || { show: false, title: '', link: '' });
+    this.zIndex = zIndex;
+    this.backgroundColor = backgroundColor || 'rgba(255,255,255,1)';
     this.border = new Border(border || {
-      borderType: 'none',
-      borderColor: 'black',
-      borderWidth: 1,
-      borderRadius: 0,
-      borderTypeOptions: [
+      type: 'none',
+      color: 'rgba(0,0,0,1)',
+      width: 1,
+      typeOptions: [
         new BorderTypeOption('无边框', 'none'),
         new BorderTypeOption('直线', 'solid'),
       ],
-    });
-    this.background = new Background(background || {
-      backgroundColor: 'transparent',
-      backgroundOpacity: 0,
     });
     this.padding = padding || [0, 0, 0, 0];
   }

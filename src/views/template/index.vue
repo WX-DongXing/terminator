@@ -105,15 +105,20 @@ export default {
             x, y, scale, parent,
           } = this.view;
           const rect = event.target.getBoundingClientRect();
-          const zIndexList = this.widgets.map(widget => widget.zIndex);
+          const zIndexList = this.widgets.map(widget => widget.config.commonConfig.zIndex);
           // 部件层级
           const zIndex = _.isEmpty(zIndexList) ? 0 : Math.max(...zIndexList) + 1;
           // 将模板对应为部件
           const widget = new Widget({
             ...data,
-            top: (rect.y + parent.scrollTop - y) / scale,
-            left: (rect.x + parent.scrollLeft - x) / scale,
-            zIndex,
+            config: {
+              commonConfig: {
+                ...data,
+                top: (rect.y + parent.scrollTop - y) / scale,
+                left: (rect.x + parent.scrollLeft - x) / scale,
+                zIndex,
+              },
+            },
           });
           // 将当期拖动的模板添加到视图的部件库中
           this.addWidget({ widget });

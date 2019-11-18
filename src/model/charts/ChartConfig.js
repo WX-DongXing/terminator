@@ -1,4 +1,4 @@
-// 初始化 echart 图表配置
+// 初始化 echarts 图表配置
 export default class ChartConfig {
   constructor() {
     this.initConfig = {

@@ -31,7 +31,6 @@ export default {
       : Factory.createElementFactory();
     // 根据类型创建图表
     this.chart = widgetFactory.create(this.widget.type, {
-      container: this.$refs[this.widget.widgetId],
       widget: this.widget,
     });
     // 将渲染的元素更新至部件

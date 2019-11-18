@@ -66,6 +66,7 @@ export default {
   height: 100%;
   width: 100%;
   overflow: auto;
+  padding-top: 16px;
 
   &__content {
     display: flex;

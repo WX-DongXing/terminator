@@ -9,18 +9,18 @@
   <div class="screen">
     <div class="screen__header">
       <p>画板</p>
-      <div class="screen__size">
-        <a-input
-          type="number"
-          addonBefore="宽"
-          v-model="width"
-          @change="() => change$.next({ type: 'width', value: Number(width) })" />
-        <a-input
-          type="number"
-          addonBefore="高"
-          v-model="height"
-          @change="() => change$.next({ type: 'height', value: Number(height) })" />
-      </div>
+<!--      <div class="screen__size">-->
+<!--        <a-input-->
+<!--          type="number"-->
+<!--          addonBefore="宽"-->
+<!--          v-model="width"-->
+<!--          @change="() => change$.next({ type: 'width', value: Number(width) })" />-->
+<!--        <a-input-->
+<!--          type="number"-->
+<!--          addonBefore="高"-->
+<!--          v-model="height"-->
+<!--          @change="() => change$.next({ type: 'height', value: Number(height) })" />-->
+<!--      </div>-->
     </div>
 
     <!-- S 画板 -->
@@ -168,12 +168,14 @@ export default {
             break;
           case 'widget':
             activeWidget = widget;
+            // eslint-disable-next-line no-case-declarations
+            const { config: { commonConfig } } = widget;
             styles = {
               display: 'block',
-              width: widget.width,
-              height: widget.height,
-              top: widget.top,
-              left: widget.left,
+              width: commonConfig.width,
+              height: commonConfig.height,
+              top: commonConfig.top,
+              left: commonConfig.left,
             };
             break;
           default:
@@ -212,8 +214,9 @@ export default {
             height: Number(height.split('px')[0]) || 0,
           };
           // 更新部件位置信息
+          Object.assign(this.activeWidget.config.commonConfig, widgetPositionState);
           this.activationWidget({
-            widget: Object.assign(this.activeWidget, widgetPositionState),
+            widget: this.activeWidget,
           });
           return;
         }
