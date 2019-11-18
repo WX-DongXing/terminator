@@ -8,12 +8,12 @@
 <template>
   <div class="color-picker">
     <div class="color-picker__marker">
-      <div class="color-picker__inner" :style="{ background: targetColor }"></div>
+      <div class="color-picker__inner" :style="{ background: this.color }"></div>
       <div class="color-picker__trigger" @click="openPicker">
         <a-icon type="bg-colors" />
       </div>
     </div>
-    <a-input v-model="targetColor" @change="() => $emit('change', this.targetColor)"/>
+    <a-input v-model="inputColor" @change="() => $emit('change', this.inputColor)"/>
     <div class="color-picker__painter"
          v-show="display" tabindex="-1"
          @blur="display = false" ref="picker">
@@ -30,6 +30,10 @@ export default {
   components: {
     Chrome,
   },
+  model: {
+    prop: 'color',
+    event: 'change',
+  },
   props: {
     color: {
       type: String,
@@ -38,18 +42,16 @@ export default {
   },
   data: () => ({
     display: false,
-    targetColor: null,
+    inputColor: 'rgba(255,255,255,1)',
     colors: {},
   }),
   created() {
-    this.targetColor = this.color;
+    this.inputColor = this.color;
   },
   methods: {
     openPicker() {
       this.display = true;
       this.$nextTick(() => this.$refs.picker.focus());
-    },
-    colorChange() {
     },
   },
   watch: {
@@ -57,8 +59,8 @@ export default {
       const {
         r, g, b, a,
       } = v.rgba;
-      this.targetColor = `rgba(${r},${g},${b},${a})`;
-      this.$emit('change', this.targetColor);
+      this.inputColor = `rgba(${r},${g},${b},${a})`;
+      this.$emit('change', `rgba(${r},${g},${b},${a})`);
     },
   },
 };

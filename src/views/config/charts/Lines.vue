@@ -15,7 +15,7 @@
         :style="{ height: '100%'}"
       >
         <a-tab-pane tab="公共属性" key="1">
-          <CommonTemplate :config="activeWidget.config.commonConfig" />
+          <CommonTemplate :config="activeWidget.config.commonConfig" @change="commonConfigChange" />
         </a-tab-pane>
         <a-tab-pane tab="专有属性" key="2"></a-tab-pane>
       </a-tabs>
@@ -25,7 +25,9 @@
 
 <script>
 import '@/assets/less/template.less';
-import { mapState } from 'vuex';
+import _ from 'lodash';
+import { mapState, mapMutations } from 'vuex';
+import { ScreenMutations } from '@/store/modules/screen';
 import CommonTemplate from '../common/index.vue';
 
 export default {
@@ -35,6 +37,19 @@ export default {
   },
   computed: {
     ...mapState('screen', ['activeWidget']),
+  },
+  methods: {
+    ...mapMutations('screen', {
+      activationWidget: ScreenMutations.ACTIVATION_WIDGET,
+    }),
+    commonConfigChange(config) {
+      const widget = _.cloneDeep(this.activeWidget);
+      Object.assign(widget.config.commonConfig, config);
+      console.log('change!', widget);
+      this.activationWidget({
+        widget,
+      });
+    },
   },
 };
 </script>

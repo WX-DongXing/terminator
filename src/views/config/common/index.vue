@@ -6,7 +6,7 @@
 * Email: dong.xing@outlook.com
 */
 <template>
-  <div class="common-template">
+  <div class="common-template" v-if="innerConfig">
 
     <!-- S 背景颜色 -->
     <p class="comment-template__title">背景</p>
@@ -14,7 +14,9 @@
       <div class="comment-template__item">
         <p class="comment-template__leading">颜色:</p>
         <div class="comment-template__inner">
-          <ColorPicker :color="config.backgroundColor" />
+          <ColorPicker
+            v-model="innerConfig.backgroundColor"
+            @change="change" />
         </div>
       </div>
     </div>
@@ -26,7 +28,10 @@
       <div class="comment-template__item">
         <p class="comment-template__leading">宽度:</p>
         <div class="comment-template__inner">
-          <a-input type="number" :value="config.border.width" min="0" max="10" />
+          <a-input
+            type="number"
+            min="0" max="10"
+            v-model.number="innerConfig.border.width" @change="change" />
         </div>
       </div>
       <!-- / 宽度 -->
@@ -34,7 +39,9 @@
       <div class="comment-template__item">
         <p class="comment-template__leading">颜色:</p>
         <div class="comment-template__inner">
-          <ColorPicker :color="config.border.borderColor" />
+          <ColorPicker
+            v-model="innerConfig.border.color"
+            @change="change" />
         </div>
       </div>
       <!-- / 颜色 -->
@@ -47,7 +54,7 @@
       <div class="comment-template__item">
         <p class="comment-template__leading">上:</p>
         <div class="comment-template__inner">
-          <a-input type="number" :value="config.padding[0]" min="0" />
+          <a-input type="number" min="0" v-model.number="innerConfig.padding[0]" @change="change" />
         </div>
       </div>
       <!-- / 上边距 -->
@@ -55,7 +62,7 @@
       <div class="comment-template__item">
         <p class="comment-template__leading">右:</p>
         <div class="comment-template__inner">
-          <a-input type="number" :value="config.padding[1]" min="0" />
+          <a-input type="number" v-model.number="innerConfig.padding[1]" min="0" @change="change" />
         </div>
       </div>
       <!-- / 右边距 -->
@@ -63,7 +70,7 @@
       <div class="comment-template__item">
         <p class="comment-template__leading">下:</p>
         <div class="comment-template__inner">
-          <a-input type="number" :value="config.padding[2]" min="0" />
+          <a-input type="number" v-model.number="innerConfig.padding[2]" min="0" @change="change" />
         </div>
       </div>
       <!-- / 下边距 -->
@@ -71,7 +78,7 @@
       <div class="comment-template__item">
         <p class="comment-template__leading">左:</p>
         <div class="comment-template__inner">
-          <a-input type="number" :value="config.padding[3]" min="0" />
+          <a-input type="number" v-model.number="innerConfig.padding[3]" min="0" @change="change" />
         </div>
       </div>
       <!-- / 左边距 -->
@@ -84,7 +91,7 @@
       <div class="comment-template__item">
         <p class="comment-template__leading">宽:</p>
         <div class="comment-template__inner">
-          <a-input type="number" :value="config.width" min="0" />
+          <a-input type="number" v-model.number="innerConfig.width" min="0" @change="change" />
         </div>
       </div>
       <!-- / 宽 -->
@@ -92,7 +99,7 @@
       <div class="comment-template__item">
         <p class="comment-template__leading">高:</p>
         <div class="comment-template__inner">
-          <a-input type="number" :value="config.height" min="0" />
+          <a-input type="number" v-model.number="innerConfig.height" min="0" @change="change" />
         </div>
       </div>
       <!-- / 高 -->
@@ -105,7 +112,7 @@
       <div class="comment-template__item">
         <p class="comment-template__leading">X:</p>
         <div class="comment-template__inner">
-          <a-input type="number" :value="config.left" min="0" />
+          <a-input type="number" v-model.number="innerConfig.left" min="0" @change="change" />
         </div>
       </div>
       <!-- / x坐标位置 -->
@@ -113,7 +120,7 @@
       <div class="comment-template__item">
         <p class="comment-template__leading">Y:</p>
         <div class="comment-template__inner">
-          <a-input type="number" :value="config.top" min="0" />
+          <a-input type="number" v-model.number="innerConfig.top" min="0" @change="change" />
         </div>
       </div>
       <!-- / y坐标位置 -->
@@ -125,19 +132,35 @@
 
 <script>
 import '@/assets/less/template.less';
+import _ from 'lodash';
 import ColorPicker from '@/components/colorPicker/index.vue';
-import CommonConfig from '@/model/config/commonConfig';
 
 export default {
   name: 'CommonTemplate',
   props: {
     config: {
       type: Object,
-      default: () => (new CommonConfig()),
+      default: () => ({}),
     },
   },
   components: {
     ColorPicker,
+  },
+  data: () => ({
+    innerConfig: null,
+  }),
+  created() {
+    this.innerConfig = _.cloneDeep(this.config);
+  },
+  methods: {
+    change() {
+      this.$emit('change', this.innerConfig);
+    },
+  },
+  watch: {
+    config(v) {
+      this.innerConfig = _.cloneDeep(v);
+    },
   },
 };
 </script>
