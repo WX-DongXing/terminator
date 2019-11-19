@@ -6,7 +6,7 @@
 * Email: dong.xing@outlook.com
 */
 <template>
-  <div class="common-template" v-if="commonConfig">
+  <div class="common-template">
 
     <!-- S 背景颜色 -->
     <p class="comment-template__title">背景</p>
@@ -15,7 +15,7 @@
         <p class="comment-template__leading">颜色:</p>
         <div class="comment-template__inner">
           <ColorPicker
-            v-model="commonConfig.backgroundColor"
+            v-model="config.commonConfig.backgroundColor"
             @change="change('style')" />
         </div>
       </div>
@@ -31,7 +31,7 @@
           <a-input
             type="number"
             min="0" max="10"
-            v-model.number="commonConfig.border.width" @change="change('style')" />
+            v-model.number="config.commonConfig.border.width" @change="change('style')" />
         </div>
       </div>
       <!-- / 宽度 -->
@@ -40,7 +40,7 @@
         <p class="comment-template__leading">颜色:</p>
         <div class="comment-template__inner">
           <ColorPicker
-            v-model="commonConfig.border.color"
+            v-model="config.commonConfig.border.color"
             @change="change('style')" />
         </div>
       </div>
@@ -57,7 +57,7 @@
           <a-input
             type="number"
             min="0"
-            v-model.number="commonConfig.padding[0]"
+            v-model.number="config.commonConfig.padding[0]"
             @change="change('style')" />
         </div>
       </div>
@@ -68,7 +68,7 @@
         <div class="comment-template__inner">
           <a-input
             type="number"
-            v-model.number="commonConfig.padding[1]"
+            v-model.number="config.commonConfig.padding[1]"
             min="0" @change="change('style')" />
         </div>
       </div>
@@ -79,7 +79,7 @@
         <div class="comment-template__inner">
           <a-input
             type="number"
-            v-model.number="commonConfig.padding[2]"
+            v-model.number="config.commonConfig.padding[2]"
             min="0" @change="change('style')" />
         </div>
       </div>
@@ -90,7 +90,7 @@
         <div class="comment-template__inner">
           <a-input
             type="number"
-            v-model.number="commonConfig.padding[3]"
+            v-model.number="config.commonConfig.padding[3]"
             min="0" @change="change('style')" />
         </div>
       </div>
@@ -106,7 +106,7 @@
         <div class="comment-template__inner">
           <a-input
             type="number"
-            v-model.number="commonConfig.width"
+            v-model.number="config.commonConfig.width"
             min="0" @change="change('size', 'width')" />
         </div>
       </div>
@@ -117,7 +117,7 @@
         <div class="comment-template__inner">
           <a-input
             type="number"
-            v-model.number="commonConfig.height"
+            v-model.number="config.commonConfig.height"
             min="0" @change="change('size', 'height')" />
         </div>
       </div>
@@ -133,7 +133,7 @@
         <div class="comment-template__inner">
           <a-input
             type="number"
-            v-model.number="commonConfig.left"
+            v-model.number="config.commonConfig.left"
             min="0" @change="change('position')" />
         </div>
       </div>
@@ -144,7 +144,7 @@
         <div class="comment-template__inner">
           <a-input
             type="number"
-            v-model.number="commonConfig.top"
+            v-model.number="config.commonConfig.top"
             min="0" @change="change('position')" />
         </div>
       </div>
@@ -174,8 +174,8 @@ export default {
   computed: {
     ...mapState('screen', ['activeWidget', 'view']),
     // 为不修改 state.activeWidget，在此深复制激活部件的配置项，并将其设置为该组件内变量，修改部件后提交再行修改state.activeWidget
-    commonConfig() {
-      return _.cloneDeep(this.activeWidget.config.commonConfig);
+    config() {
+      return _.cloneDeep(this.activeWidget.config);
     },
   },
   methods: {
@@ -187,19 +187,16 @@ export default {
       switch (type) {
         case 'style':
           // 图表样式更改，只需更新数据即可
-          Object.assign(this.activeWidget.config.commonConfig, this.commonConfig);
-          this.activeWidget.render.mergeOption(this.activeWidget.config);
+          this.activeWidget.render.mergeOption(this.config);
           break;
         case 'size':
           // 图表尺寸更改，wrapper选择器标准事件流
-          // eslint-disable-next-line no-case-declarations
           const sizePreConfig = _.cloneDeep(this.activeWidget.config.commonConfig);
-          // eslint-disable-next-line no-case-declarations
           const sizeMutation = {
             event: {
               distance: trigger === 'width'
-                ? (this.commonConfig.width - sizePreConfig.width) * this.view.scale
-                : (this.commonConfig.height - sizePreConfig.height) * this.view.scale,
+                ? (this.config.commonConfig.width - sizePreConfig.width) * this.view.scale
+                : (this.config.commonConfig.height - sizePreConfig.height) * this.view.scale,
               eventType: 'SINGLE',
               mouseType: 'mousemove',
               type: trigger === 'width' ? 'cr' : 'bc',
@@ -214,14 +211,10 @@ export default {
             target: document.getElementById('wrapper'),
             mutation: sizeMutation,
           });
-          Object.assign(this.activeWidget.config.commonConfig, this.commonConfig);
-          this.activeWidget.render.chart.resize();
           break;
         case 'position':
           // 图表位置更改，wrapper选择器标准事件流
-          // eslint-disable-next-line no-case-declarations
           const positionPreConfig = _.cloneDeep(this.activeWidget.config.commonConfig);
-          // eslint-disable-next-line no-case-declarations
           const positionMutation = {
             event: {
               direction: 'ANY',
@@ -229,8 +222,8 @@ export default {
               eventType: 'MOVE',
               mouseType: 'mousemove',
               position: {
-                top: (this.commonConfig.top - positionPreConfig.top) * this.view.scale,
-                left: (this.commonConfig.left - positionPreConfig.left) * this.view.scale,
+                top: (this.config.commonConfig.top - positionPreConfig.top) * this.view.scale,
+                left: (this.config.commonConfig.left - positionPreConfig.left) * this.view.scale,
               },
               type: 'move',
             },
@@ -244,16 +237,23 @@ export default {
             target: document.getElementById('wrapper'),
             mutation: positionMutation,
           });
-          Object.assign(this.activeWidget.config.commonConfig, this.commonConfig);
           break;
         default:
           break;
       }
       // 更新部件配置
-      // todo 由于目前的设计下可以不通过mutation修改激活的部件，故此部分或可取消，有待重构该部分
+      const activeWidget = _.cloneDeep(this.activeWidget);
       this.activationWidget({
-        widget: this.activeWidget,
+        widget: Object.assign(activeWidget, {
+          config: this.config,
+          render: this.activeWidget.render,
+        }),
       });
+      // 更新部件后，如果进行尺寸的修改则重新resize图表
+      if (type === 'size') {
+        console.log('resize');
+        this.activeWidget.render.chart.resize();
+      }
     },
   },
 };

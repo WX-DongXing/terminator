@@ -75,6 +75,7 @@ import {
 } from 'rxjs/operators';
 import { mapState, mapMutations } from 'vuex';
 import anime from 'animejs';
+import _ from 'lodash';
 import { ScreenMutations } from '@/store/modules/screen';
 import { View } from '@/model/view';
 import Wrapper from '@/components/wrapper/index.vue';
@@ -214,9 +215,10 @@ export default {
             height: Number(height.split('px')[0]) || 0,
           };
           // 更新部件位置信息
-          Object.assign(this.activeWidget.config.commonConfig, widgetPositionState);
+          const widget = _.cloneDeep(this.activeWidget);
+          Object.assign(widget.config.commonConfig, widgetPositionState);
           this.activationWidget({
-            widget: this.activeWidget,
+            widget: Object.assign(widget, { render }),
           });
           return;
         }
@@ -226,7 +228,7 @@ export default {
           mutation,
         });
         // 调整图表尺寸
-        render.chart.resize();
+        this.activeWidget.render.chart.resize();
       });
   },
   computed: {

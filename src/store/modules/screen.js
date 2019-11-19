@@ -17,7 +17,7 @@ export default {
     view: null,
     // 视图中所有部件对象
     widgets: [],
-    // 激活的部件
+    // 激活的部件对象，作为可读属性使用，不可通过非mutation方式进行修改
     activeWidget: null,
   },
   mutations: {
@@ -33,10 +33,16 @@ export default {
     [ScreenMutations.REMOVE_WIDGET](state, payload) {
       state.widgets = state.widgets.filter(widget => widget.id !== payload.widgetId);
     },
-    // 设置激活的部件
-    // Todo 目前的设计模式下会不通过mutation而修改state，虽然可实现功能，但是违反了状态管理的思想，有待后续进行整体重构
+    // 设置激活的部件，并修改widgets中的部件，深度复制激活部件，保留render对象
     [ScreenMutations.ACTIVATION_WIDGET](state, payload) {
       state.activeWidget = payload.widget;
+      // 如果选择的是部件，则更新部件的配置
+      if (payload.widget && payload.widget.widgetId) {
+        const activeWidget = state.widgets.find(
+          widget => widget.widgetId === payload.widget.widgetId,
+        );
+        Object.assign(activeWidget, payload.widget);
+      }
     },
   },
   actions: {
