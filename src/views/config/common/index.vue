@@ -169,8 +169,6 @@ export default {
   components: {
     ColorPicker,
   },
-  data: () => ({
-  }),
   computed: {
     ...mapState('screen', ['activeWidget', 'view']),
     // 为不修改 state.activeWidget，在此深复制激活部件的配置项，并将其设置为该组件内变量，修改部件后提交再行修改state.activeWidget
@@ -251,7 +249,6 @@ export default {
       });
       // 更新部件后，如果进行尺寸的修改则重新resize图表
       if (type === 'size') {
-        console.log('resize');
         this.activeWidget.render.chart.resize();
       }
     },
@@ -259,7 +256,7 @@ export default {
 };
 </script>
 
-<style scoped>
+<style scoped lang="less">
 .common-template {
   height: calc(100vh - 224px);
   overflow: auto;

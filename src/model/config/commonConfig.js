@@ -30,8 +30,8 @@ class Border {
  */
 export default class CommonConfig {
   constructor({
-    border, width, height, top, left, padding,
-    backgroundColor, zIndex,
+    width, height, top, left, zIndex, border,
+    padding, backgroundColor,
   }) {
     this.width = width || 0;
     this.height = height || 0;

@@ -72,10 +72,18 @@ export default class LineChart {
       ],
       xAxis: [{
         gridIndex: 1,
+        data: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
       }],
       yAxis: [{
         gridIndex: 1,
       }],
+      series: [
+        {
+          data: [820, 932, 901, 934, 1290, 1330, 1320],
+          type: 'line',
+          smooth: true,
+        },
+      ],
     });
   }
 

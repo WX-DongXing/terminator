@@ -86,10 +86,11 @@ export default {
     position: absolute;
     top: 0;
     left: 0;
-    height: 32px;
-    width: 32px;
+    height: 22px;
+    width: 22px;
     cursor: pointer;
     margin: 4px;
+    border-radius: 4px;
   }
 
   &__trigger {
@@ -99,8 +100,8 @@ export default {
     flex-flow: row nowrap;
     justify-content: center;
     align-items: center;
-    height: 40px;
-    width: 40px;
+    height: 30px;
+    width: 30px;
     cursor: pointer;
 
     i {
