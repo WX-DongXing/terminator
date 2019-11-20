@@ -101,10 +101,8 @@ export default {
       )
       .subscribe(({ event, data }) => {
         if (this.isWithinScope(event)) {
-          const {
-            x, y, scale, parent,
-          } = this.view;
-          const rect = event.target.getBoundingClientRect();
+          const { rect, scale, parent } = this.view;
+          const targetRect = event.target.getBoundingClientRect();
           const zIndexList = this.widgets.map(widget => widget.config.commonConfig.zIndex);
           // 部件层级
           const zIndex = _.isEmpty(zIndexList) ? 0 : Math.max(...zIndexList) + 1;
@@ -114,8 +112,8 @@ export default {
             config: {
               commonConfig: {
                 ...data,
-                top: (rect.y + parent.scrollTop - y) / scale,
-                left: (rect.x + parent.scrollLeft - x) / scale,
+                top: (targetRect.y + parent.scrollTop - rect.y) / scale,
+                left: (targetRect.x + parent.scrollLeft - rect.x) / scale,
                 zIndex,
               },
             },

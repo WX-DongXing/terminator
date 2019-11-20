@@ -77,7 +77,7 @@ import { mapState, mapMutations } from 'vuex';
 import anime from 'animejs';
 import _ from 'lodash';
 import { ScreenMutations } from '@/store/modules/screen';
-import { View } from '@/model/view';
+import View from '@/model/view';
 import Wrapper from '@/components/wrapper/index.vue';
 import ViewService from '../config/view';
 import Widget from './widget/index.vue';
@@ -130,9 +130,8 @@ export default {
             this.$refs.view,
             this.width,
             this.height,
-            this.$refs.view.getBoundingClientRect(),
             this.scale,
-            this.parent = this.$refs.page,
+            this.$refs.page,
             event.type === 'backgroundColor' ? event.value : 'rgba(255,255,255,1)',
           ),
         });
