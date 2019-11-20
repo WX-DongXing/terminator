@@ -17,6 +17,7 @@
         <a-tab-pane tab="公共属性" key="1">
           <CommonTemplate />
         </a-tab-pane>
+
         <a-tab-pane tab="专有属性" key="2">
 
           <!-- S 折线图专有配置 -->
@@ -27,7 +28,7 @@
               <div class="comment-template__inner">
                 <a-select
                   class="lines-config__select"
-                  v-model="config.proprietaryConfig.lineStyle.type" @change="$emit('change')">
+                  v-model="config.proprietaryConfig.lineStyle.type" @change="change">
                   <a-select-option value="solid">直线</a-select-option>
                   <a-select-option value="dashed">虚线</a-select-option>
                   <a-select-option value="dotted">点线</a-select-option>
@@ -41,7 +42,7 @@
               <div class="comment-template__inner">
                 <a-select
                   class="lines-config__select"
-                  v-model="config.proprietaryConfig.smooth">
+                  v-model="config.proprietaryConfig.smooth" @change="change">
                   <a-select-option :value="0">正常</a-select-option>
                   <a-select-option :value="1">平滑</a-select-option>
                 </a-select>
@@ -52,7 +53,9 @@
             <div class="comment-template__item">
               <p class="comment-template__leading">粗细:</p>
               <div class="comment-template__inner">
-                <a-slider v-model="config.proprietaryConfig.lineStyle.width" :min="1" :max="10" />
+                <a-slider
+                  v-model="config.proprietaryConfig.lineStyle.width"
+                  @change="change" :min="1" :max="10" />
               </div>
             </div>
             <!-- / 粗细 -->
@@ -61,7 +64,7 @@
               <p class="comment-template__leading">颜色:</p>
               <div class="comment-template__inner">
                 <ColorPicker
-                  v-model="config.proprietaryConfig.lineStyle.color"/>
+                  v-model="config.proprietaryConfig.lineStyle.color" @change="change"/>
               </div>
             </div>
             <!-- / 颜色 -->
@@ -75,7 +78,8 @@
               <div class="comment-template__inner">
                 <a-select
                   class="lines-config__select"
-                  v-model="config.proprietaryConfig.legend.show">
+                  v-model="config.proprietaryConfig.legend.show"
+                  @change="change">
                   <a-select-option :value="1">显示</a-select-option>
                   <a-select-option :value="0">不显示</a-select-option>
                 </a-select>
@@ -88,7 +92,8 @@
               <div class="comment-template__inner">
                 <a-select
                   class="lines-config__select"
-                  v-model="config.proprietaryConfig.legend.orient">
+                  v-model="config.proprietaryConfig.legend.orient"
+                  @change="change">
                   <a-select-option value="horizontal">水平</a-select-option>
                   <a-select-option value="vertical">纵向</a-select-option>
                 </a-select>
@@ -97,11 +102,52 @@
             <!-- / 方向 -->
 
             <div class="comment-template__item">
+              <p class="comment-template__leading">居上:</p>
+              <div class="comment-template__inner">
+                <a-input
+                  type="text" @change="change"
+                  v-model="config.proprietaryConfig.legend.top" />
+              </div>
+            </div>
+            <!-- / 居上 -->
+
+            <div class="comment-template__item">
+              <p class="comment-template__leading">居右:</p>
+              <div class="comment-template__inner">
+                <a-input
+                  type="text" @change="change"
+                  v-model="config.proprietaryConfig.legend.right" />
+              </div>
+            </div>
+            <!-- / 居右 -->
+
+            <div class="comment-template__item">
+              <p class="comment-template__leading">居下:</p>
+              <div class="comment-template__inner">
+                <a-input
+                  type="text" @change="change"
+                  v-model="config.proprietaryConfig.legend.bottom" />
+              </div>
+            </div>
+            <!-- / 居下 -->
+
+            <div class="comment-template__item">
+              <p class="comment-template__leading">居左:</p>
+              <div class="comment-template__inner">
+                <a-input
+                  type="text" @change="change"
+                  v-model="config.proprietaryConfig.legend.left" />
+              </div>
+            </div>
+            <!-- / 居左 -->
+
+            <div class="comment-template__item">
               <p class="comment-template__leading">图标:</p>
               <div class="comment-template__inner">
                 <a-select
                   class="lines-config__select"
-                  v-model="config.proprietaryConfig.legend.icon">
+                  v-model="config.proprietaryConfig.legend.icon"
+                  @change="change">
                   <a-select-option value="circle">圆点</a-select-option>
                   <a-select-option value="rect">方形</a-select-option>
                 </a-select>
@@ -113,7 +159,8 @@
               <p class="comment-template__leading">颜色:</p>
               <div class="comment-template__inner">
                 <ColorPicker
-                  v-model="config.proprietaryConfig.legend.textStyle.color" />
+                  v-model="config.proprietaryConfig.legend.textStyle.color"
+                  @change="change" />
               </div>
             </div>
             <!-- / 文字颜色 -->
@@ -123,7 +170,8 @@
               <div class="comment-template__inner">
                 <a-select
                   class="lines-config__select"
-                  v-model="config.proprietaryConfig.legend.textStyle.fontWeight" >
+                  v-model="config.proprietaryConfig.legend.textStyle.fontWeight"
+                  @change="change">
                   <a-select-option value="normal">正常</a-select-option>
                   <a-select-option value="lighter">细</a-select-option>
                   <a-select-option value="bold">粗</a-select-option>
@@ -137,7 +185,7 @@
               <p class="comment-template__leading">大小:</p>
               <div class="comment-template__inner">
                 <a-slider
-                  :min="6" :max="24"
+                  :min="6" :max="24" @change="change"
                   v-model="config.proprietaryConfig.legend.textStyle.fontSize" />
               </div>
             </div>
@@ -147,7 +195,8 @@
           <!-- E 折线图专有配置 -->
 
         </a-tab-pane>
-        <a-tab-pane tab="数据处理" key="3">
+
+        <a-tab-pane tab="数据管道" key="3">
 
         </a-tab-pane>
       </a-tabs>
@@ -158,7 +207,8 @@
 <script>
 import '@/assets/less/template.less';
 import _ from 'lodash';
-import { mapState } from 'vuex';
+import { mapState, mapMutations } from 'vuex';
+import { ScreenMutations } from '@/store/modules/screen';
 import CommonTemplate from '../common/index.vue';
 import ColorPicker from '@/components/colorPicker/index.vue';
 
@@ -172,6 +222,20 @@ export default {
     ...mapState('screen', ['activeWidget', 'view']),
     config() {
       return _.cloneDeep(this.activeWidget.config);
+    },
+  },
+  methods: {
+    ...mapMutations('screen', {
+      activationWidget: ScreenMutations.ACTIVATION_WIDGET,
+    }),
+    change() {
+      const activeWidget = _.cloneDeep(this.activeWidget);
+      const { render } = this.activeWidget;
+      Object.assign(activeWidget.config, this.config);
+      this.activationWidget({
+        widget: Object.assign(activeWidget, { render }),
+      });
+      render.mergeOption(this.config);
     },
   },
 };

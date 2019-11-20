@@ -1,3 +1,10 @@
+/**
+* 折线图
+* Author: dong xing
+* Date: 2019/11/20
+* Time: 8:55 上午
+* Email: dong.xing@outlook.com
+*/
 import echarts from 'echarts';
 import anime from 'animejs';
 import LinesConfig from '../config/defaultConfig/linesConfig';
@@ -9,7 +16,10 @@ export default class LineChart {
     this.init(widget);
   }
 
-  // 设置图表位置尺寸
+  /**
+   * 初始设置图表位置尺寸
+   * @param config
+   */
   setContainer({ config }) {
     const {
       width, height, top, left, zIndex,
@@ -34,21 +44,34 @@ export default class LineChart {
     this.mergeOption(config);
   }
 
-  // 图表resize
+  /**
+   * 图表resize
+   */
   resize() {
     this.chart.resize();
   }
 
-  // 重置图表默认配置
+  /**
+   * 重置图表默认配置
+   */
   reset() {
     this.chart.setOption(LinesConfig);
   }
 
-  // 映射成 echarts 配置项
-  static mappingOption({ commonConfig }) {
+  /**
+   * 映射成 echarts 配置项
+   * @param commonConfig
+   * @param proprietaryConfig
+   */
+  static mappingOption({ commonConfig, proprietaryConfig }) {
     const { backgroundColor, border, padding } = commonConfig;
+    const { smooth, legend, lineStyle } = proprietaryConfig;
     const [top, right, bottom, left] = padding;
     return Object.assign({}, {
+      legend: {
+        ...legend,
+        data: ['Test'],
+      },
       grid: [
         {
           show: true,
@@ -79,17 +102,24 @@ export default class LineChart {
       }],
       series: [
         {
+          name: 'Test',
           data: [820, 932, 901, 934, 1290, 1330, 1320],
           type: 'line',
-          smooth: true,
+          smooth: smooth === 1,
+          lineStyle,
         },
       ],
     });
   }
 
-  // 设置新的配置项渲染图表
+  /**
+   * 设置新的配置项渲染图表
+   * @param config widget 配置项
+   */
   mergeOption(config) {
+    // 向外暴露 echarts 配置
     this.chartConfig = LineChart.mappingOption(config);
+    // 重新配置 echarts
     this.chart.setOption(this.chartConfig);
   }
 }

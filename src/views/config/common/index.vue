@@ -28,10 +28,9 @@
       <div class="comment-template__item">
         <p class="comment-template__leading">宽度:</p>
         <div class="comment-template__inner">
-          <a-input
-            type="number"
-            min="0" max="10"
-            v-model.number="config.commonConfig.border.width" @change="change('style')" />
+          <a-slider
+            :min="0" :max="16"  @change="change('style')"
+            v-model.number="config.commonConfig.border.width" />
         </div>
       </div>
       <!-- / 宽度 -->

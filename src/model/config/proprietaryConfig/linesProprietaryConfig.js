@@ -48,10 +48,18 @@ class Legend {
     show = 0,
     orient = 'horizontal',
     icon = 'circle',
+    top = 'auto',
+    right = 'auto',
+    bottom = 'auto',
+    left = 'auto',
     textStyle,
   ) {
     this.show = show;
     this.orient = orient;
+    this.top = top;
+    this.right = right;
+    this.bottom = bottom;
+    this.left = left;
     this.icon = icon;
     this.textStyle = new LegendTextStyle(textStyle);
   }
@@ -67,7 +75,7 @@ export default class LinesProprietaryConfig {
     legend,
   ) {
     // 是否平滑曲线显示
-    this.smooth = smooth || 0;
+    this.smooth = smooth;
     this.lineStyle = new LineStyle(lineStyle);
     this.legend = new Legend(legend);
   }
