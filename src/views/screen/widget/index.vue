@@ -49,6 +49,10 @@ export default {
 <style scoped lang="less">
 .widget {
   position: absolute;
+
+  &:hover {
+    box-shadow: 0 0 4px 2px rgba(24, 144, 255, .8) !important;
+  }
 }
 
 </style>

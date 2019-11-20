@@ -8,47 +8,78 @@
 <template>
   <div class="comment-template">
     <p class="comment-template__name">画板</p>
+
+    <!-- S 视图配置 -->
     <div class="view-config">
+
       <p class="comment-template__title">尺寸</p>
-      <div class="comment-template__content view-config__content">
-        <a-input type="number"
-                 addonBefore="宽"
-                 v-model="config.width"
-                 @change="() => change$.next({ type: 'width', value: Number(config.width) })" />
-        <a-input type="number"
-                 addonBefore="高"
-                 v-model="config.height"
-                 @change="() => change$.next({ type: 'height', value: Number(config.height) })" />
+      <div class="comment-template__content">
+
+        <div class="comment-template__item">
+          <p class="comment-template__leading">宽:</p>
+          <div class="comment-template__inner">
+            <a-input
+              type="number"
+              v-model="config.width"
+              @change="() => viewService.next({ type: 'width', value: Number(config.width) })" />
+          </div>
+        </div>
+        <!-- / 宽 -->
+
+        <div class="comment-template__item">
+          <p class="comment-template__leading">高:</p>
+          <div class="comment-template__inner">
+            <a-input
+              type="number"
+              v-model="config.height"
+              @change="() => viewService.next({ type: 'height', value: Number(config.height) })" />
+          </div>
+        </div>
+        <!-- / 高 -->
 
       </div>
+      <!-- / 尺寸 -->
+
+      <p class="comment-template__title">背景</p>
+      <div class="comment-template__content">
+
+        <div class="comment-template__item">
+          <p class="comment-template__leading">颜色:</p>
+          <div class="comment-template__inner">
+            <ColorPicker
+              v-model="config.backgroundColor"
+              @change="() =>
+               viewService.next({ type: 'backgroundColor', value: config.backgroundColor })"  />
+          </div>
+        </div>
+        <!-- / 颜色 -->
+
+      </div>
+      <!-- / 背景 -->
+
     </div>
+    <!-- E 视图配置 -->
+
   </div>
 </template>
 
 <script>
 import '@/assets/less/template.less';
-import { Subject, merge } from 'rxjs';
-import { takeWhile } from 'rxjs/operators';
 import { mapState } from 'vuex';
 import _ from 'lodash';
 import ViewService from './index';
+import ColorPicker from '@/components/colorPicker/index.vue';
 
 export default {
   name: 'ViewConfig',
+  components: {
+    ColorPicker,
+  },
   data: () => ({
     isSubscribed: true,
     config: null,
     viewService: new ViewService(),
   }),
-  subscriptions() {
-    this.change$ = new Subject();
-    merge(this.change$)
-      .pipe(
-        takeWhile(() => this.isSubscribed),
-      )
-      .subscribe(event => this.viewService.next(event));
-    return {};
-  },
   created() {
     this.config = _.cloneDeep(this.activeWidget.config.commonConfig);
   },

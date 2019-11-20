@@ -10,7 +10,7 @@ class Range {
 class View {
   constructor(el, screenWidth, screenHeight, {
     x, y, width, height, top, left, bottom, right,
-  }, scale, parent) {
+  }, scale, parent, backgroundColor) {
     this.type = 'ViewConfig';
     this.el = el;
     this.x = x;
@@ -33,6 +33,7 @@ class View {
       commonConfig: {
         height: this.height,
         width: this.width,
+        backgroundColor: backgroundColor || 'rgba(255,255,255,1)',
       },
     });
   }

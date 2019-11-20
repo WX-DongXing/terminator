@@ -103,18 +103,19 @@ export default {
   data: () => ({
     width: 1920,
     height: 1080,
+    backgroundColor: 'rgba(255,255,255,1)',
     scale: 1,
     isAutoResize: true,
     isSubscribed: true,
     isResize: false,
+    viewChange$: new ViewService().change$,
   }),
   mounted() {
-    const viewService = new ViewService();
     // 视图change事件处理
     merge(
       fromEvent(window, 'resize').pipe(mapTo({ type: 'resize' })),
       this.change$,
-      viewService.change$,
+      this.viewChange$,
     )
       .pipe(
         takeWhile(() => this.isSubscribed),
@@ -132,6 +133,7 @@ export default {
             this.$refs.view.getBoundingClientRect(),
             this.scale,
             this.parent = this.$refs.page,
+            event.type === 'backgroundColor' ? event.value : 'rgba(255,255,255,1)',
           ),
         });
       });
@@ -247,22 +249,18 @@ export default {
       const { width, height } = this.$refs.page.getBoundingClientRect();
       const xScale = ((width - 32) / this.width);
       const yScale = ((height - 32) / this.height);
-      switch (event.type) {
-        case 'resize':
-          this.scale = Math.min(xScale, yScale);
-          break;
-        case 'scale':
-          this.scale = event.value;
-          break;
-        default:
-          this[event.type] = event.value;
-          break;
+      // 如果视图的更改类型为resize，则根据宽高最小的比例设置缩放，其余更改只更新该类型变量数据
+      if (event.type === 'resize') {
+        this.scale = Math.min(xScale, yScale);
+      } else {
+        this[event.type] = event.value;
       }
       anime({
         targets: this.$refs.view,
         width: this.width,
         height: this.height,
         scale: this.scale,
+        backgroundColor: this.backgroundColor,
         duration: 150,
         easing: 'linear',
       });

@@ -111,7 +111,7 @@ export default {
 
   &__painter {
     position: absolute;
-    top: 48px;
+    top: 40px;
     left: 0;
     z-index: 1000;
   }
