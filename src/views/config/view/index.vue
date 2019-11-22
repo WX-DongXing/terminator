@@ -7,7 +7,9 @@
 */
 <template>
   <div class="comment-template">
-    <p class="comment-template__name">画板</p>
+    <div class="comment-template__header">
+      <p class="comment-template__name">画板</p>
+    </div>
 
     <!-- S 视图配置 -->
     <div class="view-config">

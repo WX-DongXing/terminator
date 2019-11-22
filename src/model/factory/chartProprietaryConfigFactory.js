@@ -5,7 +5,7 @@
 * Time: 5:37 下午
 * Email: dong.xing@outlook.com
 */
-import LinesProprietaryConfig from '../config/proprietaryConfig/linesProprietaryConfig';
+import LinesProprietaryConfig from '../config/proprietaryConfigs/linesProprietaryConfig';
 
 export default class ChartProprietaryConfigFactory {
   static create({ type, proprietaryConfig }) {

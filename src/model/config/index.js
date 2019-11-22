@@ -1,19 +1,23 @@
+import Factory from '../factory/factory';
 import CommonConfig from './commonConfig';
-import factory from '../factory/factory';
+import DataConfig from './dataConfig';
 
 // 图表专有属性工厂
-const chartProprietaryConfigFactory = factory.createChartProprietaryConfigFactory();
+const chartProprietaryConfigFactory = Factory.createChartProprietaryConfigFactory();
 
 class Config {
   constructor({
-    commonConfig, proprietaryConfig, dataConfig = null,
+    commonConfig, proprietaryConfig, dataConfig,
   }) {
     this.commonConfig = new CommonConfig(commonConfig);
     this.proprietaryConfig = chartProprietaryConfigFactory.create({
       type: commonConfig.type,
       proprietaryConfig,
     });
-    this.dataConfig = dataConfig;
+    this.dataConfig = new DataConfig({
+      widgetType: commonConfig.type,
+      ...dataConfig,
+    });
   }
 }
 

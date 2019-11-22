@@ -1,5 +1,6 @@
 import Vue from 'vue';
 import Vuex from 'vuex';
+import anime from 'animejs';
 
 Vue.use(Vuex);
 
@@ -31,7 +32,13 @@ export default {
     },
     // 从视图部件库中移除该部件
     [ScreenMutations.REMOVE_WIDGET](state, payload) {
-      state.widgets = state.widgets.filter(widget => widget.id !== payload.widgetId);
+      state.widgets = state.widgets.filter(widget => widget.widgetId !== payload.widgetId);
+      // 置空激活部件
+      state.activeWidget = null;
+      // 隐藏选择器
+      anime.set(document.getElementById('wrapper'), {
+        display: 'none',
+      });
     },
     // 设置激活的部件，并修改widgets中的部件，深度复制激活部件，保留render对象
     [ScreenMutations.ACTIVATION_WIDGET](state, payload) {

@@ -1,4 +1,4 @@
-const LineConfig = {
+const LinesConfig = {
   grid: [
     {
       show: true,
@@ -28,4 +28,4 @@ const LineConfig = {
   }],
 };
 
-export default LineConfig;
+export default LinesConfig;

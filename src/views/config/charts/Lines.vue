@@ -7,7 +7,18 @@
 */
 <template>
   <div class="comment-template">
-    <p class="comment-template__name">折线图</p>
+    <div class="comment-template__header">
+      <p class="comment-template__name">折线图</p>
+      <a-popconfirm
+        title="从视图中删除该部件?"
+        placement="left"
+        @confirm="() => removeWidget({ widgetId: activeWidget.widgetId })"
+        okText="确定"
+        cancelText="取消"
+      >
+        <a-button shape="circle" type="danger" icon="delete" />
+      </a-popconfirm>
+    </div>
     <div class="lines-config">
       <a-tabs
         defaultActiveKey="1"
@@ -197,7 +208,7 @@
         </a-tab-pane>
 
         <a-tab-pane tab="数据管道" key="3">
-
+          <DataSourceTemplate />
         </a-tab-pane>
       </a-tabs>
     </div>
@@ -210,6 +221,7 @@ import _ from 'lodash';
 import { mapState, mapMutations } from 'vuex';
 import { ScreenMutations } from '@/store/modules/screen';
 import CommonTemplate from '../common/index.vue';
+import DataSourceTemplate from '../dataSource/index.vue';
 import ColorPicker from '@/components/colorPicker/index.vue';
 
 export default {
@@ -217,7 +229,17 @@ export default {
   components: {
     CommonTemplate,
     ColorPicker,
+    DataSourceTemplate,
   },
+  data: () => ({
+    icons: [
+      { name: 'circle', value: '圆点' },
+      { name: 'rect', value: '矩形' },
+      { name: 'roundRect', value: '圆角矩形' },
+      { name: 'triangle', value: '三角形' },
+      { name: 'diamond', value: '菱形' },
+    ],
+  }),
   computed: {
     ...mapState('screen', ['activeWidget', 'view']),
     config() {
@@ -227,6 +249,7 @@ export default {
   methods: {
     ...mapMutations('screen', {
       activationWidget: ScreenMutations.ACTIVATION_WIDGET,
+      removeWidget: ScreenMutations.REMOVE_WIDGET,
     }),
     change() {
       const activeWidget = _.cloneDeep(this.activeWidget);
