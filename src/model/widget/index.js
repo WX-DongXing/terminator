@@ -10,11 +10,9 @@ import Config from '../config';
 
 export default class Widget {
   constructor({
-    category, type, config, render = null,
+    config, render = null,
   }) {
     this.widgetId = uuid();
-    this.category = category;
-    this.type = type;
     this.config = new Config(config);
     this.render = render;
   }

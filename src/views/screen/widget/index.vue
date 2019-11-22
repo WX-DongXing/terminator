@@ -26,11 +26,11 @@ export default {
     ...mapState('screen', ['widgets']),
   },
   mounted() {
-    const widgetFactory = this.widget.category === 'CHART'
+    const widgetFactory = this.widget.config.category === 'CHART'
       ? Factory.createChartFactory()
       : Factory.createElementFactory();
     // 根据类型创建图表
-    this.chart = widgetFactory.create(this.widget.type, {
+    this.chart = widgetFactory.create(this.widget.config.type, {
       widget: this.widget,
     });
     // 将渲染的元素更新至部件

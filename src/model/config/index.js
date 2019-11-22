@@ -7,15 +7,17 @@ const chartProprietaryConfigFactory = Factory.createChartProprietaryConfigFactor
 
 class Config {
   constructor({
-    commonConfig, proprietaryConfig, dataConfig,
+    category, type, commonConfig, proprietaryConfig, dataConfig,
   }) {
+    this.category = category;
+    this.type = type;
     this.commonConfig = new CommonConfig(commonConfig);
     this.proprietaryConfig = chartProprietaryConfigFactory.create({
-      type: commonConfig.type,
+      type,
       proprietaryConfig,
     });
     this.dataConfig = new DataConfig({
-      widgetType: commonConfig.type,
+      widgetType: type,
       ...dataConfig,
     });
   }

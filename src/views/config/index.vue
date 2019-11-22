@@ -11,7 +11,7 @@
       <p>窗口配置</p>
     </div>
     <div class="config__content">
-      <component v-if="activeWidget" :is="activeWidget.type" />
+      <component v-if="activeWidget" :is="activeWidget.config.type" />
       <div class="config__none" v-else>
         <a-icon type="disconnect" />
         <p>无激活窗口配置</p>

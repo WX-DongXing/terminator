@@ -108,8 +108,8 @@ export default {
           const zIndex = _.isEmpty(zIndexList) ? 0 : Math.max(...zIndexList) + 1;
           // 将模板对应为部件
           const widget = new Widget({
-            ...data,
             config: {
+              ...data,
               commonConfig: {
                 ...data,
                 top: (targetRect.y + parent.scrollTop - rect.y) / scale,
