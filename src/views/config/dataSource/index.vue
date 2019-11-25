@@ -8,8 +8,9 @@
         <p class="comment-template__leading">选择:</p>
         <div class="comment-template__inner">
           <a-select
-            class="data-source__select">
-<!--            v-model="config.proprietaryConfig.lineStyle.type" @change="change">-->
+            class="data-source__select"
+            v-model="config.dataConfig.sourceType" @change="change">
+            <a-select-option value="null">空数据</a-select-option>
             <a-select-option value="static">静态数据</a-select-option>
             <a-select-option value="real">实时数据</a-select-option>
           </a-select>
@@ -24,19 +25,30 @@
 <script>
 import '@/assets/less/template.less';
 import _ from 'lodash';
-import { mapState } from 'vuex';
+import { mapState, mapMutations } from 'vuex';
+import { ScreenMutations } from '@/store/modules/screen';
 
 export default {
   name: 'DataSourceTemplate',
   computed: {
-    ...mapState('screen', ['activeWidget', 'view']),
-    // 为不修改 state.activeWidget，在此深复制激活部件的配置项，并将其设置为该组件内变量，修改部件后提交再行修改state.activeWidget
+    ...mapState('screen', ['activeWidget']),
     config() {
       return _.cloneDeep(this.activeWidget.config);
     },
   },
-  created() {
-    console.log(this.config);
+  methods: {
+    ...mapMutations('screen', {
+      activationWidget: ScreenMutations.ACTIVATION_WIDGET,
+    }),
+    change() {
+      const activeWidget = _.cloneDeep(this.activeWidget);
+      const { render } = this.activeWidget;
+      Object.assign(activeWidget.config, this.config);
+      this.activationWidget({
+        widget: Object.assign(activeWidget, { render }),
+      });
+      render.mergeOption(this.config);
+    },
   },
 };
 </script>

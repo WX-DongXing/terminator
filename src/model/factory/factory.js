@@ -1,7 +1,7 @@
 import ChartFactory from './chartFactory';
 import ElementFactory from './elementFactory';
 import ChartProprietaryConfigFactory from './chartProprietaryConfigFactory';
-import StaticDataConfigFactory from './staticDataConfigFactory';
+import StaticDataFactory from './staticDataFactory';
 
 export default class Factory {
   // 创建图表工厂
@@ -11,7 +11,7 @@ export default class Factory {
   static createChartProprietaryConfigFactory = () => ChartProprietaryConfigFactory
 
   // 创建图表静态数据配置工厂
-  static createStaticDataConfigFactory = () => StaticDataConfigFactory
+  static createStaticDataFactory = () => StaticDataFactory
 
   // 创建元素工厂
   static createElementFactory = () => ElementFactory

@@ -1,3 +1,11 @@
+/**
+* 折线图默认配置
+* Author: dong xing
+* Date: 2019/11/22
+* Time: 4:49 下午
+* Email: dong.xing@outlook.com
+*/
+
 const LinesConfig = {
   grid: [
     {

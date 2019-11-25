@@ -7,7 +7,8 @@
 */
 import echarts from 'echarts';
 import anime from 'animejs';
-import LinesConfig from '../config/defaultConfig/linesConfig';
+import _ from 'lodash';
+import LinesConfig from '@/assets/js/defaultChartConfig/linesConfig';
 
 export default class LineChart {
   constructor({ widget }) {
@@ -60,17 +61,38 @@ export default class LineChart {
 
   /**
    * 映射成 echarts 配置项
-   * @param commonConfig
-   * @param proprietaryConfig
+   * @param commonConfig 公共配置
+   * @param proprietaryConfig 专有配置
+   * @param dataConfig 数据配置
    */
-  static mappingOption({ commonConfig, proprietaryConfig }) {
+  static mappingOption({ commonConfig, proprietaryConfig, dataConfig }) {
     const { backgroundColor, border, padding } = commonConfig;
     const { smooth, legend, lineStyle } = proprietaryConfig;
+    const { sourceType, staticData } = dataConfig;
     const [top, right, bottom, left] = padding;
+    const chartLegend = _.cloneDeep(legend);
+    const line = {
+      type: 'line',
+      smooth: smooth === 1,
+      lineStyle,
+    };
+    let xAxis = {};
+    let yAxis = {};
+    let series = [];
+
+    if (sourceType === 'static') {
+      Object.assign(chartLegend, { data: staticData.legend });
+      series = staticData.series.map((item) => {
+        Object.assign(item, line);
+        return item;
+      });
+      xAxis = _.cloneDeep(staticData.xAxis);
+      yAxis = _.cloneDeep(staticData.yAxis);
+    }
+
     return Object.assign({}, {
       legend: {
-        ...legend,
-        data: ['Test'],
+        ...chartLegend,
       },
       grid: [
         {
@@ -95,20 +117,13 @@ export default class LineChart {
       ],
       xAxis: [{
         gridIndex: 1,
-        data: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
+        ...xAxis,
       }],
       yAxis: [{
         gridIndex: 1,
+        ...yAxis,
       }],
-      series: [
-        {
-          name: 'Test',
-          data: [820, 932, 901, 934, 1290, 1330, 1320],
-          type: 'line',
-          smooth: smooth === 1,
-          lineStyle,
-        },
-      ],
+      series,
     });
   }
 
@@ -119,7 +134,11 @@ export default class LineChart {
   mergeOption(config) {
     // 向外暴露 echarts 配置
     this.chartConfig = LineChart.mappingOption(config);
-    // 重新配置 echarts
+    // 如果数据为空则清空图表
+    if (_.isEmpty(this.chartConfig.series)) {
+      this.chart.clear();
+    }
+    // 重新配置图表
     this.chart.setOption(this.chartConfig);
   }
 }
