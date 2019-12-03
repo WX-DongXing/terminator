@@ -13,7 +13,9 @@ class BorderTypeOption {
  */
 class Border {
   constructor({
-    type, color, width,
+    type = 'solid',
+    color = '#333',
+    width = 1,
   }) {
     this.type = type;
     this.typeOptions = [
@@ -30,24 +32,22 @@ class Border {
  */
 export default class CommonConfig {
   constructor({
-    width, height, top, left, zIndex, border,
-    padding, backgroundColor,
+    width = 0,
+    height = 0,
+    top = 0,
+    left = 0,
+    zIndex = 0,
+    padding = [0, 0, 0, 0],
+    backgroundColor = 'rgba(255,255,255,1)',
+    border = {},
   }) {
-    this.width = width || 0;
-    this.height = height || 0;
-    this.top = top || 0;
-    this.left = left || 0;
+    this.width = width;
+    this.height = height;
+    this.top = top;
+    this.left = left;
     this.zIndex = zIndex;
-    this.backgroundColor = backgroundColor || 'rgba(255,255,255,1)';
-    this.border = new Border(border || {
-      type: 'none',
-      color: 'rgba(0,0,0,1)',
-      width: 1,
-      typeOptions: [
-        new BorderTypeOption('无边框', 'none'),
-        new BorderTypeOption('直线', 'solid'),
-      ],
-    });
-    this.padding = padding || [0, 0, 0, 0];
+    this.backgroundColor = backgroundColor;
+    this.border = new Border(border);
+    this.padding = padding;
   }
 }

@@ -6,12 +6,15 @@
 * Email: dong.xing@outlook.com
 */
 import LineChart from '../charts/LineChart';
+import BarChart from '../charts/BarChart';
 
 export default class ChartFactory {
-  static create(type, element, widget) {
+  static create(type, widget) {
     switch (type) {
       case 'Lines':
-        return new LineChart(element, widget);
+        return new LineChart(widget);
+      case 'Bar':
+        return new BarChart(widget);
       default:
         return null;
     }

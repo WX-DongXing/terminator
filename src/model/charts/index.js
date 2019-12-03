@@ -1,17 +1,18 @@
 /**
-* 折线图
+* echarts 图表对象
 * Author: dong xing
-* Date: 2019/11/20
-* Time: 8:55 上午
+* Date: 2019/11/25
+* Time: 4:55 下午
 * Email: dong.xing@outlook.com
 */
-import echarts from 'echarts';
 import anime from 'animejs';
+import echarts from 'echarts';
 import _ from 'lodash';
 
-export default class LineChart {
+export default class Chart {
   constructor({ widget }) {
     this.container = document.getElementById(widget.widgetId);
+    this.initConfig = {};
     this.setContainer(widget);
     this.init(widget);
   }
@@ -33,6 +34,7 @@ export default class LineChart {
     });
   }
 
+
   /**
    * 初始化图表
    * @param widget
@@ -52,12 +54,17 @@ export default class LineChart {
   }
 
   /**
-   * 映射成 echarts 配置项
-   * @param commonConfig 公共配置
-   * @param proprietaryConfig 专有配置
-   * @param dataConfig 数据配置
+   * 重置图表默认配置
    */
-  static mappingOption({ commonConfig, proprietaryConfig, dataConfig }) {
+  reset() {
+    this.chart.setOption(this.initConfig);
+  }
+
+  /**
+   * 映射成 echarts 配置项
+   */
+  // eslint-disable-next-line class-methods-use-this
+  mappingOption({ commonConfig, proprietaryConfig, dataConfig }) {
     const { backgroundColor, border, padding } = commonConfig;
     const { smooth, legend, lineStyle } = proprietaryConfig;
     const { sourceType, staticData } = dataConfig;
@@ -125,7 +132,7 @@ export default class LineChart {
    */
   mergeOption(config) {
     // 向外暴露 echarts 配置
-    this.chartConfig = LineChart.mappingOption(config);
+    this.chartConfig = this.mappingOption(config);
     // 如果数据为空则清空图表
     if (_.isEmpty(this.chartConfig.series)) {
       this.chart.clear();

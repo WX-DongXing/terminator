@@ -5,13 +5,16 @@
 * Time: 5:37 下午
 * Email: dong.xing@outlook.com
 */
-import LinesProprietaryConfig from '../config/proprietaryConfigs/linesProprietaryConfig';
+import LinesProprietaryConfig from '../config/proprietaryConfigs/LinesProprietaryConfig';
+import BarProprietaryConfig from '../config/proprietaryConfigs/BarProprietaryConfig';
 
 export default class ChartProprietaryConfigFactory {
   static create({ type, proprietaryConfig }) {
     switch (type) {
       case 'Lines':
-        return new LinesProprietaryConfig(proprietaryConfig);
+        return new LinesProprietaryConfig(proprietaryConfig || {});
+      case 'Bar':
+        return new BarProprietaryConfig(proprietaryConfig || {});
       default:
         return null;
     }

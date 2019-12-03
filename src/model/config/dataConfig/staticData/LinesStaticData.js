@@ -6,7 +6,7 @@
 * Email: dong.xing@outlook.com
 */
 const LinesStaticData = {
-  legend: ['日期'],
+  legend: ['折线图示例'],
   xAxis: {
     type: 'category',
     data: ['周一', '周二', '周三', '周四', '周五', '周六', '周日'],
@@ -15,7 +15,7 @@ const LinesStaticData = {
     type: 'value',
   },
   series: [
-    { name: '日期', data: [820, 932, 901, 934, 1290, 1330, 1320] },
+    { name: '折线图示例', data: [820, 932, 901, 934, 1290, 1330, 1320] },
   ],
 };
 

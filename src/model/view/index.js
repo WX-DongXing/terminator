@@ -8,8 +8,9 @@ class Range {
 }
 
 export default class View {
-  constructor(el, width, height, scale, parent, backgroundColor) {
-    this.type = 'ViewConfig';
+  constructor({
+    el, width, height, scale, parent, backgroundColor,
+  }) {
     this.el = el;
     this.rect = el.getBoundingClientRect();
     this.area = {
@@ -19,6 +20,7 @@ export default class View {
     this.scale = scale;
     this.parent = parent;
     this.config = new Config({
+      type: 'ViewConfig',
       commonConfig: {
         height,
         width,

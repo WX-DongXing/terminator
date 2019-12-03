@@ -126,17 +126,16 @@ export default {
         this.setScale(event);
         // 设置屏幕对象
         this.setView({
-          view: new View(
-            this.$refs.view,
-            this.width,
-            this.height,
-            this.scale,
-            this.$refs.page,
-            event.type === 'backgroundColor' ? event.value : 'rgba(255,255,255,1)',
-          ),
+          view: new View({
+            el: this.$refs.view,
+            width: this.width,
+            height: this.height,
+            scale: this.scale,
+            parent: this.$refs.page,
+            backgroundColor: event.type === 'backgroundColor' ? event.value : 'rgba(255,255,255,1)',
+          }),
         });
       });
-
     // 选择激活的部件
     merge(
       this.select$,
