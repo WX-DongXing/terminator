@@ -110,6 +110,8 @@ export default {
   }
 
   &__painter {
+    height: 0;
+    overflow: visible;
     position: absolute;
     top: 40px;
     left: 0;

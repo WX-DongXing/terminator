@@ -16,7 +16,7 @@ import { ItemStyle, Legend } from './index';
  */
 export default class BarProprietaryConfig {
   constructor({
-    barType = 'multiple',
+    barType = 'single',
     itemStyle = {},
     legend = {},
     barWidthType = 'auto',

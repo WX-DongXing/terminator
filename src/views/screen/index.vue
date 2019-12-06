@@ -339,7 +339,7 @@ export default {
   box-sizing: border-box;
   padding: 0 16px;
   height: 48px;
-  background: #fafafa;
+  background: white;
   border: 2px solid whitesmoke;
   border-bottom: none;
 

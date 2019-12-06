@@ -13,51 +13,62 @@
 
     <!-- S 视图配置 -->
     <div class="view-config">
+      <a-collapse :activeKey="[1, 2]" :bordered="false">
 
-      <p class="comment-template__title">尺寸</p>
-      <div class="comment-template__content">
+        <!-- S 尺寸 -->
+        <a-collapse-panel header="尺寸" key="1">
 
-        <div class="comment-template__item">
-          <p class="comment-template__leading">宽:</p>
-          <div class="comment-template__inner">
-            <a-input
-              type="number"
-              v-model="config.width"
-              @change="() => viewService.next({ type: 'width', value: Number(config.width) })" />
+          <div class="comment-template__item">
+            <p class="comment-template__leading">宽:</p>
+            <div class="comment-template__inner">
+              <a-input
+                type="number"
+                v-model="config.width"
+                @change="() => viewService.next({
+                  type: 'width',
+                  value: Number(config.width)
+                })" />
+            </div>
           </div>
-        </div>
-        <!-- / 宽 -->
+          <!-- / 宽 -->
 
-        <div class="comment-template__item">
-          <p class="comment-template__leading">高:</p>
-          <div class="comment-template__inner">
-            <a-input
-              type="number"
-              v-model="config.height"
-              @change="() => viewService.next({ type: 'height', value: Number(config.height) })" />
+          <div class="comment-template__item">
+            <p class="comment-template__leading">高:</p>
+            <div class="comment-template__inner">
+              <a-input
+                type="number"
+                v-model="config.height"
+                @change="() => viewService.next({
+                  type: 'height',
+                  value: Number(config.height)
+                })" />
+            </div>
           </div>
-        </div>
-        <!-- / 高 -->
+          <!-- / 高 -->
 
-      </div>
-      <!-- / 尺寸 -->
+        </a-collapse-panel>
+        <!-- E 尺寸 -->
 
-      <p class="comment-template__title">背景</p>
-      <div class="comment-template__content">
+        <!-- E 背景 -->
+        <a-collapse-panel header="背景" key="2">
 
-        <div class="comment-template__item">
-          <p class="comment-template__leading">颜色:</p>
-          <div class="comment-template__inner">
-            <ColorPicker
-              v-model="config.backgroundColor"
-              @change="() =>
-               viewService.next({ type: 'backgroundColor', value: config.backgroundColor })"  />
+          <div class="comment-template__item">
+            <p class="comment-template__leading">颜色:</p>
+            <div class="comment-template__inner">
+              <ColorPicker
+                v-model="config.backgroundColor"
+                @change="() =>viewService.next({
+                  type: 'backgroundColor',
+                  value: config.backgroundColor
+                 })" />
+            </div>
           </div>
-        </div>
-        <!-- / 颜色 -->
+          <!-- / 颜色 -->
 
-      </div>
-      <!-- / 背景 -->
+        </a-collapse-panel>
+        <!-- E 背景 -->
+
+      </a-collapse>
 
     </div>
     <!-- E 视图配置 -->
