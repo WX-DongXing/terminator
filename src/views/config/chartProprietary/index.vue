@@ -8,6 +8,10 @@
 <template>
   <div class="chart-proprietary-template">
 
+    <!-- S 图表专有配置顶部插槽 -->
+    <slot name="header" :config="config" />
+    <!-- E 图表专有配置顶部插槽 -->
+
     <p class="comment-template__title">图例</p>
     <div class="comment-template__content">
       <div class="comment-template__item">
@@ -133,7 +137,9 @@
     </div>
     <!-- E 折线图专有配置 -->
 
+    <!-- S 图表专有配置默认插槽 -->
     <slot :config="config" />
+    <!-- E 图表专有配置默认插槽 -->
 
   </div>
 </template>

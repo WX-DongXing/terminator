@@ -20,7 +20,9 @@ export default class BarChart extends Chart {
   // eslint-disable-next-line class-methods-use-this
   mappingOption({ commonConfig, proprietaryConfig, dataConfig }) {
     const { backgroundColor, border, padding } = commonConfig;
-    const { legend, itemStyle, barWidth } = proprietaryConfig;
+    const {
+      barType, legend, itemStyle, barWidth,
+    } = proprietaryConfig;
     const { sourceType, staticData } = dataConfig;
     const [top, right, bottom, left] = padding;
     const chartLegend = _.cloneDeep(legend);
@@ -28,7 +30,8 @@ export default class BarChart extends Chart {
     let yAxis = {};
     const bar = {
       type: 'bar',
-      itemStyle: _.cloneDeep(itemStyle),
+      // 删除 color 对象，防止未格式化颜色影响图表颜色
+      itemStyle: _.omit(_.cloneDeep(itemStyle), 'color'),
     };
 
     const { type, color } = _.cloneDeep(itemStyle);
@@ -38,60 +41,80 @@ export default class BarChart extends Chart {
         targetColor = color;
         break;
       case 'combination':
-        targetColor = (params) => {
-          if (!params) {
-            return null;
-          }
-          return [...color][params.dataIndex] || 'rgba(0, 0, 0, 1)';
-        };
+        targetColor = [...color];
+        // 单一项暂时注释
+        // targetColor = (params) => {
+        //   if (!params) {
+        //     return null;
+        //   }
+        //   return [...color][params.dataIndex] || 'rgba(0, 0, 0, 1)';
+        // };
         break;
       case 'linear':
-        targetColor = (params) => {
-          if (!params) {
-            return null;
-          }
-          const defaultColor = { start: 'rgba(255,255,255,1)', end: 'rgba(0,0,0,1)' };
-          const colors = _.isEmpty(color)
-            ? new Array(11).fill(defaultColor)
-            : [...color];
-          return {
-            type: 'linear',
-            x: 1,
-            y: 0,
-            x2: 1,
-            y2: 1,
-            colorStops: [
-              {
-                offset: 0,
-                color: (colors[params.dataIndex] || defaultColor).start,
-              },
-              {
-                offset: 1,
-                color: (colors[params.dataIndex] || defaultColor).end,
-              },
-            ],
-          };
-        };
+        targetColor = [...color].map(({ start, end }) => ({
+          type: 'linear',
+          x: 1,
+          y: 0,
+          x2: 1,
+          y2: 1,
+          colorStops: [
+            {
+              offset: 0,
+              color: start,
+            },
+            {
+              offset: 1,
+              color: end,
+            },
+          ],
+        }));
+        // 单一项暂时注释
+        // targetColor = (params) => {
+        //   if (!params) {
+        //     return null;
+        //   }
+        //   const defaultColor = { start: 'rgba(255,255,255,1)', end: 'rgba(0,0,0,1)' };
+        //   const colors = _.isEmpty(color)
+        //     ? new Array(11).fill(defaultColor)
+        //     : [...color];
+        //   return {
+        //     type: 'linear',
+        //     x: 1,
+        //     y: 0,
+        //     x2: 1,
+        //     y2: 1,
+        //     colorStops: [
+        //       {
+        //         offset: 0,
+        //         color: (colors[params.dataIndex] || defaultColor).start,
+        //       },
+        //       {
+        //         offset: 1,
+        //         color: (colors[params.dataIndex] || defaultColor).end,
+        //       },
+        //     ],
+        //   };
+        // };
         break;
       default:
         targetColor = null;
         break;
     }
-    Object.assign(bar.itemStyle, { color: targetColor });
+    // Object.assign(bar.itemStyle, { color: targetColor });
 
     let series = [];
 
     if (sourceType === 'static') {
-      Object.assign(chartLegend, { data: staticData.legend });
-      series = staticData.series.map((item) => {
+      Object.assign(chartLegend, { legend: staticData.legend });
+      series = staticData[barType === 'single' ? 'singleSeries' : 'multipleSeries'].map((item) => {
         Object.assign(item, bar, { barWidth });
         return item;
       });
       xAxis = _.cloneDeep(staticData.xAxis);
       yAxis = _.cloneDeep(staticData.yAxis);
     }
-
     return Object.assign({}, {
+      color: targetColor,
       legend: {
         ...chartLegend,
       },
@@ -108,10 +131,10 @@ export default class BarChart extends Chart {
         },
         {
           show: true,
-          top: 25 + top,
-          right: 25 + right,
-          bottom: 25 + bottom,
-          left: 25 + left,
+          top: 30 + top,
+          right: 30 + right,
+          bottom: 30 + bottom,
+          left: 30 + left,
           borderWidth: 0,
           backgroundColor: 'transparent',
         },

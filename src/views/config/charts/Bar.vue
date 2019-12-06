@@ -37,6 +37,54 @@
 
           <!-- S 专有配置模板 -->
           <ChartProprietaryTemplate ref="chartProprietaryRef">
+            <template v-slot:header="{ config }">
+
+              <p class="comment-template__title">图形</p>
+              <div class="comment-template__content">
+
+                <div class="comment-template__item">
+                  <p class="comment-template__leading">显示类型:</p>
+                  <div class="comment-template__inner">
+                    <a-select
+                      v-model="config.proprietaryConfig.barType"
+                      @change="$refs.chartProprietaryRef.change()">
+                      <a-select-option value="single">单列</a-select-option>
+                      <a-select-option value="multiple">多列</a-select-option>
+                    </a-select>
+                  </div>
+                </div>
+                <!-- / 数据类型 -->
+
+                <div class="comment-template__item">
+                  <p class="comment-template__leading">柱条宽度:</p>
+                  <div class="comment-template__inner">
+                    <a-select
+                      v-model="config.proprietaryConfig.barWidthType"
+                      @change="barWidthTypeChange(config)">
+                      <a-select-option value="auto">自适应</a-select-option>
+                      <a-select-option value="custom">自定义</a-select-option>
+                    </a-select>
+                  </div>
+                </div>
+                <!-- / 柱条宽度 -->
+
+                <div class="comment-template__item"
+                     v-if="config.proprietaryConfig.barWidthType === 'custom'"
+                >
+                  <p class="comment-template__leading">自定宽度:</p>
+                  <div class="comment-template__inner">
+                    <a-input
+                      type="number" min="12" max="100"
+                      @change="$refs.chartProprietaryRef.change()"
+                      v-model.number="config.proprietaryConfig.barWidth" />
+                  </div>
+                </div>
+                <!-- / 柱条宽度 -->
+
+              </div>
+              <!-- / 图形 -->
+
+            </template>
             <template v-slot="{ config }">
 
               <p class="comment-template__title">颜色</p>
@@ -177,38 +225,6 @@
 
               </div>
               <!-- / 颜色 -->
-
-              <p class="comment-template__title">图形</p>
-              <div class="comment-template__content">
-
-                <div class="comment-template__item">
-                  <p class="comment-template__leading">柱条宽度:</p>
-                  <div class="comment-template__inner">
-                    <a-select
-                      v-model="config.proprietaryConfig.barWidthType"
-                      @change="barWidthTypeChange(config)">
-                      <a-select-option value="auto">自适应</a-select-option>
-                      <a-select-option value="custom">自定义</a-select-option>
-                    </a-select>
-                  </div>
-                </div>
-                <!-- / 柱条宽度 -->
-
-                <div class="comment-template__item"
-                  v-if="config.proprietaryConfig.barWidthType === 'custom'"
-                >
-                  <p class="comment-template__leading">自定宽度:</p>
-                  <div class="comment-template__inner">
-                    <a-input
-                      type="number" min="12" max="100"
-                      @change="$refs.chartProprietaryRef.change()"
-                      v-model.number="config.proprietaryConfig.barWidth" />
-                  </div>
-                </div>
-                <!-- / 柱条宽度 -->
-
-              </div>
-              <!-- / 图形 -->
 
               <p class="comment-template__title">圆角</p>
               <div class="comment-template__content">

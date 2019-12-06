@@ -15,7 +15,7 @@ class Border {
   constructor({
     type = 'solid',
     color = '#333',
-    width = 1,
+    width = 0,
   }) {
     this.type = type;
     this.typeOptions = [
