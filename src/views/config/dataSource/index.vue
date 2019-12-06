@@ -1,23 +1,37 @@
+/**
+* 数据源选择模板
+* Author: dong xing
+* Date: 2019/12/6
+* Time: 4:09 下午
+* Email: dong.xing@outlook.com
+*/
+
 <template>
   <div class="data-source common-template">
 
-    <!-- S 背景颜色 -->
-    <p class="comment-template__title">数据源</p>
-    <div class="comment-template__content">
-      <div class="comment-template__item">
-        <p class="comment-template__leading">选择:</p>
-        <div class="comment-template__inner">
-          <a-select
-            class="data-source__select"
-            v-model="config.dataConfig.sourceType" @change="change">
-            <a-select-option value="null">空数据</a-select-option>
-            <a-select-option value="static">静态数据</a-select-option>
-            <a-select-option value="real">实时数据</a-select-option>
-          </a-select>
+    <a-collapse defaultActiveKey="1" :bordered="false">
+
+      <!-- S 数据源 -->
+      <a-collapse-panel header="数据源" key="1">
+
+        <div class="comment-template__item">
+          <p class="comment-template__leading">选择:</p>
+          <div class="comment-template__inner">
+            <a-select
+              class="data-source__select"
+              v-model="config.dataConfig.sourceType" @change="change">
+              <a-select-option value="null">空数据</a-select-option>
+              <a-select-option value="static">静态数据</a-select-option>
+              <a-select-option value="real">实时数据</a-select-option>
+            </a-select>
+          </div>
         </div>
-      </div>
-    </div>
-    <!-- E 背景颜色 -->
+        <!-- / 数据源选择 -->
+
+      </a-collapse-panel>
+      <!-- E 数据源 -->
+
+    </a-collapse>
 
   </div>
 </template>

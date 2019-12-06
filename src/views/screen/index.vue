@@ -295,7 +295,7 @@ export default {
     height: 48px;
     box-sizing: border-box;
     padding: 0 16px;
-    background: #fafafa;
+    background: white;
     border-bottom: 1px solid rgba(0, 0, 0, .3);
 
     p {

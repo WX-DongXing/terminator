@@ -37,59 +37,64 @@
 
           <!-- S 专有配置模板 -->
           <ChartProprietaryTemplate ref="chartProprietaryRef">
-            <template v-slot="{ config }">
+            <template v-slot:header="{ config }">
 
               <!-- S 折线图专有配置 -->
-              <p class="comment-template__title">折线</p>
-              <div class="comment-template__content">
-                <div class="comment-template__item">
-                  <p class="comment-template__leading">类型:</p>
-                  <div class="comment-template__inner">
-                    <a-select
-                      v-model="config.proprietaryConfig.lineStyle.type"
-                      @change="$refs.chartProprietaryRef.change()">
-                      <a-select-option value="solid">直线</a-select-option>
-                      <a-select-option value="dashed">虚线</a-select-option>
-                      <a-select-option value="dotted">点线</a-select-option>
-                    </a-select>
-                  </div>
-                </div>
-                <!-- / 类型 -->
+              <a-collapse defaultActiveKey="1" :bordered="false">
 
-                <div class="comment-template__item">
-                  <p class="comment-template__leading">平滑:</p>
-                  <div class="comment-template__inner">
-                    <a-select
-                      v-model="config.proprietaryConfig.smooth"
-                      @change="$refs.chartProprietaryRef.change()">
-                      <a-select-option :value="0">正常</a-select-option>
-                      <a-select-option :value="1">平滑</a-select-option>
-                    </a-select>
-                  </div>
-                </div>
-                <!-- / 平滑 -->
+                <a-collapse-panel header="折线" key="1">
 
-                <div class="comment-template__item">
-                  <p class="comment-template__leading">粗细:</p>
-                  <div class="comment-template__inner">
-                    <a-slider
-                      v-model="config.proprietaryConfig.lineStyle.width"
-                      @change="$refs.chartProprietaryRef.change()" :min="1" :max="10" />
+                  <div class="comment-template__item">
+                    <p class="comment-template__leading">类型:</p>
+                    <div class="comment-template__inner">
+                      <a-select
+                        v-model="config.proprietaryConfig.lineStyle.type"
+                        @change="$refs.chartProprietaryRef.change()">
+                        <a-select-option value="solid">直线</a-select-option>
+                        <a-select-option value="dashed">虚线</a-select-option>
+                        <a-select-option value="dotted">点线</a-select-option>
+                      </a-select>
+                    </div>
                   </div>
-                </div>
-                <!-- / 粗细 -->
+                  <!-- / 类型 -->
 
-                <div class="comment-template__item">
-                  <p class="comment-template__leading">颜色:</p>
-                  <div class="comment-template__inner">
-                    <ColorPicker
-                      v-model="config.proprietaryConfig.lineStyle.color"
-                      @change="$refs.chartProprietaryRef.change()"/>
+                  <div class="comment-template__item">
+                    <p class="comment-template__leading">平滑:</p>
+                    <div class="comment-template__inner">
+                      <a-select
+                        v-model="config.proprietaryConfig.smooth"
+                        @change="$refs.chartProprietaryRef.change()">
+                        <a-select-option :value="0">正常</a-select-option>
+                        <a-select-option :value="1">平滑</a-select-option>
+                      </a-select>
+                    </div>
                   </div>
-                </div>
-                <!-- / 颜色 -->
+                  <!-- / 平滑 -->
 
-              </div>
+                  <div class="comment-template__item">
+                    <p class="comment-template__leading">粗细:</p>
+                    <div class="comment-template__inner">
+                      <a-slider
+                        v-model="config.proprietaryConfig.lineStyle.width"
+                        @change="$refs.chartProprietaryRef.change()" :min="1" :max="10" />
+                    </div>
+                  </div>
+                  <!-- / 粗细 -->
+
+                  <div class="comment-template__item">
+                    <p class="comment-template__leading">颜色:</p>
+                    <div class="comment-template__inner">
+                      <ColorPicker
+                        v-model="config.proprietaryConfig.lineStyle.color"
+                        @change="$refs.chartProprietaryRef.change()"/>
+                    </div>
+                  </div>
+                  <!-- / 颜色 -->
+
+                </a-collapse-panel>
+                <!-- / 折线 -->
+
+              </a-collapse>
               <!-- E 折线图专有配置 -->
 
             </template>

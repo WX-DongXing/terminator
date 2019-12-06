@@ -12,129 +12,135 @@
     <slot name="header" :config="config" />
     <!-- E 图表专有配置顶部插槽 -->
 
-    <p class="comment-template__title">图例</p>
-    <div class="comment-template__content">
-      <div class="comment-template__item">
-        <p class="comment-template__leading">显示:</p>
-        <div class="comment-template__inner">
-          <a-select
-            v-model="config.proprietaryConfig.legend.show"
-            @change="change">
-            <a-select-option :value="1">显示</a-select-option>
-            <a-select-option :value="0">不显示</a-select-option>
-          </a-select>
-        </div>
-      </div>
-      <!-- / 显示 -->
+    <!-- E 折线图专有配置 -->
+    <a-collapse :bordered="false">
 
-      <div v-if="config.proprietaryConfig.legend.show">
+      <a-collapse-panel header="图例" key="1">
+
         <div class="comment-template__item">
-          <p class="comment-template__leading">方向:</p>
+          <p class="comment-template__leading">显示:</p>
           <div class="comment-template__inner">
             <a-select
-              v-model="config.proprietaryConfig.legend.orient"
+              v-model="config.proprietaryConfig.legend.show"
               @change="change">
-              <a-select-option value="horizontal">水平</a-select-option>
-              <a-select-option value="vertical">纵向</a-select-option>
+              <a-select-option :value="1">显示</a-select-option>
+              <a-select-option :value="0">不显示</a-select-option>
             </a-select>
           </div>
         </div>
-        <!-- / 方向 -->
+        <!-- / 显示 -->
 
-        <div class="comment-template__item">
-          <p class="comment-template__leading">居上:</p>
-          <div class="comment-template__inner">
-            <a-input
-              type="text" @change="change"
-              v-model="config.proprietaryConfig.legend.top" />
+        <div v-if="config.proprietaryConfig.legend.show">
+          <div class="comment-template__item">
+            <p class="comment-template__leading">方向:</p>
+            <div class="comment-template__inner">
+              <a-select
+                v-model="config.proprietaryConfig.legend.orient"
+                @change="change">
+                <a-select-option value="horizontal">水平</a-select-option>
+                <a-select-option value="vertical">纵向</a-select-option>
+              </a-select>
+            </div>
+          </div>
+          <!-- / 方向 -->
+
+          <div class="comment-template__item">
+            <p class="comment-template__leading">居上:</p>
+            <div class="comment-template__inner">
+              <a-input
+                type="text" @change="change"
+                v-model="config.proprietaryConfig.legend.top" />
+            </div>
+          </div>
+          <!-- / 居上 -->
+
+          <div class="comment-template__item">
+            <p class="comment-template__leading">居右:</p>
+            <div class="comment-template__inner">
+              <a-input
+                type="text" @change="change"
+                v-model="config.proprietaryConfig.legend.right" />
+            </div>
+          </div>
+          <!-- / 居右 -->
+
+          <div class="comment-template__item">
+            <p class="comment-template__leading">居下:</p>
+            <div class="comment-template__inner">
+              <a-input
+                type="text" @change="change"
+                v-model="config.proprietaryConfig.legend.bottom" />
+            </div>
+          </div>
+          <!-- / 居下 -->
+
+          <div class="comment-template__item">
+            <p class="comment-template__leading">居左:</p>
+            <div class="comment-template__inner">
+              <a-input
+                type="text" @change="change"
+                v-model="config.proprietaryConfig.legend.left" />
+            </div>
+          </div>
+          <!-- / 居左 -->
+
+          <div class="comment-template__item">
+            <p class="comment-template__leading">图标:</p>
+            <div class="comment-template__inner">
+              <a-select
+                v-model="config.proprietaryConfig.legend.icon"
+                @change="change">
+                <a-select-option
+                  v-for="icon in icons"
+                  :key="icon.value"
+                  :value="icon.value">
+                  {{icon.name}}
+                </a-select-option>
+              </a-select>
+            </div>
+          </div>
+          <!-- / 方向 -->
+
+          <div class="comment-template__item">
+            <p class="comment-template__leading">颜色:</p>
+            <div class="comment-template__inner">
+              <ColorPicker
+                v-model="config.proprietaryConfig.legend.textStyle.color"
+                @change="change" />
+            </div>
+          </div>
+          <!-- / 文字颜色 -->
+
+          <div class="comment-template__item">
+            <p class="comment-template__leading">粗细:</p>
+            <div class="comment-template__inner">
+              <a-select
+                v-model="config.proprietaryConfig.legend.textStyle.fontWeight"
+                @change="change">
+                <a-select-option value="normal">正常</a-select-option>
+                <a-select-option value="lighter">细</a-select-option>
+                <a-select-option value="bold">粗</a-select-option>
+                <a-select-option value="bolder">更粗</a-select-option>
+              </a-select>
+            </div>
+          </div>
+          <!-- / 文字粗细 -->
+
+          <div class="comment-template__item">
+            <p class="comment-template__leading">大小:</p>
+            <div class="comment-template__inner">
+              <a-slider
+                :min="6" :max="24" @change="change"
+                v-model="config.proprietaryConfig.legend.textStyle.fontSize" />
+            </div>
           </div>
         </div>
-        <!-- / 居上 -->
+        <!-- / 文字大小 -->
 
-        <div class="comment-template__item">
-          <p class="comment-template__leading">居右:</p>
-          <div class="comment-template__inner">
-            <a-input
-              type="text" @change="change"
-              v-model="config.proprietaryConfig.legend.right" />
-          </div>
-        </div>
-        <!-- / 居右 -->
+      </a-collapse-panel>
+      <!-- / 图例 -->
 
-        <div class="comment-template__item">
-          <p class="comment-template__leading">居下:</p>
-          <div class="comment-template__inner">
-            <a-input
-              type="text" @change="change"
-              v-model="config.proprietaryConfig.legend.bottom" />
-          </div>
-        </div>
-        <!-- / 居下 -->
-
-        <div class="comment-template__item">
-          <p class="comment-template__leading">居左:</p>
-          <div class="comment-template__inner">
-            <a-input
-              type="text" @change="change"
-              v-model="config.proprietaryConfig.legend.left" />
-          </div>
-        </div>
-        <!-- / 居左 -->
-
-        <div class="comment-template__item">
-          <p class="comment-template__leading">图标:</p>
-          <div class="comment-template__inner">
-            <a-select
-              v-model="config.proprietaryConfig.legend.icon"
-              @change="change">
-              <a-select-option
-                v-for="icon in icons"
-                :key="icon.value"
-                :value="icon.value">
-                {{icon.name}}
-              </a-select-option>
-            </a-select>
-          </div>
-        </div>
-        <!-- / 方向 -->
-
-        <div class="comment-template__item">
-          <p class="comment-template__leading">颜色:</p>
-          <div class="comment-template__inner">
-            <ColorPicker
-              v-model="config.proprietaryConfig.legend.textStyle.color"
-              @change="change" />
-          </div>
-        </div>
-        <!-- / 文字颜色 -->
-
-        <div class="comment-template__item">
-          <p class="comment-template__leading">粗细:</p>
-          <div class="comment-template__inner">
-            <a-select
-              v-model="config.proprietaryConfig.legend.textStyle.fontWeight"
-              @change="change">
-              <a-select-option value="normal">正常</a-select-option>
-              <a-select-option value="lighter">细</a-select-option>
-              <a-select-option value="bold">粗</a-select-option>
-              <a-select-option value="bolder">更粗</a-select-option>
-            </a-select>
-          </div>
-        </div>
-        <!-- / 文字粗细 -->
-
-        <div class="comment-template__item">
-          <p class="comment-template__leading">大小:</p>
-          <div class="comment-template__inner">
-            <a-slider
-              :min="6" :max="24" @change="change"
-              v-model="config.proprietaryConfig.legend.textStyle.fontSize" />
-          </div>
-        </div>
-        <!-- / 粗细 -->
-      </div>
-
-    </div>
+    </a-collapse>
     <!-- E 折线图专有配置 -->
 
     <!-- S 图表专有配置默认插槽 -->
@@ -195,7 +201,5 @@ export default {
 .chart-proprietary-template {
   height: calc(100vh - 224px);
   overflow: auto;
-  box-sizing: border-box;
-  padding: 0 12px;
 }
 </style>

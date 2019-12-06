@@ -37,166 +37,183 @@
 
           <!-- S 专有配置模板 -->
           <ChartProprietaryTemplate ref="chartProprietaryRef">
+
             <template v-slot:header="{ config }">
 
-              <p class="comment-template__title">图形</p>
-              <div class="comment-template__content">
+              <a-collapse defaultActiveKey="1" :bordered="false">
 
-                <div class="comment-template__item">
-                  <p class="comment-template__leading">显示类型:</p>
-                  <div class="comment-template__inner">
-                    <a-select
-                      v-model="config.proprietaryConfig.barType"
-                      @change="$refs.chartProprietaryRef.change()">
-                      <a-select-option value="single">单列</a-select-option>
-                      <a-select-option value="multiple">多列</a-select-option>
-                    </a-select>
-                  </div>
-                </div>
-                <!-- / 数据类型 -->
+                <a-collapse-panel header="图形" key="1">
 
-                <div class="comment-template__item">
-                  <p class="comment-template__leading">柱条宽度:</p>
-                  <div class="comment-template__inner">
-                    <a-select
-                      v-model="config.proprietaryConfig.barWidthType"
-                      @change="barWidthTypeChange(config)">
-                      <a-select-option value="auto">自适应</a-select-option>
-                      <a-select-option value="custom">自定义</a-select-option>
-                    </a-select>
-                  </div>
-                </div>
-                <!-- / 柱条宽度 -->
-
-                <div class="comment-template__item"
-                     v-if="config.proprietaryConfig.barWidthType === 'custom'"
-                >
-                  <p class="comment-template__leading">自定宽度:</p>
-                  <div class="comment-template__inner">
-                    <a-input
-                      type="number" min="12" max="100"
-                      @change="$refs.chartProprietaryRef.change()"
-                      v-model.number="config.proprietaryConfig.barWidth" />
-                  </div>
-                </div>
-                <!-- / 柱条宽度 -->
-
-              </div>
-              <!-- / 图形 -->
-
-            </template>
-            <template v-slot="{ config }">
-
-              <p class="comment-template__title">颜色</p>
-              <div class="comment-template__content">
-                <div class="comment-template__item">
-                  <p class="comment-template__leading">颜色类型:</p>
-                  <div class="comment-template__inner">
-                    <a-select
-                      v-model="config.proprietaryConfig.itemStyle.type"
-                      @change="typeChange(config)">
-                      <a-select-option value="single">单一</a-select-option>
-                      <a-select-option value="combination">组合</a-select-option>
-                      <a-select-option value="linear">渐变</a-select-option>
-                    </a-select>
-                  </div>
-                </div>
-                <!-- / 颜色类型 -->
-
-                <div class="comment-template__item"
-                     v-if="config.proprietaryConfig.itemStyle.type === 'single'">
-                  <p class="comment-template__leading">单一颜色:</p>
-                  <div class="comment-template__inner">
-                    <ColorPicker
-                      v-model="config.proprietaryConfig.itemStyle.color"
-                      @change="$refs.chartProprietaryRef.change()"/>
-                  </div>
-                </div>
-                <!-- / 单一颜色 -->
-
-                <div v-if="config.proprietaryConfig.itemStyle.type === 'combination'">
                   <div class="comment-template__item">
-                    <p class="comment-template__leading">组合类型:</p>
+                    <p class="comment-template__leading">显示类型:</p>
                     <div class="comment-template__inner">
                       <a-select
-                        v-model="config.proprietaryConfig.itemStyle.colorType"
-                        @change="colorTypeChange(config)">
-                        <a-select-option value="default">默认</a-select-option>
+                        v-model="config.proprietaryConfig.barType"
+                        @change="$refs.chartProprietaryRef.change()">
+                        <a-select-option value="single">单列</a-select-option>
+                        <a-select-option value="multiple">多列</a-select-option>
+                      </a-select>
+                    </div>
+                  </div>
+                  <!-- / 数据类型 -->
+
+                  <div class="comment-template__item">
+                    <p class="comment-template__leading">柱条宽度:</p>
+                    <div class="comment-template__inner">
+                      <a-select
+                        v-model="config.proprietaryConfig.barWidthType"
+                        @change="barWidthTypeChange(config)">
+                        <a-select-option value="auto">自适应</a-select-option>
                         <a-select-option value="custom">自定义</a-select-option>
                       </a-select>
                     </div>
                   </div>
-                  <!-- / 组合类型 -->
+                  <!-- / 柱条宽度 -->
 
-                  <div v-if="config.proprietaryConfig.itemStyle.colorType === 'default'">
+                  <div class="comment-template__item"
+                       v-if="config.proprietaryConfig.barWidthType === 'custom'"
+                  >
+                    <p class="comment-template__leading">自定宽度:</p>
+                    <div class="comment-template__inner">
+                      <a-input
+                        type="number" min="12" max="100"
+                        @change="$refs.chartProprietaryRef.change()"
+                        v-model.number="config.proprietaryConfig.barWidth" />
+                    </div>
+                  </div>
+                  <!-- / 柱条宽度 -->
+
+                </a-collapse-panel>
+                <!-- / 图形 -->
+
+              </a-collapse>
+
+            </template>
+
+            <template v-slot="{ config }">
+
+              <a-collapse :bordered="false">
+
+                <a-collapse-panel header="颜色" key="1">
+
+                  <div class="comment-template__item">
+                    <p class="comment-template__leading">颜色:</p>
+                    <div class="comment-template__inner">
+                      <ColorPicker
+                        v-model="config.commonConfig.backgroundColor"
+                        @change="change('style')" />
+                    </div>
+                  </div>
+                  <!-- / 背景颜色 -->
+
+                  <div class="comment-template__item">
+                    <p class="comment-template__leading">颜色类型:</p>
+                    <div class="comment-template__inner">
+                      <a-select
+                        v-model="config.proprietaryConfig.itemStyle.type"
+                        @change="typeChange(config)">
+                        <a-select-option value="single">单一</a-select-option>
+                        <a-select-option value="combination">组合</a-select-option>
+                        <a-select-option value="linear">渐变</a-select-option>
+                      </a-select>
+                    </div>
+                  </div>
+                  <!-- / 颜色类型 -->
+
+                  <div class="comment-template__item"
+                       v-if="config.proprietaryConfig.itemStyle.type === 'single'">
+                    <p class="comment-template__leading">单一颜色:</p>
+                    <div class="comment-template__inner">
+                      <ColorPicker
+                        v-model="config.proprietaryConfig.itemStyle.color"
+                        @change="$refs.chartProprietaryRef.change()"/>
+                    </div>
+                  </div>
+                  <!-- / 单一颜色 -->
+
+                  <div v-if="config.proprietaryConfig.itemStyle.type === 'combination'">
                     <div class="comment-template__item">
-                      <p class="comment-template__leading">配色方案:</p>
+                      <p class="comment-template__leading">组合类型:</p>
                       <div class="comment-template__inner">
                         <a-select
-                          v-model="config.proprietaryConfig.itemStyle.colorScheme"
-                          @change="$refs.chartProprietaryRef.change()">
+                          v-model="config.proprietaryConfig.itemStyle.colorType"
+                          @change="colorTypeChange(config)">
                           <a-select-option value="default">默认</a-select-option>
-                          <a-select-option value="light">亮</a-select-option>
-                          <a-select-option value="dark">暗</a-select-option>
+                          <a-select-option value="custom">自定义</a-select-option>
                         </a-select>
                       </div>
                     </div>
                     <!-- / 组合类型 -->
 
-                    <div class="comment-template__item bar-config__colors">
+                    <div v-if="config.proprietaryConfig.itemStyle.colorType === 'default'">
+                      <div class="comment-template__item">
+                        <p class="comment-template__leading">配色方案:</p>
+                        <div class="comment-template__inner">
+                          <a-select
+                            v-model="config.proprietaryConfig.itemStyle.colorScheme"
+                            @change="$refs.chartProprietaryRef.change()">
+                            <a-select-option value="default">默认</a-select-option>
+                            <a-select-option value="light">亮</a-select-option>
+                            <a-select-option value="dark">暗</a-select-option>
+                          </a-select>
+                        </div>
+                      </div>
+                      <!-- / 组合类型 -->
+
+                      <div class="comment-template__item bar-config__colors">
                       <span
                         v-for="(color, index)
                         in getColors(config)"
                         :key="index"
                         :style="{ background: color}"></span>
+                      </div>
+
                     </div>
+                    <!-- / 配色方案 -->
 
-                  </div>
-                  <!-- / 配色方案 -->
+                    <div v-if="config.proprietaryConfig.itemStyle.colorType === 'custom'">
 
-                  <div v-if="config.proprietaryConfig.itemStyle.colorType === 'custom'">
+                      <SingleColorSelector
+                        v-model="combinationCustomColors"
+                        @change="customColors(config)" />
+                      <!-- / 颜色选择 -->
 
-                    <SingleColorSelector
-                      v-model="combinationCustomColors"
-                      @change="customColors(config)" />
-                    <!-- / 颜色选择 -->
-
-                  </div>
-                  <!-- / 单一颜色自定义 -->
-
-                </div>
-                <!-- / 组合颜色 -->
-
-                <div v-if="config.proprietaryConfig.itemStyle.type === 'linear'">
-                  <div class="comment-template__item">
-                    <p class="comment-template__leading">渐变类型:</p>
-                    <div class="comment-template__inner">
-                      <a-select
-                        v-model="config.proprietaryConfig.itemStyle.colorType"
-                        @change="colorTypeChange(config)">
-                        <a-select-option value="default">默认</a-select-option>
-                        <a-select-option value="custom">自定义</a-select-option>
-                      </a-select>
                     </div>
-                  </div>
-                  <!-- / 渐变类型 -->
+                    <!-- / 单一颜色自定义 -->
 
-                  <div v-if="config.proprietaryConfig.itemStyle.colorType === 'default'">
+                  </div>
+                  <!-- / 组合颜色 -->
+
+                  <div v-if="config.proprietaryConfig.itemStyle.type === 'linear'">
                     <div class="comment-template__item">
-                      <p class="comment-template__leading">配色方案:</p>
+                      <p class="comment-template__leading">渐变类型:</p>
                       <div class="comment-template__inner">
                         <a-select
-                          v-model="config.proprietaryConfig.itemStyle.colorScheme"
-                          @change="$refs.chartProprietaryRef.change()">
+                          v-model="config.proprietaryConfig.itemStyle.colorType"
+                          @change="colorTypeChange(config)">
                           <a-select-option value="default">默认</a-select-option>
-                          <a-select-option value="light">亮</a-select-option>
-                          <a-select-option value="dark">暗</a-select-option>
+                          <a-select-option value="custom">自定义</a-select-option>
                         </a-select>
                       </div>
                     </div>
-                    <!-- / 组合类型 -->
+                    <!-- / 渐变类型 -->
 
-                    <div class="comment-template__item bar-config__linear">
+                    <div v-if="config.proprietaryConfig.itemStyle.colorType === 'default'">
+                      <div class="comment-template__item">
+                        <p class="comment-template__leading">配色方案:</p>
+                        <div class="comment-template__inner">
+                          <a-select
+                            v-model="config.proprietaryConfig.itemStyle.colorScheme"
+                            @change="$refs.chartProprietaryRef.change()">
+                            <a-select-option value="default">默认</a-select-option>
+                            <a-select-option value="light">亮</a-select-option>
+                            <a-select-option value="dark">暗</a-select-option>
+                          </a-select>
+                        </div>
+                      </div>
+                      <!-- / 组合类型 -->
+
+                      <div class="comment-template__item bar-config__linear">
                       <span
                         v-for="(color, index)
                         in getColors(config)"
@@ -205,76 +222,77 @@
                           background: `linear-gradient(180deg, ${color.start}, ${color.end})`
                         }">
                       </span>
+                      </div>
+
                     </div>
+                    <!-- / 配色方案 -->
+
+                    <div v-if="config.proprietaryConfig.itemStyle.colorType === 'custom'">
+
+                      <LinearColorSelector
+                        v-model="linearCustomColors"
+                        @change="customColors(config)" />
+                      <!-- / 颜色选择 -->
+
+                    </div>
+                    <!-- / 渐变颜色自定义 -->
 
                   </div>
-                  <!-- / 配色方案 -->
+                  <!-- / 渐变颜色 -->
 
-                  <div v-if="config.proprietaryConfig.itemStyle.colorType === 'custom'">
+                </a-collapse-panel>
+                <!-- / 颜色 -->
 
-                    <LinearColorSelector
-                      v-model="linearCustomColors"
-                      @change="customColors(config)" />
-                    <!-- / 颜色选择 -->
+                <a-collapse-panel header="圆角" key="2">
 
+                  <div class="comment-template__item">
+                    <p class="comment-template__leading">左上:</p>
+                    <div class="comment-template__inner">
+                      <a-input
+                        type="number" min="0" max="100"
+                        @change="$refs.chartProprietaryRef.change()"
+                        v-model.number="config.proprietaryConfig.itemStyle.barBorderRadius[0]" />
+                    </div>
                   </div>
-                  <!-- / 渐变颜色自定义 -->
+                  <!-- / 左上圆角 -->
 
-                </div>
-                <!-- / 渐变颜色 -->
-
-              </div>
-              <!-- / 颜色 -->
-
-              <p class="comment-template__title">圆角</p>
-              <div class="comment-template__content">
-
-                <div class="comment-template__item">
-                  <p class="comment-template__leading">左上:</p>
-                  <div class="comment-template__inner">
-                    <a-input
-                      type="number" min="0" max="100"
-                      @change="$refs.chartProprietaryRef.change()"
-                      v-model.number="config.proprietaryConfig.itemStyle.barBorderRadius[0]" />
+                  <div class="comment-template__item">
+                    <p class="comment-template__leading">右上:</p>
+                    <div class="comment-template__inner">
+                      <a-input
+                        type="number" min="0" max="100"
+                        @change="$refs.chartProprietaryRef.change()"
+                        v-model.number="config.proprietaryConfig.itemStyle.barBorderRadius[1]" />
+                    </div>
                   </div>
-                </div>
-                <!-- / 左上圆角 -->
+                  <!-- / 左上圆角 -->
 
-                <div class="comment-template__item">
-                  <p class="comment-template__leading">右上:</p>
-                  <div class="comment-template__inner">
-                    <a-input
-                      type="number" min="0" max="100"
-                      @change="$refs.chartProprietaryRef.change()"
-                      v-model.number="config.proprietaryConfig.itemStyle.barBorderRadius[1]" />
+                  <div class="comment-template__item">
+                    <p class="comment-template__leading">右下:</p>
+                    <div class="comment-template__inner">
+                      <a-input
+                        type="number" min="0" max="100"
+                        @change="$refs.chartProprietaryRef.change()"
+                        v-model.number="config.proprietaryConfig.itemStyle.barBorderRadius[2]" />
+                    </div>
                   </div>
-                </div>
-                <!-- / 左上圆角 -->
+                  <!-- / 左上圆角 -->
 
-                <div class="comment-template__item">
-                  <p class="comment-template__leading">右下:</p>
-                  <div class="comment-template__inner">
-                    <a-input
-                      type="number" min="0" max="100"
-                      @change="$refs.chartProprietaryRef.change()"
-                      v-model.number="config.proprietaryConfig.itemStyle.barBorderRadius[2]" />
+                  <div class="comment-template__item">
+                    <p class="comment-template__leading">左下:</p>
+                    <div class="comment-template__inner">
+                      <a-input
+                        type="number" min="0" max="100"
+                        @change="$refs.chartProprietaryRef.change()"
+                        v-model.number="config.proprietaryConfig.itemStyle.barBorderRadius[3]" />
+                    </div>
                   </div>
-                </div>
-                <!-- / 左上圆角 -->
+                  <!-- / 左上圆角 -->
 
-                <div class="comment-template__item">
-                  <p class="comment-template__leading">左下:</p>
-                  <div class="comment-template__inner">
-                    <a-input
-                      type="number" min="0" max="100"
-                      @change="$refs.chartProprietaryRef.change()"
-                      v-model.number="config.proprietaryConfig.itemStyle.barBorderRadius[3]" />
-                  </div>
-                </div>
-                <!-- / 左上圆角 -->
+                </a-collapse-panel>
+                <!-- / 圆角 -->
 
-              </div>
-              <!-- / 圆角 -->
+              </a-collapse>
 
             </template>
           </ChartProprietaryTemplate>

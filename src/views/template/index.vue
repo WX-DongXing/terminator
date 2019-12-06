@@ -154,7 +154,7 @@ export default {
   flex-flow: column nowrap;
   justify-content: flex-start;
   align-items: stretch;
-  background: #fafafa;
+  background: white;
 
   &__header {
     display: flex;

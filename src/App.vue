@@ -77,7 +77,7 @@ export default {
 .left {
   flex: none;
   width: 240px;
-  background: #fafafa;
+  background: white;
 }
 
 .center {
@@ -89,6 +89,6 @@ export default {
 .right {
   flex: none;
   width: 320px;
-  background: #fafafa;
+  background: white;
 }
 </style>

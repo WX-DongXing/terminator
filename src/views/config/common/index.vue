@@ -8,148 +8,158 @@
 <template>
   <div class="common-template">
 
-    <!-- S 背景颜色 -->
-    <p class="comment-template__title">背景</p>
-    <div class="comment-template__content">
-      <div class="comment-template__item">
-        <p class="comment-template__leading">颜色:</p>
-        <div class="comment-template__inner">
-          <ColorPicker
-            v-model="config.commonConfig.backgroundColor"
-            @change="change('style')" />
-        </div>
-      </div>
-    </div>
-    <!-- E 背景颜色 -->
+    <a-collapse defaultActiveKey="1" :bordered="false">
 
-    <!-- S 边框 -->
-    <p class="comment-template__title">边框</p>
-    <div class="comment-template__content">
-      <div class="comment-template__item">
-        <p class="comment-template__leading">宽度:</p>
-        <div class="comment-template__inner">
-          <a-slider
-            :min="0" :max="16"  @change="change('style')"
-            v-model.number="config.commonConfig.border.width" />
-        </div>
-      </div>
-      <!-- / 宽度 -->
+      <!-- S 背景颜色 -->
+      <a-collapse-panel header="背景" key="1">
 
-      <div class="comment-template__item">
-        <p class="comment-template__leading">颜色:</p>
-        <div class="comment-template__inner">
-          <ColorPicker
-            v-model="config.commonConfig.border.color"
-            @change="change('style')" />
+        <div class="comment-template__item">
+          <p class="comment-template__leading">颜色:</p>
+          <div class="comment-template__inner">
+            <ColorPicker
+              v-model="config.commonConfig.backgroundColor"
+              @change="change('style')" />
+          </div>
         </div>
-      </div>
-      <!-- / 颜色 -->
-    </div>
-    <!-- E 边框 -->
+        <!-- / 背景颜色 -->
 
-    <!-- S 边距 -->
-    <p class="comment-template__title">边距</p>
-    <div class="comment-template__content">
-      <div class="comment-template__item">
-        <p class="comment-template__leading">上:</p>
-        <div class="comment-template__inner">
-          <a-input
-            type="number"
-            min="0"
-            v-model.number="config.commonConfig.padding[0]"
-            @change="change('style')" />
-        </div>
-      </div>
-      <!-- / 上边距 -->
+      </a-collapse-panel>
+      <!-- E 背景颜色 -->
 
-      <div class="comment-template__item">
-        <p class="comment-template__leading">右:</p>
-        <div class="comment-template__inner">
-          <a-input
-            type="number"
-            v-model.number="config.commonConfig.padding[1]"
-            min="0" @change="change('style')" />
-        </div>
-      </div>
-      <!-- / 右边距 -->
+      <!-- S 边框 -->
+      <a-collapse-panel header="边框" key="2">
 
-      <div class="comment-template__item">
-        <p class="comment-template__leading">下:</p>
-        <div class="comment-template__inner">
-          <a-input
-            type="number"
-            v-model.number="config.commonConfig.padding[2]"
-            min="0" @change="change('style')" />
+        <div class="comment-template__item">
+          <p class="comment-template__leading">宽度:</p>
+          <div class="comment-template__inner">
+            <a-slider
+              :min="0" :max="16"  @change="change('style')"
+              v-model.number="config.commonConfig.border.width" />
+          </div>
         </div>
-      </div>
-      <!-- / 下边距 -->
+        <!-- / 宽度 -->
 
-      <div class="comment-template__item">
-        <p class="comment-template__leading">左:</p>
-        <div class="comment-template__inner">
-          <a-input
-            type="number"
-            v-model.number="config.commonConfig.padding[3]"
-            min="0" @change="change('style')" />
+        <div class="comment-template__item">
+          <p class="comment-template__leading">颜色:</p>
+          <div class="comment-template__inner">
+            <ColorPicker
+              v-model="config.commonConfig.border.color"
+              @change="change('style')" />
+          </div>
         </div>
-      </div>
-      <!-- / 左边距 -->
-    </div>
-    <!-- E 边距 -->
+        <!-- / 颜色 -->
 
-    <!-- S 尺寸 -->
-    <p class="comment-template__title">尺寸</p>
-    <div class="comment-template__content">
-      <div class="comment-template__item">
-        <p class="comment-template__leading">宽:</p>
-        <div class="comment-template__inner">
-          <a-input
-            type="number"
-            v-model.number="config.commonConfig.width"
-            min="0" @change="change('size', 'width')" />
-        </div>
-      </div>
-      <!-- / 宽 -->
+      </a-collapse-panel>
+      <!-- E 边框 -->
 
-      <div class="comment-template__item">
-        <p class="comment-template__leading">高:</p>
-        <div class="comment-template__inner">
-          <a-input
-            type="number"
-            v-model.number="config.commonConfig.height"
-            min="0" @change="change('size', 'height')" />
-        </div>
-      </div>
-      <!-- / 高 -->
-    </div>
-    <!-- E 尺寸 -->
+      <!-- S 边距 -->
+      <a-collapse-panel header="边距" key="3">
 
-    <!-- S 位置 -->
-    <p class="comment-template__title">位置</p>
-    <div class="comment-template__content">
-      <div class="comment-template__item">
-        <p class="comment-template__leading">X:</p>
-        <div class="comment-template__inner">
-          <a-input
-            type="number"
-            v-model.number="config.commonConfig.left"
-            min="0" @change="change('position')" />
+        <div class="comment-template__item">
+          <p class="comment-template__leading">上:</p>
+          <div class="comment-template__inner">
+            <a-input
+              type="number"
+              min="0"
+              v-model.number="config.commonConfig.padding[0]"
+              @change="change('style')" />
+          </div>
         </div>
-      </div>
-      <!-- / x坐标位置 -->
+        <!-- / 上边距 -->
 
-      <div class="comment-template__item">
-        <p class="comment-template__leading">Y:</p>
-        <div class="comment-template__inner">
-          <a-input
-            type="number"
-            v-model.number="config.commonConfig.top"
-            min="0" @change="change('position')" />
+        <div class="comment-template__item">
+          <p class="comment-template__leading">右:</p>
+          <div class="comment-template__inner">
+            <a-input
+              type="number"
+              v-model.number="config.commonConfig.padding[1]"
+              min="0" @change="change('style')" />
+          </div>
         </div>
-      </div>
-      <!-- / y坐标位置 -->
-    </div>
-    <!-- E 位置 -->
+        <!-- / 右边距 -->
+
+        <div class="comment-template__item">
+          <p class="comment-template__leading">下:</p>
+          <div class="comment-template__inner">
+            <a-input
+              type="number"
+              v-model.number="config.commonConfig.padding[2]"
+              min="0" @change="change('style')" />
+          </div>
+        </div>
+        <!-- / 下边距 -->
+
+        <div class="comment-template__item">
+          <p class="comment-template__leading">左:</p>
+          <div class="comment-template__inner">
+            <a-input
+              type="number"
+              v-model.number="config.commonConfig.padding[3]"
+              min="0" @change="change('style')" />
+          </div>
+        </div>
+        <!-- / 左边距 -->
+
+      </a-collapse-panel>
+      <!-- E 边距 -->
+
+      <!-- S 尺寸 -->
+      <a-collapse-panel header="尺寸" key="4">
+
+        <div class="comment-template__item">
+          <p class="comment-template__leading">宽:</p>
+          <div class="comment-template__inner">
+            <a-input
+              type="number"
+              v-model.number="config.commonConfig.width"
+              min="0" @change="change('size', 'width')" />
+          </div>
+        </div>
+        <!-- / 宽 -->
+
+        <div class="comment-template__item">
+          <p class="comment-template__leading">高:</p>
+          <div class="comment-template__inner">
+            <a-input
+              type="number"
+              v-model.number="config.commonConfig.height"
+              min="0" @change="change('size', 'height')" />
+          </div>
+        </div>
+        <!-- / 高 -->
+
+      </a-collapse-panel>
+      <!-- E 尺寸 -->
+
+      <!-- S 位置 -->
+      <a-collapse-panel header="位置" key="5">
+
+        <div class="comment-template__item">
+          <p class="comment-template__leading">X:</p>
+          <div class="comment-template__inner">
+            <a-input
+              type="number"
+              v-model.number="config.commonConfig.left"
+              min="0" @change="change('position')" />
+          </div>
+        </div>
+        <!-- / x坐标位置 -->
+
+        <div class="comment-template__item">
+          <p class="comment-template__leading">Y:</p>
+          <div class="comment-template__inner">
+            <a-input
+              type="number"
+              v-model.number="config.commonConfig.top"
+              min="0" @change="change('position')" />
+          </div>
+        </div>
+        <!-- / y坐标位置 -->
+
+      </a-collapse-panel>
+      <!-- E 位置 -->
+
+    </a-collapse>
 
   </div>
 </template>
