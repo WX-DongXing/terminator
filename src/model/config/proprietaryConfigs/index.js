@@ -11,14 +11,14 @@
  * @param fontWeight 'normal' | 'bold' | 'bolder' | 'lighter'
  */
 class LegendTextStyle {
-  constructor({
+  constructor ({
     color = 'rgba(0,0,0,1)',
     fontWeight = 'normal',
-    fontSize = 12,
+    fontSize = 12
   }) {
-    this.color = color;
-    this.fontWeight = fontWeight;
-    this.fontSize = fontSize;
+    this.color = color
+    this.fontWeight = fontWeight
+    this.fontSize = fontSize
   }
 }
 
@@ -28,7 +28,7 @@ class LegendTextStyle {
  * @param icon 'circle' | 'rect' | 'roundRect' | 'triangle' |  'diamond' | 'pin' | 'arrow' | 'none'
  */
 class Legend {
-  constructor({
+  constructor ({
     show = 0,
     orient = 'horizontal',
     icon = 'circle',
@@ -36,33 +36,32 @@ class Legend {
     right = 'auto',
     bottom = 'auto',
     left = 'auto',
-    textStyle = {},
+    textStyle = {}
   }) {
-    this.show = show;
-    this.orient = orient;
-    this.top = top;
-    this.right = right;
-    this.bottom = bottom;
-    this.left = left;
-    this.icon = icon;
-    this.textStyle = new LegendTextStyle(textStyle);
+    this.show = show
+    this.orient = orient
+    this.top = top
+    this.right = right
+    this.bottom = bottom
+    this.left = left
+    this.icon = icon
+    this.textStyle = new LegendTextStyle(textStyle)
   }
 }
-
 
 /**
  * 折线样式
  * @param type 'solid' | 'dashed' | 'dotted'
  */
 class LineStyle {
-  constructor({
+  constructor ({
     color = 'rgba(0,0,0,1)',
     width = 2,
-    type = 'solid',
+    type = 'solid'
   }) {
-    this.color = color;
-    this.width = width;
-    this.type = type;
+    this.color = color
+    this.width = width
+    this.type = type
   }
 }
 
@@ -72,23 +71,23 @@ class LineStyle {
  * @param colorType 颜色类型 'default' | 'custom'
  */
 class ItemStyle {
-  constructor({
+  constructor ({
     type = 'single',
     colorType = 'default',
     colorScheme = 'default',
     color = 'rgba(7,171,253,1)',
-    barBorderRadius = [0, 0, 0, 0],
+    barBorderRadius = [0, 0, 0, 0]
   }) {
-    this.type = type;
-    this.colorType = colorType;
-    this.colorScheme = colorScheme;
-    this.color = color;
-    this.barBorderRadius = barBorderRadius;
+    this.type = type
+    this.colorType = colorType
+    this.colorScheme = colorScheme
+    this.color = color
+    this.barBorderRadius = barBorderRadius
   }
 }
 
 export {
   Legend,
   LineStyle,
-  ItemStyle,
-};
+  ItemStyle
+}

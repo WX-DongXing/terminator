@@ -5,18 +5,18 @@
 * Time: 5:12 下午
 * Email: dong.xing@outlook.com
 */
-import Factory from '@/model/factory/factory';
+import Factory from '@/model/factory/factory'
 
-const StaticDataFactory = Factory.createStaticDataFactory();
+const StaticDataFactory = Factory.createStaticDataFactory()
 
 export default class DataConfig {
-  constructor({
+  constructor ({
     sourceType = 'null',
     widgetType,
-    dbDataConfig,
+    dbDataConfig
   }) {
-    this.sourceType = sourceType;
-    this.staticData = StaticDataFactory.create(widgetType);
-    this.dbDataConfig = dbDataConfig;
+    this.sourceType = sourceType
+    this.staticData = StaticDataFactory.create(widgetType)
+    this.dbDataConfig = dbDataConfig
   }
 }

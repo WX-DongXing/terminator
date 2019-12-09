@@ -14,56 +14,59 @@
       </div>
     </div>
     <a-input v-model="inputColor" @change="() => $emit('change', this.inputColor)"/>
-    <div class="color-picker__painter"
-         v-show="display" tabindex="-1"
-         @blur="display = false" ref="picker">
+    <div
+      class="color-picker__painter"
+      v-show="display"
+      tabindex="-1"
+      @blur="display = false"
+      ref="picker">
       <Chrome v-model="colors"/>
     </div>
   </div>
 </template>
 
 <script>
-import { Chrome } from 'vue-color';
+import { Chrome } from 'vue-color'
 
 export default {
   name: 'ColorPicker',
   components: {
-    Chrome,
+    Chrome
   },
   model: {
     prop: 'color',
-    event: 'change',
+    event: 'change'
   },
   props: {
     color: {
       type: String,
-      default: 'rgba(255,255,255,1)',
-    },
+      default: 'rgba(255,255,255,1)'
+    }
   },
   data: () => ({
     display: false,
     inputColor: 'rgba(255,255,255,1)',
-    colors: {},
+    colors: {}
   }),
-  created() {
-    this.inputColor = this.color;
+  created () {
+    this.inputColor = this.color
   },
   methods: {
-    openPicker() {
-      this.display = true;
-      this.$nextTick(() => this.$refs.picker.focus());
-    },
+    openPicker () {
+      this.display = true
+      this.$nextTick(() => this.$refs.picker.focus())
+    }
   },
   watch: {
-    colors(v) {
+    colors (v) {
       const {
-        r, g, b, a,
-      } = v.rgba;
-      this.inputColor = `rgba(${r},${g},${b},${a})`;
-      this.$emit('change', `rgba(${r},${g},${b},${a})`);
-    },
-  },
-};
+        r, g, b, a
+      } = v.rgba
+      this.inputColor = `rgba(${r},${g},${b},${a})`
+      this.$emit('change', `rgba(${r},${g},${b},${a})`)
+    }
+  }
+}
 </script>
 
 <style scoped lang="less">

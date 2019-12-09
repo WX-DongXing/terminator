@@ -6,8 +6,8 @@
 * Email: dong.xing@outlook.com
 */
 <script>
-import anime from 'animejs';
-import { mapState } from 'vuex';
+import anime from 'animejs'
+import { mapState } from 'vuex'
 
 export default {
   name: 'AdjustMixins',
@@ -15,10 +15,10 @@ export default {
     top: 0,
     left: 0,
     width: 0,
-    height: 0,
+    height: 0
   }),
   computed: {
-    ...mapState('screen', ['view']),
+    ...mapState('screen', ['view'])
   },
   methods: {
     /**
@@ -27,92 +27,92 @@ export default {
      * @param mutation wrapper选择器标准事件流
      */
     // Todo 修改事件流格式，格式化为绝对位置进行修改
-    adjust({ target, mutation }) {
-      const { scale } = this.view;
-      const { event, originalState } = mutation;
+    adjust ({ target, mutation }) {
+      const { scale } = this.view
+      const { event, originalState } = mutation
       const {
-        eventType, position, distance, type, direction,
-      } = event;
+        eventType, position, distance, type, direction
+      } = event
       // 初始位置
       const {
-        top, left, width, height,
-      } = originalState;
+        top, left, width, height
+      } = originalState
       switch (eventType) {
         case 'MOVE':
           anime.set(target, {
             top: top + position.top / scale,
-            left: left + position.left / scale,
-          });
-          break;
+            left: left + position.left / scale
+          })
+          break
         case 'SINGLE':
           switch (type) {
             case 'tc':
               anime.set(target, {
                 top: top - distance / scale,
-                height: height + distance / scale,
-              });
-              break;
+                height: height + distance / scale
+              })
+              break
             case 'cr':
               anime.set(target, {
-                width: width + distance / scale,
-              });
-              break;
+                width: width + distance / scale
+              })
+              break
             case 'bc':
               anime.set(target, {
-                height: height + distance / scale,
-              });
-              break;
+                height: height + distance / scale
+              })
+              break
             case 'cl':
               anime.set(target, {
                 left: left - distance / scale,
-                width: height + distance / scale,
-              });
-              break;
+                width: height + distance / scale
+              })
+              break
             default:
-              break;
+              break
           }
-          break;
+          break
         case 'SCALE':
           // eslint-disable-next-line no-case-declarations
           const absDistance = direction === 'EXPAND'
-            ? Math.abs(distance) : -Math.abs(distance);
+            ? Math.abs(distance) : -Math.abs(distance)
           switch (type) {
             case 'tl':
               anime.set(target, {
                 top: top + distance / scale,
                 left: left + distance / scale,
                 width: width - distance / scale,
-                height: height - distance / scale,
-              });
-              break;
+                height: height - distance / scale
+              })
+              break
             case 'tr':
               anime.set(target, {
                 top: top - absDistance / scale,
                 width: width + absDistance / scale,
-                height: height + absDistance / scale,
-              });
-              break;
+                height: height + absDistance / scale
+              })
+              break
             case 'br':
               anime.set(target, {
                 width: width + distance / scale,
-                height: height + distance / scale,
-              });
-              break;
+                height: height + distance / scale
+              })
+              break
             case 'bl':
               anime.set(target, {
                 left: left - absDistance / scale,
                 width: width + absDistance / scale,
-                height: height + absDistance / scale,
-              });
-              break;
+                height: height + absDistance / scale
+              })
+              break
             default:
-              break;
+              break
           }
-          break;
+          break
         default:
-          break;
+          break
       }
-    },
-  },
-};
+    }
+  }
+}
 </script>

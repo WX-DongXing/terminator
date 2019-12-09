@@ -18,18 +18,18 @@
 </template>
 
 <script>
-import Screen from './views/screen/index.vue';
-import Template from './views/template/index.vue';
-import Config from './views/config/index.vue';
+import Screen from './views/screen/index.vue'
+import Template from './views/template/index.vue'
+import Config from './views/config/index.vue'
 
 export default {
-  name: 'app',
+  name: 'App',
   components: {
     Screen,
     Template,
-    Config,
-  },
-};
+    Config
+  }
+}
 </script>
 
 <style lang="less">

@@ -5,43 +5,43 @@
 * Time: 4:59 下午
 * Email: dong.xing@outlook.com
 */
-import _ from 'lodash';
-import Chart from './index';
+import _ from 'lodash'
+import Chart from './index'
 
 export default class BarChart extends Chart {
-  constructor({ widget }) {
-    super({ widget });
-    this.type = 'bar';
+  constructor ({ widget }) {
+    super({ widget })
+    this.type = 'bar'
   }
 
   /**
    * 映射成 echarts 配置项
    */
   // eslint-disable-next-line class-methods-use-this
-  mappingOption({ commonConfig, proprietaryConfig, dataConfig }) {
-    const { backgroundColor, border, padding } = commonConfig;
+  mappingOption ({ commonConfig, proprietaryConfig, dataConfig }) {
+    const { backgroundColor, border, padding } = commonConfig
     const {
-      barType, legend, itemStyle, barWidth,
-    } = proprietaryConfig;
-    const { sourceType, staticData } = dataConfig;
-    const [top, right, bottom, left] = padding;
-    const chartLegend = _.cloneDeep(legend);
-    let xAxis = {};
-    let yAxis = {};
+      barType, legend, itemStyle, barWidth
+    } = proprietaryConfig
+    const { sourceType, staticData } = dataConfig
+    const [top, right, bottom, left] = padding
+    const chartLegend = _.cloneDeep(legend)
+    let xAxis = {}
+    let yAxis = {}
     const bar = {
       type: 'bar',
       // 删除 color 对象，防止未格式化颜色影响图表颜色
-      itemStyle: _.omit(_.cloneDeep(itemStyle), 'color'),
-    };
+      itemStyle: _.omit(_.cloneDeep(itemStyle), 'color')
+    }
 
-    const { type, color } = _.cloneDeep(itemStyle);
-    let targetColor = null;
+    const { type, color } = _.cloneDeep(itemStyle)
+    let targetColor
     switch (type) {
       case 'single':
-        targetColor = color;
-        break;
+        targetColor = color
+        break
       case 'combination':
-        targetColor = [...color];
+        targetColor = [...color]
         // 单一项暂时注释
         // targetColor = (params) => {
         //   if (!params) {
@@ -49,7 +49,7 @@ export default class BarChart extends Chart {
         //   }
         //   return [...color][params.dataIndex] || 'rgba(0, 0, 0, 1)';
         // };
-        break;
+        break
       case 'linear':
         targetColor = [...color].map(({ start, end }) => ({
           type: 'linear',
@@ -60,14 +60,14 @@ export default class BarChart extends Chart {
           colorStops: [
             {
               offset: 0,
-              color: start,
+              color: start
             },
             {
               offset: 1,
-              color: end,
-            },
-          ],
-        }));
+              color: end
+            }
+          ]
+        }))
         // 单一项暂时注释
         // targetColor = (params) => {
         //   if (!params) {
@@ -95,28 +95,28 @@ export default class BarChart extends Chart {
         //     ],
         //   };
         // };
-        break;
+        break
       default:
-        targetColor = null;
-        break;
+        targetColor = null
+        break
     }
     // Object.assign(bar.itemStyle, { color: targetColor });
 
-    let series = [];
+    let series = []
 
     if (sourceType === 'static') {
-      Object.assign(chartLegend, { legend: staticData.legend });
+      Object.assign(chartLegend, { legend: staticData.legend })
       series = staticData[barType === 'single' ? 'singleSeries' : 'multipleSeries'].map((item) => {
-        Object.assign(item, bar, { barWidth });
-        return item;
-      });
-      xAxis = _.cloneDeep(staticData.xAxis);
-      yAxis = _.cloneDeep(staticData.yAxis);
+        Object.assign(item, bar, { barWidth })
+        return item
+      })
+      xAxis = _.cloneDeep(staticData.xAxis)
+      yAxis = _.cloneDeep(staticData.yAxis)
     }
     return Object.assign({}, {
       color: targetColor,
       legend: {
-        ...chartLegend,
+        ...chartLegend
       },
       grid: [
         {
@@ -127,7 +127,7 @@ export default class BarChart extends Chart {
           left: 0,
           backgroundColor,
           borderColor: border.color,
-          borderWidth: border.width,
+          borderWidth: border.width
         },
         {
           show: true,
@@ -136,18 +136,18 @@ export default class BarChart extends Chart {
           bottom: 30 + bottom,
           left: 30 + left,
           borderWidth: 0,
-          backgroundColor: 'transparent',
-        },
+          backgroundColor: 'transparent'
+        }
       ],
       xAxis: [{
         gridIndex: 1,
-        ...xAxis,
+        ...xAxis
       }],
       yAxis: [{
         gridIndex: 1,
-        ...yAxis,
+        ...yAxis
       }],
-      series,
-    });
+      series
+    })
   }
 }

@@ -19,7 +19,8 @@
       </div>
     </div>
     <div class="single-color-selector__list">
-      <div class="single-color-selector__item"
+      <div
+        class="single-color-selector__item"
         v-for="(color, index) in colors"
         :key="index"
         :style="{ background: color}">
@@ -32,42 +33,42 @@
 </template>
 
 <script>
-import '@/assets/less/template.less';
-import ColorPicker from '@/components/colorPicker/index.vue';
+import '@/assets/less/template.less'
+import ColorPicker from '@/components/colorPicker/index.vue'
 
 export default {
   name: 'SingleColorSelector',
   components: {
-    ColorPicker,
+    ColorPicker
   },
   props: {
     colors: {
       type: Array,
-      default: () => ([]),
-    },
+      default: () => ([])
+    }
   },
   model: {
     prop: 'colors',
-    event: 'change',
+    event: 'change'
   },
   data: () => ({
-    color: 'rgba(255,255,255,1)',
+    color: 'rgba(255,255,255,1)'
   }),
   methods: {
-    addColor() {
-      const { length } = this.colors;
+    addColor () {
+      const { length } = this.colors
       if (length >= 11) {
-        this.colors.shift();
+        this.colors.shift()
       }
-      this.colors.push(this.color);
-      this.$emit('change', this.colors);
+      this.colors.push(this.color)
+      this.$emit('change', this.colors)
     },
-    removeColor(index) {
-      this.colors.splice(index, 1);
-      this.$emit('change', this.colors);
-    },
-  },
-};
+    removeColor (index) {
+      this.colors.splice(index, 1)
+      this.$emit('change', this.colors)
+    }
+  }
+}
 </script>
 
 <style scoped lang="less">

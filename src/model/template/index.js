@@ -6,14 +6,14 @@
 * Email: dong.xing@outlook.com
 */
 export default class Template {
-  constructor({
-    category, name, type, icon, height, width,
+  constructor ({
+    category, name, type, icon, height, width
   }) {
-    this.category = category;
-    this.name = name;
-    this.type = type;
-    this.icon = icon;
-    this.height = height;
-    this.width = width;
+    this.category = category
+    this.name = name
+    this.type = type
+    this.icon = icon
+    this.height = height
+    this.width = width
   }
 }

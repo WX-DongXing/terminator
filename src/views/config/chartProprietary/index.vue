@@ -48,7 +48,8 @@
             <p class="comment-template__leading">居上:</p>
             <div class="comment-template__inner">
               <a-input
-                type="text" @change="change"
+                type="text"
+                @change="change"
                 v-model="config.proprietaryConfig.legend.top" />
             </div>
           </div>
@@ -58,7 +59,8 @@
             <p class="comment-template__leading">居右:</p>
             <div class="comment-template__inner">
               <a-input
-                type="text" @change="change"
+                type="text"
+                @change="change"
                 v-model="config.proprietaryConfig.legend.right" />
             </div>
           </div>
@@ -68,7 +70,8 @@
             <p class="comment-template__leading">居下:</p>
             <div class="comment-template__inner">
               <a-input
-                type="text" @change="change"
+                type="text"
+                @change="change"
                 v-model="config.proprietaryConfig.legend.bottom" />
             </div>
           </div>
@@ -78,7 +81,8 @@
             <p class="comment-template__leading">居左:</p>
             <div class="comment-template__inner">
               <a-input
-                type="text" @change="change"
+                type="text"
+                @change="change"
                 v-model="config.proprietaryConfig.legend.left" />
             </div>
           </div>
@@ -91,10 +95,10 @@
                 v-model="config.proprietaryConfig.legend.icon"
                 @change="change">
                 <a-select-option
-                  v-for="icon in icons"
-                  :key="icon.value"
+                  v-for="(icon, index) in icons"
+                  :key="index"
                   :value="icon.value">
-                  {{icon.name}}
+                  {{ icon.name }}
                 </a-select-option>
               </a-select>
             </div>
@@ -130,7 +134,9 @@
             <p class="comment-template__leading">大小:</p>
             <div class="comment-template__inner">
               <a-slider
-                :min="6" :max="24" @change="change"
+                :min="6"
+                :max="24"
+                @change="change"
                 v-model="config.proprietaryConfig.legend.textStyle.fontSize" />
             </div>
           </div>
@@ -151,16 +157,16 @@
 </template>
 
 <script>
-import '@/assets/less/template.less';
-import _ from 'lodash';
-import { mapState, mapMutations } from 'vuex';
-import { ScreenMutations } from '@/store/modules/screen';
-import ColorPicker from '@/components/colorPicker/index.vue';
+import '@/assets/less/template.less'
+import _ from 'lodash'
+import { mapState, mapMutations } from 'vuex'
+import { ScreenMutations } from '@/store/modules/screen'
+import ColorPicker from '@/components/colorPicker/index.vue'
 
 export default {
   name: 'ChartProprietaryTemplate',
   components: {
-    ColorPicker,
+    ColorPicker
   },
   data: () => ({
     icons: [
@@ -168,33 +174,33 @@ export default {
       { name: '矩形', value: 'rect' },
       { name: '圆角矩形', value: 'roundRect' },
       { name: '三角形', value: 'triangle' },
-      { name: '菱形', value: 'diamond' },
-    ],
+      { name: '菱形', value: 'diamond' }
+    ]
   }),
   computed: {
     ...mapState('screen', ['activeWidget']),
-    config() {
-      return _.cloneDeep(this.activeWidget.config);
-    },
+    config () {
+      return _.cloneDeep(this.activeWidget.config)
+    }
   },
   methods: {
     ...mapMutations('screen', {
       activationWidget: ScreenMutations.ACTIVATION_WIDGET,
-      removeWidget: ScreenMutations.REMOVE_WIDGET,
+      removeWidget: ScreenMutations.REMOVE_WIDGET
     }),
-    change() {
-      const activeWidget = _.cloneDeep(this.activeWidget);
-      const { render } = this.activeWidget;
-      Object.assign(activeWidget.config, this.config);
+    change () {
+      const activeWidget = _.cloneDeep(this.activeWidget)
+      const { render } = this.activeWidget
+      Object.assign(activeWidget.config, this.config)
       this.activationWidget({
-        widget: Object.assign(activeWidget, { render }),
-      });
+        widget: Object.assign(activeWidget, { render })
+      })
       this.$nextTick(() => {
-        render.mergeOption(this.config);
-      });
-    },
-  },
-};
+        render.mergeOption(this.config)
+      })
+    }
+  }
+}
 </script>
 
 <style scoped lang="less">

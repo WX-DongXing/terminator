@@ -1,2 +1,2 @@
-import './vue-rx';
-import './ant-design';
+import './vue-rx'
+import './ant-design'

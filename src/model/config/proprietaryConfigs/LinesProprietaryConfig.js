@@ -6,20 +6,20 @@
 * Email: dong.xing@outlook.com
 */
 
-import { LineStyle, Legend } from './index';
+import { LineStyle, Legend } from './index'
 
 /**
  * 折现图专有属性配置
  */
 export default class LinesProprietaryConfig {
-  constructor({
+  constructor ({
     smooth = 0,
     lineStyle = {},
-    legend = {},
+    legend = {}
   }) {
     // 是否平滑曲线显示
-    this.smooth = smooth;
-    this.lineStyle = new LineStyle(lineStyle);
-    this.legend = new Legend(legend);
+    this.smooth = smooth
+    this.lineStyle = new LineStyle(lineStyle)
+    this.legend = new Legend(legend)
   }
 }

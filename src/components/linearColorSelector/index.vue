@@ -1,9 +1,11 @@
 <template>
   <div class="linear-color-selector">
     <div class="linear-color-selector__wrapper">
-      <div class="linear-color-selector__bar" :style="{
-        background: `linear-gradient(180deg, ${start}, ${end})`
-      }">
+      <div
+        class="linear-color-selector__bar"
+        :style="{
+          background: `linear-gradient(180deg, ${start}, ${end})`
+        }">
       </div>
       <div class="linear-color-selector__pickers">
         <ColorPicker v-model="start" />
@@ -17,10 +19,11 @@
         @click="addColor" />
     </div>
     <div class="linear-color-selector__colors">
-      <div class="linear-color-selector__item"
-           v-for="(color, index) in colors"
-           :key="index"
-           :style="{ background: `linear-gradient(180deg, ${color.start}, ${color.end})`}">
+      <div
+        class="linear-color-selector__item"
+        v-for="(color, index) in colors"
+        :key="index"
+        :style="{ background: `linear-gradient(180deg, ${color.start}, ${color.end})`}">
         <a-icon type="close-circle" @click="removeColor(index)" />
       </div>
       <p v-if="colors.length === 0">请添加颜色</p>
@@ -29,43 +32,43 @@
 </template>
 
 <script>
-import ColorPicker from '@/components/colorPicker/index.vue';
+import ColorPicker from '@/components/colorPicker/index.vue'
 
 export default {
   name: 'LinearColorSelector',
   components: {
-    ColorPicker,
+    ColorPicker
   },
   props: {
     colors: {
       type: Array,
-      default: () => ([]),
-    },
+      default: () => ([])
+    }
   },
   model: {
     prop: 'colors',
-    event: 'change',
+    event: 'change'
   },
   data: () => ({
     start: 'rgba(255,255,255,1)',
-    end: 'rgba(0,0,0,1)',
+    end: 'rgba(0,0,0,1)'
   }),
   methods: {
-    addColor() {
-      const { start, end } = this;
-      const { length } = this.colors;
+    addColor () {
+      const { start, end } = this
+      const { length } = this.colors
       if (length >= 11) {
-        this.colors.shift();
+        this.colors.shift()
       }
-      this.colors.push({ start, end });
-      this.$emit('change', this.colors);
+      this.colors.push({ start, end })
+      this.$emit('change', this.colors)
     },
-    removeColor(index) {
-      this.colors.splice(index, 1);
-      this.$emit('change', this.colors);
-    },
-  },
-};
+    removeColor (index) {
+      this.colors.splice(index, 1)
+      this.$emit('change', this.colors)
+    }
+  }
+}
 </script>
 
 <style scoped lang="less">

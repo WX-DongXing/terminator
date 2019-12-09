@@ -5,21 +5,21 @@
 * Time: 2:17 下午
 * Email: dong.xing@outlook.com
 */
-import ViewConfig from './view/index.vue';
-import Lines from './charts/Lines.vue';
-import Bar from './charts/Bar.vue';
+import ViewConfig from './view/index.vue'
+import Lines from './charts/Lines.vue'
+import Bar from './charts/Bar.vue'
 
 // 图表模板配置
 const charts = {
   Bar,
-  Lines,
-};
+  Lines
+}
 
 // 模板配置组件
 const CONFIGCOMPONENTS = {
   // 视图模板配置
   ViewConfig,
-  ...charts,
-};
+  ...charts
+}
 
-export default CONFIGCOMPONENTS;
+export default CONFIGCOMPONENTS

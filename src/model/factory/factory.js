@@ -1,7 +1,7 @@
-import ChartFactory from './chartFactory';
-import ElementFactory from './elementFactory';
-import ChartProprietaryConfigFactory from './chartProprietaryConfigFactory';
-import StaticDataFactory from './staticDataFactory';
+import ChartFactory from './chartFactory'
+import ElementFactory from './elementFactory'
+import ChartProprietaryConfigFactory from './chartProprietaryConfigFactory'
+import StaticDataFactory from './staticDataFactory'
 
 export default class Factory {
   // 创建图表工厂

@@ -6,7 +6,7 @@
  * Email: dong.xing@outlook.com
  */
 
-import { ItemStyle, Legend } from './index';
+import { ItemStyle, Legend } from './index'
 
 /**
  * 折现图专有属性配置
@@ -15,17 +15,17 @@ import { ItemStyle, Legend } from './index';
  * @param barWidth 柱条宽度 'auto' | Number
  */
 export default class BarProprietaryConfig {
-  constructor({
+  constructor ({
     barType = 'single',
     itemStyle = {},
     legend = {},
     barWidthType = 'auto',
-    barWidth = 'auto',
+    barWidth = 'auto'
   }) {
-    this.barType = barType;
-    this.legend = new Legend(legend);
-    this.itemStyle = new ItemStyle(itemStyle);
-    this.barWidthType = barWidthType;
-    this.barWidth = barWidth;
+    this.barType = barType
+    this.legend = new Legend(legend)
+    this.itemStyle = new ItemStyle(itemStyle)
+    this.barWidthType = barWidthType
+    this.barWidth = barWidth
   }
 }

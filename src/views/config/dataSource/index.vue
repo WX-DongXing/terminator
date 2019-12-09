@@ -19,7 +19,8 @@
           <div class="comment-template__inner">
             <a-select
               class="data-source__select"
-              v-model="config.dataConfig.sourceType" @change="change">
+              v-model="config.dataConfig.sourceType"
+              @change="change">
               <a-select-option value="null">空数据</a-select-option>
               <a-select-option value="static">静态数据</a-select-option>
               <a-select-option value="real">实时数据</a-select-option>
@@ -37,34 +38,34 @@
 </template>
 
 <script>
-import '@/assets/less/template.less';
-import _ from 'lodash';
-import { mapState, mapMutations } from 'vuex';
-import { ScreenMutations } from '@/store/modules/screen';
+import '@/assets/less/template.less'
+import _ from 'lodash'
+import { mapState, mapMutations } from 'vuex'
+import { ScreenMutations } from '@/store/modules/screen'
 
 export default {
   name: 'DataSourceTemplate',
   computed: {
     ...mapState('screen', ['activeWidget']),
-    config() {
-      return _.cloneDeep(this.activeWidget.config);
-    },
+    config () {
+      return _.cloneDeep(this.activeWidget.config)
+    }
   },
   methods: {
     ...mapMutations('screen', {
-      activationWidget: ScreenMutations.ACTIVATION_WIDGET,
+      activationWidget: ScreenMutations.ACTIVATION_WIDGET
     }),
-    change() {
-      const activeWidget = _.cloneDeep(this.activeWidget);
-      const { render } = this.activeWidget;
-      Object.assign(activeWidget.config, this.config);
+    change () {
+      const activeWidget = _.cloneDeep(this.activeWidget)
+      const { render } = this.activeWidget
+      Object.assign(activeWidget.config, this.config)
       this.activationWidget({
-        widget: Object.assign(activeWidget, { render }),
-      });
-      render.mergeOption(this.config);
-    },
-  },
-};
+        widget: Object.assign(activeWidget, { render })
+      })
+      render.mergeOption(this.config)
+    }
+  }
+}
 </script>
 
 <style scoped lang="less">

@@ -33,7 +33,9 @@
           <p class="comment-template__leading">宽度:</p>
           <div class="comment-template__inner">
             <a-slider
-              :min="0" :max="16"  @change="change('style')"
+              :min="0"
+              :max="16"
+              @change="change('style')"
               v-model.number="config.commonConfig.border.width" />
           </div>
         </div>
@@ -73,7 +75,8 @@
             <a-input
               type="number"
               v-model.number="config.commonConfig.padding[1]"
-              min="0" @change="change('style')" />
+              min="0"
+              @change="change('style')" />
           </div>
         </div>
         <!-- / 右边距 -->
@@ -84,7 +87,8 @@
             <a-input
               type="number"
               v-model.number="config.commonConfig.padding[2]"
-              min="0" @change="change('style')" />
+              min="0"
+              @change="change('style')" />
           </div>
         </div>
         <!-- / 下边距 -->
@@ -95,7 +99,8 @@
             <a-input
               type="number"
               v-model.number="config.commonConfig.padding[3]"
-              min="0" @change="change('style')" />
+              min="0"
+              @change="change('style')" />
           </div>
         </div>
         <!-- / 左边距 -->
@@ -112,7 +117,8 @@
             <a-input
               type="number"
               v-model.number="config.commonConfig.width"
-              min="0" @change="change('size', 'width')" />
+              min="0"
+              @change="change('size', 'width')" />
           </div>
         </div>
         <!-- / 宽 -->
@@ -123,7 +129,8 @@
             <a-input
               type="number"
               v-model.number="config.commonConfig.height"
-              min="0" @change="change('size', 'height')" />
+              min="0"
+              @change="change('size', 'height')" />
           </div>
         </div>
         <!-- / 高 -->
@@ -140,7 +147,8 @@
             <a-input
               type="number"
               v-model.number="config.commonConfig.left"
-              min="0" @change="change('position')" />
+              min="0"
+              @change="change('position')" />
           </div>
         </div>
         <!-- / x坐标位置 -->
@@ -151,7 +159,8 @@
             <a-input
               type="number"
               v-model.number="config.commonConfig.top"
-              min="0" @change="change('position')" />
+              min="0"
+              @change="change('position')" />
           </div>
         </div>
         <!-- / y坐标位置 -->
@@ -165,40 +174,40 @@
 </template>
 
 <script>
-import '@/assets/less/template.less';
-import _ from 'lodash';
-import { mapState, mapMutations } from 'vuex';
-import { ScreenMutations } from '@/store/modules/screen';
-import ColorPicker from '@/components/colorPicker/index.vue';
-import AdjustMixins from '@/components/wrapper/AdjustMixins.vue';
+import '@/assets/less/template.less'
+import _ from 'lodash'
+import { mapState, mapMutations } from 'vuex'
+import { ScreenMutations } from '@/store/modules/screen'
+import ColorPicker from '@/components/colorPicker/index.vue'
+import AdjustMixins from '@/components/wrapper/AdjustMixins.vue'
 
 export default {
   name: 'CommonTemplate',
   mixins: [AdjustMixins],
   components: {
-    ColorPicker,
+    ColorPicker
   },
   computed: {
     ...mapState('screen', ['activeWidget', 'view']),
     // 为不修改 state.activeWidget，在此深复制激活部件的配置项，并将其设置为该组件内变量，修改部件后提交再行修改state.activeWidget
-    config() {
-      return _.cloneDeep(this.activeWidget.config);
-    },
+    config () {
+      return _.cloneDeep(this.activeWidget.config)
+    }
   },
   methods: {
     ...mapMutations('screen', {
-      activationWidget: ScreenMutations.ACTIVATION_WIDGET,
+      activationWidget: ScreenMutations.ACTIVATION_WIDGET
     }),
     // Todo 为实现移动、更改激活部件，设置wrapper选择器事件，有待于重构改部分
-    change(type, trigger = null) {
+    change (type, trigger = null) {
       switch (type) {
         case 'style':
           // 图表样式更改，只需更新数据即可
-          this.activeWidget.render.mergeOption(this.config);
-          break;
+          this.activeWidget.render.mergeOption(this.config)
+          break
         case 'size':
           // 图表尺寸更改，wrapper选择器标准事件流
-          const sizePreConfig = _.cloneDeep(this.activeWidget.config.commonConfig);
+          const sizePreConfig = _.cloneDeep(this.activeWidget.config.commonConfig)
           const sizeMutation = {
             event: {
               distance: trigger === 'width'
@@ -206,22 +215,22 @@ export default {
                 : (this.config.commonConfig.height - sizePreConfig.height) * this.view.scale,
               eventType: 'SINGLE',
               mouseType: 'mousemove',
-              type: trigger === 'width' ? 'cr' : 'bc',
+              type: trigger === 'width' ? 'cr' : 'bc'
             },
-            originalState: { ...sizePreConfig },
-          };
+            originalState: { ...sizePreConfig }
+          }
           this.adjust({
             target: document.getElementById(this.activeWidget.widgetId),
-            mutation: sizeMutation,
-          });
+            mutation: sizeMutation
+          })
           this.adjust({
             target: document.getElementById('wrapper'),
-            mutation: sizeMutation,
-          });
-          break;
+            mutation: sizeMutation
+          })
+          break
         case 'position':
           // 图表位置更改，wrapper选择器标准事件流
-          const positionPreConfig = _.cloneDeep(this.activeWidget.config.commonConfig);
+          const positionPreConfig = _.cloneDeep(this.activeWidget.config.commonConfig)
           const positionMutation = {
             event: {
               direction: 'ANY',
@@ -230,39 +239,39 @@ export default {
               mouseType: 'mousemove',
               position: {
                 top: (this.config.commonConfig.top - positionPreConfig.top) * this.view.scale,
-                left: (this.config.commonConfig.left - positionPreConfig.left) * this.view.scale,
+                left: (this.config.commonConfig.left - positionPreConfig.left) * this.view.scale
               },
-              type: 'move',
+              type: 'move'
             },
-            originalState: { ...positionPreConfig },
-          };
+            originalState: { ...positionPreConfig }
+          }
           this.adjust({
             target: document.getElementById(this.activeWidget.widgetId),
-            mutation: positionMutation,
-          });
+            mutation: positionMutation
+          })
           this.adjust({
             target: document.getElementById('wrapper'),
-            mutation: positionMutation,
-          });
-          break;
+            mutation: positionMutation
+          })
+          break
         default:
-          break;
+          break
       }
       // 更新部件配置
-      const activeWidget = _.cloneDeep(this.activeWidget);
+      const activeWidget = _.cloneDeep(this.activeWidget)
       this.activationWidget({
         widget: Object.assign(activeWidget, {
           config: this.config,
-          render: this.activeWidget.render,
-        }),
-      });
+          render: this.activeWidget.render
+        })
+      })
       // 更新部件后，如果进行尺寸的修改则重新resize图表
       if (type === 'size') {
-        this.activeWidget.render.chart.resize();
+        this.activeWidget.render.chart.resize()
       }
-    },
-  },
-};
+    }
+  }
+}
 </script>
 
 <style scoped lang="less">

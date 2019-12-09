@@ -5,18 +5,18 @@
 * Time: 5:13 下午
 * Email: dong.xing@outlook.com
 */
-import LinesStaticData from '../config/dataConfig/staticData/LinesStaticData';
-import BarStaticData from '../config/dataConfig/staticData/BarStaticData';
+import LinesStaticData from '../config/dataConfig/staticData/LinesStaticData'
+import BarStaticData from '../config/dataConfig/staticData/BarStaticData'
 
 export default class StaticDataFactory {
-  static create(type) {
+  static create (type) {
     switch (type) {
       case 'Lines':
-        return LinesStaticData;
+        return LinesStaticData
       case 'Bar':
-        return BarStaticData;
+        return BarStaticData
       default:
-        return null;
+        return null
     }
   }
 }

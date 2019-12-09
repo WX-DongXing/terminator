@@ -60,7 +60,7 @@
                 @change="() =>viewService.next({
                   type: 'backgroundColor',
                   value: config.backgroundColor
-                 })" />
+                })" />
             </div>
           </div>
           <!-- / 颜色 -->
@@ -77,32 +77,32 @@
 </template>
 
 <script>
-import '@/assets/less/template.less';
-import { mapState } from 'vuex';
-import _ from 'lodash';
-import ViewService from './index';
-import ColorPicker from '@/components/colorPicker/index.vue';
+import '@/assets/less/template.less'
+import { mapState } from 'vuex'
+import _ from 'lodash'
+import ViewService from './index'
+import ColorPicker from '@/components/colorPicker/index.vue'
 
 export default {
   name: 'ViewConfig',
   components: {
-    ColorPicker,
+    ColorPicker
   },
   data: () => ({
     isSubscribed: true,
     config: null,
-    viewService: new ViewService(),
+    viewService: new ViewService()
   }),
-  created() {
-    this.config = _.cloneDeep(this.activeWidget.config.commonConfig);
+  created () {
+    this.config = _.cloneDeep(this.activeWidget.config.commonConfig)
   },
   computed: {
-    ...mapState('screen', ['activeWidget']),
+    ...mapState('screen', ['activeWidget'])
   },
-  beforeDestroy() {
-    this.isSubscribed = false;
-  },
-};
+  beforeDestroy () {
+    this.isSubscribed = false
+  }
+}
 </script>
 
 <style scoped lang="less">

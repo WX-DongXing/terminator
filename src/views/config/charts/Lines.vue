@@ -76,7 +76,9 @@
                     <div class="comment-template__inner">
                       <a-slider
                         v-model="config.proprietaryConfig.lineStyle.width"
-                        @change="$refs.chartProprietaryRef.change()" :min="1" :max="10" />
+                        @change="$refs.chartProprietaryRef.change()"
+                        :min="1"
+                        :max="10" />
                     </div>
                   </div>
                   <!-- / 粗细 -->
@@ -116,13 +118,13 @@
 </template>
 
 <script>
-import '@/assets/less/template.less';
-import { mapState, mapMutations } from 'vuex';
-import { ScreenMutations } from '@/store/modules/screen';
-import CommonTemplate from '../common/index.vue';
-import ChartProprietaryTemplate from '../chartProprietary/index.vue';
-import ColorPicker from '@/components/colorPicker/index.vue';
-import DataSourceTemplate from '../dataSource/index.vue';
+import '@/assets/less/template.less'
+import { mapState, mapMutations } from 'vuex'
+import { ScreenMutations } from '@/store/modules/screen'
+import CommonTemplate from '../common/index.vue'
+import ChartProprietaryTemplate from '../chartProprietary/index.vue'
+import ColorPicker from '@/components/colorPicker/index.vue'
+import DataSourceTemplate from '../dataSource/index.vue'
 
 export default {
   name: 'Lines',
@@ -130,17 +132,17 @@ export default {
     CommonTemplate,
     ChartProprietaryTemplate,
     ColorPicker,
-    DataSourceTemplate,
+    DataSourceTemplate
   },
   computed: {
-    ...mapState('screen', ['activeWidget']),
+    ...mapState('screen', ['activeWidget'])
   },
   methods: {
     ...mapMutations('screen', {
-      removeWidget: ScreenMutations.REMOVE_WIDGET,
-    }),
-  },
-};
+      removeWidget: ScreenMutations.REMOVE_WIDGET
+    })
+  }
+}
 </script>
 
 <style scoped>

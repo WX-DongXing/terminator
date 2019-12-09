@@ -21,18 +21,18 @@
 </template>
 
 <script>
-import { mapState } from 'vuex';
-import CONFIGCOMPONENTS from './configComponents';
+import { mapState } from 'vuex'
+import CONFIGCOMPONENTS from './configComponents'
 
 export default {
   name: 'Config',
   components: {
-    ...CONFIGCOMPONENTS,
+    ...CONFIGCOMPONENTS
   },
   computed: {
-    ...mapState('screen', ['activeWidget']),
-  },
-};
+    ...mapState('screen', ['activeWidget'])
+  }
+}
 </script>
 
 <style scoped lang="less">

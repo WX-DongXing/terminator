@@ -6,44 +6,52 @@
 * Email: dong.xing@outlook.com
 */
 <template>
-  <div class="widget"
-       :id="widget.widgetId" :ref="widget.widgetId" @click.stop="() => $emit('select')">
+  <div
+    class="widget"
+    :id="widget.widgetId"
+    :ref="widget.widgetId"
+    @click.stop="() => $emit('select')">
   </div>
 </template>
 
 <script>
-import { mapMutations, mapState } from 'vuex';
-import { ScreenMutations } from '@/store/modules/screen';
-import Factory from '@/model/factory/factory';
+import { mapMutations, mapState } from 'vuex'
+import { ScreenMutations } from '@/store/modules/screen'
+import Factory from '@/model/factory/factory'
 
 export default {
   name: 'Widget',
-  props: ['widget'],
+  props: {
+    widget: {
+      type: Object,
+      default: () => ({})
+    }
+  },
   data: () => ({
-    chart: null,
+    chart: null
   }),
   computed: {
-    ...mapState('screen', ['widgets']),
+    ...mapState('screen', ['widgets'])
   },
-  mounted() {
+  mounted () {
     const widgetFactory = this.widget.config.category === 'CHART'
       ? Factory.createChartFactory()
-      : Factory.createElementFactory();
+      : Factory.createElementFactory()
     // 根据类型创建图表
     this.chart = widgetFactory.create(this.widget.config.type, {
-      widget: this.widget,
-    });
+      widget: this.widget
+    })
     // 将渲染的元素更新至部件
     this.activationWidget({
-      widget: Object.assign(this.widget, { render: this.chart }),
-    });
+      widget: Object.assign(this.widget, { render: this.chart })
+    })
   },
   methods: {
     ...mapMutations('screen', {
-      activationWidget: ScreenMutations.ACTIVATION_WIDGET,
-    }),
-  },
-};
+      activationWidget: ScreenMutations.ACTIVATION_WIDGET
+    })
+  }
+}
 </script>
 
 <style scoped lang="less">

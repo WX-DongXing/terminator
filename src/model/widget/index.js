@@ -5,15 +5,15 @@
 * Time: 2:01 下午
 * Email: dong.xing@outlook.com
 */
-import uuid from 'uuid/v4';
-import Config from '../config';
+import uuid from 'uuid/v4'
+import Config from '../config'
 
 export default class Widget {
-  constructor({
-    config, render = null,
+  constructor ({
+    config, render = null
   }) {
-    this.widgetId = uuid();
-    this.config = new Config(config);
-    this.render = render;
+    this.widgetId = uuid()
+    this.config = new Config(config)
+    this.render = render
   }
 }
