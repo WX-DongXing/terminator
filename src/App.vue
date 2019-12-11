@@ -4,15 +4,19 @@
       <p>Terminator</p>
     </div>
     <div class="content">
-      <div class="left">
-        <Template />
-      </div>
+      <transition name="panel">
+        <div class="left" v-if="leftPanelExpand">
+          <Template />
+        </div>
+      </transition>
       <div class="center">
-        <Screen />
+        <Screen @left="leftPanelControl" @right="rightPanelControl"/>
       </div>
-      <div class="right">
-        <Config />
-      </div>
+      <transition name="panel">
+        <div class="right" v-if="rightPanelExpand">
+          <Config />
+        </div>
+      </transition>
     </div>
   </div>
 </template>
@@ -28,6 +32,18 @@ export default {
     Screen,
     Template,
     Config
+  },
+  data: () => ({
+    leftPanelExpand: true,
+    rightPanelExpand: true
+  }),
+  methods: {
+    leftPanelControl (control) {
+      this.leftPanelExpand = control
+    },
+    rightPanelControl (control) {
+      this.rightPanelExpand = control
+    }
   }
 }
 </script>
@@ -56,10 +72,11 @@ export default {
   height: 54px;
   box-sizing: border-box;
   padding: 0 24px;
-  background: rebeccapurple;
+  background: white;
+  border-bottom: 1px solid rgba(0, 0, 0, .25);
 
   p {
-    color: whitesmoke;
+    color: #757575;
     font-weight: bold;
     font-size: 18px;
     margin: 0;
@@ -78,6 +95,7 @@ export default {
   flex: none;
   width: 240px;
   background: white;
+  overflow: hidden;
 }
 
 .center {
@@ -90,5 +108,14 @@ export default {
   flex: none;
   width: 320px;
   background: white;
+}
+
+/* panel 过度动画 */
+.panel-enter-active, .panel-leave-active {
+  transition: all 400ms cubic-bezier(.25,.8,.25,1);
+}
+
+.panel-enter, .panel-leave-to {
+  width: 0;
 }
 </style>

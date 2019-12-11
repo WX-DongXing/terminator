@@ -41,6 +41,7 @@ export default {
   flex-flow: column nowrap;
   justify-content: space-between;
   align-content: stretch;
+  width: 320px;
   height: 100%;
 
   &__header {
@@ -53,7 +54,9 @@ export default {
     border-bottom: 1px solid rgba(0, 0, 0, 0.23);
     box-sizing: border-box;
     padding: 0 16px;
+
     p {
+      flex: none;
       margin: 0;
     }
   }

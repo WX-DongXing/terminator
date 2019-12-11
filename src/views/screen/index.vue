@@ -8,7 +8,21 @@
 <template>
   <div class="screen">
     <div class="screen__header">
-      <p>画板</p>
+      <div class="screen__control" @click="panelControl('left')">
+        <span v-if="leftPanelExpand">
+          <a-icon type="menu-fold" />
+        </span>
+        <a-button v-else type="link" icon="appstore">组件库</a-button>
+      </div>
+      <div class="screen__title">
+        <!--        <p>画板</p>-->
+      </div>
+      <div class="screen__control" @click="panelControl('right')">
+        <span v-if="rightPanelExpand">
+          <a-icon type="menu-unfold" />
+        </span>
+        <a-button v-else type="link" icon="setting">配置</a-button>
+      </div>
       <!--      <div class="screen__size">-->
       <!--        <a-input-->
       <!--          type="number"-->
@@ -108,6 +122,8 @@ export default {
   data: () => ({
     width: 1920,
     height: 1080,
+    leftPanelExpand: true,
+    rightPanelExpand: true,
     backgroundColor: 'rgba(255,255,255,1)',
     scale: 1,
     isAutoResize: true,
@@ -127,6 +143,7 @@ export default {
         startWith({ type: 'resize' })
       )
       .subscribe((event) => {
+        console.log(event)
         // 设置缩放
         this.setScale(event)
         // 设置屏幕对象
@@ -245,6 +262,21 @@ export default {
       activationWidget: ScreenMutations.ACTIVATION_WIDGET
     }),
     /**
+     * 左右panel展开与否
+     * @param type 左右panel
+     */
+    panelControl (type) {
+      const mapping = new Map([
+        ['left', 'leftPanelExpand'],
+        ['right', 'rightPanelExpand']
+      ])
+      this[mapping.get(type)] = !this[mapping.get(type)]
+      this.$emit(type, this[mapping.get(type)])
+      setTimeout(() => {
+        this.change$.next({ type: 'resize' })
+      }, 400)
+    },
+    /**
      * 设置视图缩放
      * @param event
      */
@@ -298,13 +330,35 @@ export default {
     justify-content: space-between;
     align-items: center;
     height: 48px;
-    box-sizing: border-box;
-    padding: 0 16px;
     background: white;
     border-bottom: 1px solid rgba(0, 0, 0, .3);
 
     p {
       margin: 0;
+    }
+  }
+
+  &__control {
+    display: flex;
+    flex-flow: row nowrap;
+    justify-content: flex-start;
+    align-items: center;
+    cursor: pointer;
+    height: 100%;
+
+    & span {
+      flex: none;
+      display: flex;
+      flex-flow: row nowrap;
+      justify-content: center;
+      align-items: center;
+      cursor: pointer;
+      width: 48px;
+      height: 100%;
+
+      &:hover {
+        background: rgba(0, 0, 0, 0.025);
+      }
     }
   }
 

@@ -158,6 +158,7 @@ export default {
   flex-flow: column nowrap;
   justify-content: flex-start;
   align-items: stretch;
+  width: 240px;
   background: white;
 
   &__header {
@@ -169,6 +170,7 @@ export default {
     border-bottom: 1px solid rgba(0, 0, 0, 0.23);
 
     p {
+      flex: none;
       margin: 0;
       padding: 0 16px;
     }
