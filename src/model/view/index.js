@@ -1,11 +1,5 @@
 import Config from '../config'
-
-class Range {
-  constructor (min, max) {
-    this.min = min
-    this.max = max
-  }
-}
+import { Range } from '../common'
 
 export default class View {
   constructor ({

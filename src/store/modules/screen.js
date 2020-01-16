@@ -8,7 +8,8 @@ export const ScreenMutations = {
   SET_VIEW: 'SET_VIEW[设置视图对象]',
   ADD_WIDGET: 'ADD_WIDGET[添加部件]',
   REMOVE_WIDGET: 'REMOVE_WIDGET[添加部件]',
-  ACTIVATION_WIDGET: 'ACTIVATION_WIDGET[设置激活的窗口]'
+  ACTIVATION_WIDGET: 'ACTIVATION_WIDGET[设置激活的窗口]',
+  MODIFY_TOPOLOGY_EDITABLE_STATUS: 'MODIFY_TOPOLOGY_EDITABLE_STATUS[修改拓扑图可编辑状态]'
 }
 
 export default {
@@ -19,7 +20,9 @@ export default {
     // 视图中所有部件对象
     widgets: [],
     // 激活的部件对象，作为可读属性使用，不可通过非mutation方式进行修改
-    activeWidget: null
+    activeWidget: null,
+    // 拓扑图是否可编辑
+    topologyEditable: false
   },
   mutations: {
     // 设置视图对象
@@ -50,6 +53,10 @@ export default {
         )
         Object.assign(activeWidget, payload.widget)
       }
+    },
+    // 修改拓扑图可编辑状态
+    [ScreenMutations.MODIFY_TOPOLOGY_EDITABLE_STATUS] (state, payload) {
+      state.topologyEditable = payload.editable
     }
   },
   actions: {

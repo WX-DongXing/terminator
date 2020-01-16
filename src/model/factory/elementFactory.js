@@ -5,15 +5,17 @@
 * Time: 5:36 下午
 * Email: dong.xing@outlook.com
 */
+
 // import TextElement from '../element/TextElement';
 
 export default class ElementFactory {
-  // create(type) {
-  //   switch (type) {
-  //     case 'text':
-  //       return new TextElement();
-  //     default:
-  //       return null;
-  //   }
-  // }
+  static create (type, widget) {
+    switch (type) {
+      case 'text':
+        // return new TextElement()
+        return null
+      default:
+        return null
+    }
+  }
 }

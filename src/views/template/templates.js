@@ -1,3 +1,11 @@
+/**
+* 图表配置
+* Author: dong xing
+* Date: 2020/1/13
+* Time: 2:55 下午
+* Email: dong.xing@outlook.com
+*/
+
 import Template from '../../model/template'
 
 // 图表模板
@@ -13,6 +21,9 @@ const charts = [
   },
   {
     category: 'CHART', type: 'Area', name: '区域图', icon: 'area-chart', width: 300, height: 300
+  },
+  {
+    category: 'CHART', type: 'Topology', name: '拓扑图', icon: 'branches', width: 800, height: 600
   }
 ]
 

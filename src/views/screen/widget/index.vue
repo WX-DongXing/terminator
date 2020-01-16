@@ -34,11 +34,12 @@ export default {
     ...mapState('screen', ['widgets'])
   },
   mounted () {
-    const widgetFactory = this.widget.config.category === 'CHART'
+    const { category, type } = this.widget.config
+    const widgetFactory = category === 'CHART'
       ? Factory.createChartFactory()
       : Factory.createElementFactory()
     // 根据类型创建图表
-    this.chart = widgetFactory.create(this.widget.config.type, {
+    this.chart = widgetFactory.create(type, {
       widget: this.widget
     })
     // 将渲染的元素更新至部件
@@ -56,7 +57,7 @@ export default {
 
 <style scoped lang="less">
 .widget {
-  position: absolute;
+  position: absolute !important;
 
   &:hover {
     box-shadow: 0 0 4px 2px rgba(24, 144, 255, .8) !important;

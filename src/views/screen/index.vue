@@ -38,12 +38,15 @@
     </div>
 
     <!-- S 画板 -->
-    <div class="page" ref="page" @click.self="() => select$.next({ el: 'page' })">
+    <div
+      ref="page"
+      class="page"
+      @click.self="() => select$.next({ el: 'page' })">
 
       <div class="gauge" ref="gauge"></div>
       <!-- / 标尺 -->
 
-      <div class="view" ref="view">
+      <div ref="view" class="view">
 
         <Widget
           v-for="widget in widgets"
@@ -143,7 +146,6 @@ export default {
         startWith({ type: 'resize' })
       )
       .subscribe((event) => {
-        console.log(event)
         // 设置缩放
         this.setScale(event)
         // 设置屏幕对象
@@ -158,6 +160,7 @@ export default {
           })
         })
       })
+
     // 选择激活的部件
     merge(
       this.select$,
@@ -222,7 +225,7 @@ export default {
         pluck('event', 'msg')
       )
       .subscribe((mutation) => {
-        const { widgetId, render } = this.activeWidget
+        const { widgetId, config, render } = this.activeWidget
         const [targetComponent] = this.$refs[widgetId]
         const { event } = mutation
         // 当鼠标抬起时更新部件位置状态
@@ -250,11 +253,17 @@ export default {
           mutation
         })
         // 调整图表尺寸
-        this.activeWidget.render.chart.resize()
+        if (config.type === 'Topology') {
+          this.activeWidget.render.resize(
+            render.container.offsetWidth,
+            render.container.offsetHeight
+          )
+        }
+        this.activeWidget.render.resize()
       })
   },
   computed: {
-    ...mapState('screen', ['view', 'widgets', 'activeWidget'])
+    ...mapState('screen', ['view', 'widgets', 'activeWidget', 'topologyEditable'])
   },
   methods: {
     ...mapMutations('screen', {
@@ -324,6 +333,7 @@ export default {
   background: whitesmoke;
 
   &__header {
+    position: relative;
     flex: none;
     display: flex;
     flex-flow: row nowrap;
@@ -331,7 +341,8 @@ export default {
     align-items: center;
     height: 48px;
     background: white;
-    border-bottom: 1px solid rgba(0, 0, 0, .3);
+    box-shadow: 0 0 11px 0 rgba(0, 0, 0, 0.1);
+    /*border-bottom: 1px solid rgba(0, 0, 0, .3);*/
 
     p {
       margin: 0;

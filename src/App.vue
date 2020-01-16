@@ -5,7 +5,7 @@
     </div>
     <div class="content">
       <transition name="panel">
-        <div class="left" v-if="leftPanelExpand">
+        <div class="left" v-show="leftPanelExpand">
           <Template />
         </div>
       </transition>
@@ -13,7 +13,7 @@
         <Screen @left="leftPanelControl" @right="rightPanelControl"/>
       </div>
       <transition name="panel">
-        <div class="right" v-if="rightPanelExpand">
+        <div class="right" v-show="rightPanelExpand">
           <Config />
         </div>
       </transition>
@@ -64,6 +64,7 @@ export default {
 }
 
 .header {
+  position: relative;
   flex: none;
   display: flex;
   flex-flow: row nowrap;
@@ -71,9 +72,10 @@ export default {
   align-items: center;
   height: 54px;
   box-sizing: border-box;
-  padding: 0 24px;
+  padding: 0 16px;
   background: white;
-  border-bottom: 1px solid rgba(0, 0, 0, .25);
+  box-shadow: 0 2px 8px #f0f1f2;
+  z-index: 1;
 
   p {
     color: #757575;
@@ -84,6 +86,7 @@ export default {
 }
 
 .content {
+  position: relative;
   display: flex;
   flex-flow: row nowrap;
   justify-content: space-between;
@@ -95,6 +98,7 @@ export default {
   flex: none;
   width: 240px;
   background: white;
+  box-shadow: 0 0 11px 0 rgba(0, 0, 0, 0.1);
   overflow: hidden;
 }
 
@@ -108,6 +112,7 @@ export default {
   flex: none;
   width: 320px;
   background: white;
+  box-shadow: 0 0 11px 0 rgba(0, 0, 0, 0.1);
 }
 
 /* panel 过度动画 */
@@ -117,5 +122,9 @@ export default {
 
 .panel-enter, .panel-leave-to {
   width: 0;
+}
+
+.ant-collapse-content.ant-collapse-content-active {
+  overflow: visible !important;
 }
 </style>

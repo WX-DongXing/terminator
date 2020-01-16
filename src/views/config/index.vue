@@ -51,9 +51,10 @@ export default {
     justify-content: space-between;
     align-items: center;
     height: 48px;
-    border-bottom: 1px solid rgba(0, 0, 0, 0.23);
+    /*border-bottom: 1px solid rgba(0, 0, 0, 0.23);*/
     box-sizing: border-box;
     padding: 0 16px;
+    box-shadow: 0 0 11px 0 rgba(0, 0, 0, 0.1);
 
     p {
       flex: none;

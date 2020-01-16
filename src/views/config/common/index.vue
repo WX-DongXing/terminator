@@ -188,7 +188,7 @@ export default {
     ColorPicker
   },
   computed: {
-    ...mapState('screen', ['activeWidget', 'view']),
+    ...mapState('screen', ['activeWidget', 'view', 'topologyEditable']),
     // 为不修改 state.activeWidget，在此深复制激活部件的配置项，并将其设置为该组件内变量，修改部件后提交再行修改state.activeWidget
     config () {
       return _.cloneDeep(this.activeWidget.config)
@@ -198,7 +198,7 @@ export default {
     ...mapMutations('screen', {
       activationWidget: ScreenMutations.ACTIVATION_WIDGET
     }),
-    // Todo 为实现移动、更改激活部件，设置wrapper选择器事件，有待于重构改部分
+    // Todo 为实现移动、更改激活部件，设置wrapper选择器事件，有待于重构该部分
     change (type, trigger = null) {
       switch (type) {
         case 'style':
@@ -258,6 +258,23 @@ export default {
           break
       }
       // 更新部件配置
+      this.updateActionWidget()
+      // 更新部件后，如果进行尺寸的修改则重新resize图表
+      if (type === 'size') {
+        const { config, render } = this.activeWidget
+        if (config.type === 'Topology') {
+          this.activeWidget.render.resize(
+            render.container.offsetWidth,
+            render.container.offsetHeight
+          )
+        }
+        this.activeWidget.render.resize()
+      }
+    },
+    /**
+     * 更新部件配置
+     */
+    updateActionWidget () {
       const activeWidget = _.cloneDeep(this.activeWidget)
       this.activationWidget({
         widget: Object.assign(activeWidget, {
@@ -265,10 +282,6 @@ export default {
           render: this.activeWidget.render
         })
       })
-      // 更新部件后，如果进行尺寸的修改则重新resize图表
-      if (type === 'size') {
-        this.activeWidget.render.chart.resize()
-      }
     }
   }
 }
