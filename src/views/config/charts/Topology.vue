@@ -107,11 +107,23 @@
                   <a-switch
                     checkedChildren="开"
                     unCheckedChildren="关"
-                    :value="topologyEditable"
+                    :checked="topologyEditable"
                     @change="topologyEdit" />
                 </div>
               </div>
               <!-- / 编辑 -->
+
+              <div class="comment-template__item" v-if="topologyEditable">
+                <p class="comment-template__leading">尺寸:</p>
+                <div class="comment-template__inner topology-config__editable">
+                  <a-switch
+                    checkedChildren="开"
+                    unCheckedChildren="关"
+                    v-model="topologyResizable"
+                    @change="topologyResize" />
+                </div>
+              </div>
+              <!-- / 尺寸 -->
 
             </a-collapse-panel>
             <!-- E 操作 -->
@@ -140,6 +152,7 @@ import ColorPicker from '@/components/colorPicker/index'
 import CommonTemplate from '../common/index'
 import ChartProprietaryTemplate from '../chartProprietary/index'
 import DataSourceTemplate from '../dataSource/index'
+import WrapperService from '@/components/wrapper/WrapperService'
 
 export default {
   name: 'Topology',
@@ -149,16 +162,34 @@ export default {
     ChartProprietaryTemplate,
     DataSourceTemplate
   },
+  data: () => ({
+    topologyResizable: true,
+    wrapperService: new WrapperService()
+  }),
   methods: {
     ...mapMutations('screen', {
       removeWidget: ScreenMutations.REMOVE_WIDGET,
       modifyTopologyEditable: ScreenMutations.MODIFY_TOPOLOGY_EDITABLE_STATUS
     }),
+    /**
+     * 拓扑图是否可编辑
+     */
     topologyEdit () {
       // 更改拓扑图编辑状态
       this.modifyTopologyEditable({
         editable: !this.topologyEditable
       })
+
+      // 取消编辑时选中该拓扑部件, 重置状态
+      if (!this.topologyEditable) {
+        this.wrapperService.next({
+          el: 'topology',
+          value: true,
+          widget: this.activeWidget
+        })
+        this.topologyResizable = true
+      }
+
       // 打开元素添加列表
       const [topology] = document.getElementsByClassName('topology')
       if (this.topologyEditable) {
@@ -222,6 +253,16 @@ export default {
           })
         })
       }
+    },
+    /**
+     * 拓扑图是否可更改尺寸
+     */
+    topologyResize () {
+      this.wrapperService.next({
+        el: 'topology',
+        value: this.topologyResizable,
+        widget: this.activeWidget
+      })
     }
   }
 }

@@ -58,12 +58,15 @@
         <!-- / 部件渲染 -->
 
         <Wrapper ref="wrapper" v-stream:adjust="adjust$" />
+        <!-- / 选择指示器 -->
+
       </div>
       <!-- / 视图 -->
 
     </div>
     <!-- E 画板 -->
 
+    <!-- S 比例条 -->
     <div class="scale-bar">
       <a-tooltip placement="top">
         <template slot="title">
@@ -84,6 +87,8 @@
         v-model="scale" />
       <p class="scale-bar__number">缩放比：{{ this.scale.toFixed(2) }}</p>
     </div>
+    <!-- E 比例条 -->
+
   </div>
 </template>
 
@@ -104,6 +109,7 @@ import Wrapper from '@/components/wrapper/index.vue'
 import ViewService from '../config/view'
 import Widget from './widget/index.vue'
 import AdjustMixins from '@/components/wrapper/AdjustMixins.vue'
+import WrapperService from '@/components/wrapper/WrapperService'
 
 export default {
   name: 'Screen',
@@ -132,7 +138,8 @@ export default {
     isAutoResize: true,
     isSubscribed: true,
     isResize: false,
-    viewChange$: new ViewService().change$
+    viewChange$: new ViewService().change$,
+    wrapperChange$: new WrapperService().change$
   }),
   mounted () {
     // 视图change事件处理
@@ -175,12 +182,15 @@ export default {
           const [mousedownEvent] = events
           return [...mousedownEvent.target.classList].includes('view')
         })
-      )
+      ),
+      this.wrapperChange$
     )
       .pipe(
-        takeWhile(() => this.isSubscribed)
+        takeWhile(() => this.isSubscribed),
+        // 当拓扑视图在编辑时禁用其他部件的激活功能
+        filter(({ el }) => !this.topologyEditable || el === 'topology')
       )
-      .subscribe(({ el, widget }) => {
+      .subscribe(({ el, widget, value }) => {
         let activeWidget
         let styles = {}
         switch (el) {
@@ -202,6 +212,12 @@ export default {
               height: commonConfig.height,
               top: commonConfig.top,
               left: commonConfig.left
+            }
+            break
+          case 'topology':
+            activeWidget = widget
+            styles = {
+              display: value ? 'block' : 'none'
             }
             break
           default:

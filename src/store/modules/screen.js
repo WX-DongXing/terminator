@@ -22,7 +22,9 @@ export default {
     // 激活的部件对象，作为可读属性使用，不可通过非mutation方式进行修改
     activeWidget: null,
     // 拓扑图是否可编辑
-    topologyEditable: false
+    topologyEditable: false,
+    // 拓扑图是否可更改尺寸
+    topologyResizable: true
   },
   mutations: {
     // 设置视图对象

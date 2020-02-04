@@ -1,13 +1,13 @@
 import { Subject } from 'rxjs'
 
-export default class ViewService {
+export default class WrapperService {
   constructor () {
-    if (!ViewService.prototype.instance) {
+    if (!WrapperService.prototype.instance) {
       this.change = new Subject()
       this.change$ = this.change.asObservable()
-      ViewService.prototype.instance = this
+      WrapperService.prototype.instance = this
     }
-    return ViewService.prototype.instance
+    return WrapperService.prototype.instance
   }
 
   next (event) {

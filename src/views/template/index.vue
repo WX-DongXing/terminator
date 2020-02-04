@@ -49,6 +49,7 @@ import { ScreenMutations } from '@/store/modules/screen'
 import TEMPLATES from './templates'
 import Widget from '@/model/widget'
 import { Range } from '@/model/common'
+import WrapperService from '@/components/wrapper/WrapperService'
 
 export default {
   name: 'Template',
@@ -60,7 +61,8 @@ export default {
     yDistance: 0,
     viewUp$: null,
     templates: TEMPLATES,
-    topologyArea: null
+    topologyArea: null,
+    wrapperService: new WrapperService()
   }),
   subscriptions () {
     // 模板 mousedown 事件
@@ -143,6 +145,8 @@ export default {
           this.addWidget({ widget })
           // 将当前的部件状态激活
           this.activationWidget({ widget })
+          // 选择器选中该部件
+          this.wrapperService.next({ el: 'widget', widget })
         }
         // 从当前文档中移除该dom节点
         document.body.removeChild(this.cloneTemplate)
@@ -183,7 +187,6 @@ export default {
             left: pageX - this.xDistance
           })
           // 设置克隆节点在视图区域的动画效果
-          console.log('handle: ', this.isWithinTopologyScope(event))
           anime({
             targets: this.cloneNode,
             width: this.isWithinTopologyScope(event) ? width : 96,
@@ -196,7 +199,6 @@ export default {
         filter(({ event }) => event.type === 'mouseup')
       )
       .subscribe((res) => {
-        console.log(res)
         // 从当前文档中移除该dom节点
         document.body.removeChild(this.cloneNode)
       })
@@ -223,16 +225,25 @@ export default {
       return (pageX >= xRange.min && pageX <= xRange.max) &&
         (pageY >= yRange.min && pageY <= yRange.max)
     },
+    /**
+     * 获取拓扑部件区域信息
+     * @returns {{xRange: *, yRange: *}}
+     */
     getTopologyArea () {
       const { render: { container } } = this.activeWidget
       const { x, y, width, height } = container.getBoundingClientRect()
       return {
-        xRange: new Range(x, x + width * this.view.scale),
-        yRange: new Range(y, y + height * this.view.scale)
+        xRange: new Range(x, x + width),
+        yRange: new Range(y, y + height)
       }
     },
+    /**
+     * 鼠标是否在拓扑部件内
+     * @param pageX
+     * @param pageY
+     * @returns {boolean|boolean}
+     */
     isWithinTopologyScope ({ pageX, pageY }) {
-      console.log(pageX, pageY, this.topologyArea)
       const { xRange, yRange } = this.topologyArea
       return (pageX >= xRange.min && pageX <= xRange.max) &&
         (pageY >= yRange.min && pageY <= yRange.max)
