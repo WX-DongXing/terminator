@@ -7,7 +7,7 @@
 */
 import LineChart from '../charts/LineChart'
 import BarChart from '../charts/BarChart'
-import TopologyChart from '../charts/topologyChart'
+import TopologyChart from '../charts/TopologyChart'
 
 export default class ChartFactory {
   static create (type, widget) {

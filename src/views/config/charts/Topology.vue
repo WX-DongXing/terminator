@@ -180,6 +180,10 @@ export default {
         editable: !this.topologyEditable
       })
 
+      // 对当前已激活可编辑的拓扑部件添加样式，以标注状态
+      const { render: { container } } = this.activeWidget
+      container.className = this.topologyEditable ? 'widget topology-widget' : 'widget'
+
       // 取消编辑时选中该拓扑部件, 重置状态
       if (!this.topologyEditable) {
         this.wrapperService.next({

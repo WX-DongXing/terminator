@@ -26,9 +26,14 @@
           <p>{{ item.name }}</p>
         </div>
         <div class="template__topology" v-if="item.type === 'Topology' && topologyEditable">
-          <div class="template__node" v-stream:mousedown="nodeMouseDown$">
-            <a-icon type="plus-circle" />
-            <p>节点</p>
+          <div
+            class="template__node"
+            v-for="(node, i) in nodes"
+            v-stream:mousedown="{ subject: nodeMouseDown$, data: node }"
+            :key="i"
+          >
+            <a-icon :type="node.icon" />
+            <p>{{ node.name }}</p>
           </div>
         </div>
       </div>
@@ -47,6 +52,7 @@ import anime from 'animejs'
 import _ from 'lodash'
 import { ScreenMutations } from '@/store/modules/screen'
 import TEMPLATES from './templates'
+import NODES from './nodes'
 import Widget from '@/model/widget'
 import { Range } from '@/model/common'
 import WrapperService from '@/components/wrapper/WrapperService'
@@ -61,6 +67,7 @@ export default {
     yDistance: 0,
     viewUp$: null,
     templates: TEMPLATES,
+    nodes: NODES,
     topologyArea: null,
     wrapperService: new WrapperService()
   }),
@@ -176,21 +183,22 @@ export default {
         }),
         map(() => this.documentMove$.pipe(takeUntil(this.documentUp$))),
         switchMap(move$ => merge(this.documentUp$.pipe(first()), move$)),
-        withLatestFrom(this.itemMouseDown$, (event, { data }) => ({ event, data })),
+        withLatestFrom(this.nodeMouseDown$, (event, { data }) => ({ event, data })),
         tap(({ event, data }) => {
           const { pageX, pageY } = event
-          const { width, height } = data
+          const { width, height, radius } = data
           // 设置克隆节点的位置
           anime.set(this.cloneNode, {
-            transformOrigin: '0 0',
             top: pageY - this.yDistance,
             left: pageX - this.xDistance
           })
           // 设置克隆节点在视图区域的动画效果
           anime({
             targets: this.cloneNode,
+            transformOrigin: `${this.xDistance * 96 / width}px ${this.yDistance * 96 / height}px`,
             width: this.isWithinTopologyScope(event) ? width : 96,
             height: this.isWithinTopologyScope(event) ? height : 96,
+            borderRadius: this.isWithinTopologyScope(event) ? radius : 0,
             scale: this.isWithinTopologyScope(event) ? this.view.scale : 1,
             duration: 35,
             easing: 'linear'
@@ -198,7 +206,13 @@ export default {
         }),
         filter(({ event }) => event.type === 'mouseup')
       )
-      .subscribe((res) => {
+      .subscribe(({ event }) => {
+        if (this.isWithinTopologyScope(event)) {
+          const { render: { container } } = this.activeWidget
+          const { x, y } = container.getBoundingClientRect()
+          const { pageX, pageY } = event
+          console.log(pageX - x, pageY - y, this.activeWidget)
+        }
         // 从当前文档中移除该dom节点
         document.body.removeChild(this.cloneNode)
       })

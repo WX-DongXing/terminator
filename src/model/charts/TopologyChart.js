@@ -23,38 +23,16 @@ export default class TopologyChart extends Chart {
     this.chart = new G6.Graph({
       container: this.container,
       width,
-      height
+      height,
+      renderer: 'canvas',
+      modes: {
+        default: ['zoom-canvas', 'drag-canvas', 'drag-node']
+      },
+      animate: true
     })
     this.initConfig = {
-      nodes: [
-        {
-          id: 'node1',
-          groupId: 'group1',
-          label: 'node1'
-        },
-        {
-          id: 'node2',
-          groupId: 'group1',
-          label: 'node2'
-        }
-      ],
-      edges: [
-        {
-          source: 'node1',
-          target: 'node2'
-        }
-      ],
-      groups: [
-        {
-          id: 'group1',
-          title: {
-            text: '我的群组1',
-            stroke: '#444',
-            offsetX: -20,
-            offsetY: 30
-          }
-        }
-      ]
+      nodes: [],
+      edges: []
     }
     this.chart.data(this.initConfig)
     this.chart.render()
