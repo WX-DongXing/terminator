@@ -51,10 +51,10 @@ export default {
     justify-content: space-between;
     align-items: center;
     height: 48px;
-    /*border-bottom: 1px solid rgba(0, 0, 0, 0.23);*/
     box-sizing: border-box;
     padding: 0 16px;
-    box-shadow: 0 0 11px 0 rgba(0, 0, 0, 0.1);
+    box-shadow: 0 2px 8px #f0f1f2;
+    z-index: 1;
 
     p {
       flex: none;
@@ -63,11 +63,14 @@ export default {
   }
 
   &__content {
+    position: relative;
     display: flex;
     flex-flow: row nowrap;
     justify-content: center;
     align-items: center;
     height: 100%;
+    box-shadow: -4px 8px 8px 0 rgba(0, 0, 0, 0.12);
+    z-index: 2;
   }
 
   &__none {

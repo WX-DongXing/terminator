@@ -51,6 +51,9 @@ export default {
     ...mapMutations('screen', {
       activationWidget: ScreenMutations.ACTIVATION_WIDGET
     })
+  },
+  beforeDestroy () {
+    this.chart.destroy()
   }
 }
 </script>

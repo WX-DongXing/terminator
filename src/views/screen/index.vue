@@ -357,8 +357,8 @@ export default {
     align-items: center;
     height: 48px;
     background: white;
-    box-shadow: 0 0 11px 0 rgba(0, 0, 0, 0.1);
-    /*border-bottom: 1px solid rgba(0, 0, 0, .3);*/
+    box-shadow: 0 2px 8px #f0f1f2;
+    z-index: 2;
 
     p {
       margin: 0;
@@ -428,6 +428,7 @@ export default {
   background: white;
   border: 2px solid whitesmoke;
   border-bottom: none;
+  z-index: 3;
 
   &__slider.ant-slider {
     width: 200px;

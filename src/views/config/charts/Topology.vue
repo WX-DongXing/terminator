@@ -13,7 +13,7 @@
       <a-popconfirm
         title="从视图中删除该部件?"
         placement="left"
-        @confirm="() => removeWidget({ widgetId: activeWidget.widgetId })"
+        @confirm="remove"
         okText="确定"
         cancelText="取消"
       >
@@ -171,6 +171,13 @@ export default {
       removeWidget: ScreenMutations.REMOVE_WIDGET,
       modifyTopologyEditable: ScreenMutations.MODIFY_TOPOLOGY_EDITABLE_STATUS
     }),
+    /**
+     * 移除拓扑部件
+     */
+    remove () {
+      this.topologyEditable && this.topologyEdit()
+      this.removeWidget({ widgetId: this.activeWidget.widgetId })
+    },
     /**
      * 拓扑图是否可编辑
      */

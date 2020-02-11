@@ -176,7 +176,7 @@
 <script>
 import '@/assets/less/template.less'
 import _ from 'lodash'
-import { mapState, mapMutations } from 'vuex'
+import { mapState, mapGetters, mapMutations } from 'vuex'
 import { ScreenMutations } from '@/store/modules/screen'
 import ColorPicker from '@/components/colorPicker/index.vue'
 import AdjustMixins from '@/components/wrapper/AdjustMixins.vue'
@@ -188,7 +188,8 @@ export default {
     ColorPicker
   },
   computed: {
-    ...mapState('screen', ['activeWidget', 'view', 'topologyEditable']),
+    ...mapState('screen', ['activeWidget', 'topologyEditable']),
+    ...mapGetters('screen', ['scale']),
     // 为不修改 state.activeWidget，在此深复制激活部件的配置项，并将其设置为该组件内变量，修改部件后提交再行修改state.activeWidget
     config () {
       return _.cloneDeep(this.activeWidget.config)
@@ -211,8 +212,8 @@ export default {
           const sizeMutation = {
             event: {
               distance: trigger === 'width'
-                ? (this.config.commonConfig.width - sizePreConfig.width) * this.view.scale
-                : (this.config.commonConfig.height - sizePreConfig.height) * this.view.scale,
+                ? (this.config.commonConfig.width - sizePreConfig.width) * this.scale
+                : (this.config.commonConfig.height - sizePreConfig.height) * this.scale,
               eventType: 'SINGLE',
               mouseType: 'mousemove',
               type: trigger === 'width' ? 'cr' : 'bc'
@@ -238,8 +239,8 @@ export default {
               eventType: 'MOVE',
               mouseType: 'mousemove',
               position: {
-                top: (this.config.commonConfig.top - positionPreConfig.top) * this.view.scale,
-                left: (this.config.commonConfig.left - positionPreConfig.left) * this.view.scale
+                top: (this.config.commonConfig.top - positionPreConfig.top) * this.scale,
+                left: (this.config.commonConfig.left - positionPreConfig.left) * this.scale
               },
               type: 'move'
             },

@@ -26,6 +26,12 @@ export default {
     // 拓扑图是否可更改尺寸
     topologyResizable: true
   },
+  getters: {
+    // 画板缩放比例
+    scale (state) {
+      return state.view.scale || 1
+    }
+  },
   mutations: {
     // 设置视图对象
     [ScreenMutations.SET_VIEW] (state, payload) {

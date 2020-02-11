@@ -33,7 +33,7 @@
             :key="i"
           >
             <a-icon :type="node.icon" />
-            <p>{{ node.name }}</p>
+            <p>{{ node.label }}</p>
           </div>
         </div>
       </div>
@@ -42,20 +42,21 @@
 </template>
 
 <script>
+import anime from 'animejs'
+import _ from 'lodash'
 import { fromEvent, merge, Subject } from 'rxjs'
 import {
   map, takeWhile, takeUntil,
   tap, switchMap, first, filter, withLatestFrom
 } from 'rxjs/operators'
-import { mapState, mapMutations } from 'vuex'
-import anime from 'animejs'
-import _ from 'lodash'
+import { mapState, mapGetters, mapMutations } from 'vuex'
 import { ScreenMutations } from '@/store/modules/screen'
 import TEMPLATES from './templates'
 import NODES from './nodes'
 import Widget from '@/model/widget'
 import { Range } from '@/model/common'
 import WrapperService from '@/components/wrapper/WrapperService'
+import Factory from '@/model/factory/factory'
 
 export default {
   name: 'Template',
@@ -81,6 +82,18 @@ export default {
     // 全局 mouseup 事件
     this.documentUp$ = fromEvent(document, 'mouseup')
   },
+  computed: {
+    ...mapState(
+      'screen',
+      [
+        'view',
+        'widgets',
+        'activeWidget',
+        'topologyEditable'
+      ]
+    ),
+    ...mapGetters('screen', ['scale'])
+  },
   mounted () {
     this.viewUp$ = fromEvent(document.getElementsByClassName('view')[0], 'mouseup')
 
@@ -100,7 +113,8 @@ export default {
             position: 'fixed',
             margin: 0,
             top: y,
-            left: x
+            left: x,
+            zIndex: 3
           })
           document.body.append(this.cloneTemplate)
           event.preventDefault()
@@ -187,6 +201,8 @@ export default {
         tap(({ event, data }) => {
           const { pageX, pageY } = event
           const { width, height, radius } = data
+          const { render: { chart } } = this.activeWidget
+          const zoom = chart.getZoom()
           // 设置克隆节点的位置
           anime.set(this.cloneNode, {
             top: pageY - this.yDistance,
@@ -196,38 +212,41 @@ export default {
           anime({
             targets: this.cloneNode,
             transformOrigin: `${this.xDistance * 96 / width}px ${this.yDistance * 96 / height}px`,
-            width: this.isWithinTopologyScope(event) ? width : 96,
-            height: this.isWithinTopologyScope(event) ? height : 96,
+            width: this.isWithinTopologyScope(event) ? width * zoom : 96,
+            height: this.isWithinTopologyScope(event) ? height * zoom : 96,
             borderRadius: this.isWithinTopologyScope(event) ? radius : 0,
-            scale: this.isWithinTopologyScope(event) ? this.view.scale : 1,
+            scale: this.isWithinTopologyScope(event) ? this.scale : 1,
             duration: 35,
             easing: 'linear'
           })
         }),
         filter(({ event }) => event.type === 'mouseup')
       )
-      .subscribe(({ event }) => {
+      .subscribe(({ event, data }) => {
         if (this.isWithinTopologyScope(event)) {
-          const { render: { container } } = this.activeWidget
-          const { x, y } = container.getBoundingClientRect()
+          const { render: { initConfig, chart } } = this.activeWidget
           const { pageX, pageY } = event
-          console.log(pageX - x, pageY - y, this.activeWidget)
+          // 将屏幕/页面坐标转换为视口坐标
+          const topologyCoordinate = chart.getPointByClient(pageX, pageY)
+          const { x, y, width, height } = this.cloneNode.getBoundingClientRect()
+          const zoom = chart.getZoom()
+          const distance = {
+            x: (x + (width / 2) - pageX) / this.scale / zoom,
+            y: (y + (height / 2) - pageY) / this.scale / zoom
+          }
+          const nodeFactory = Factory.createNodeFactory()
+          const node = nodeFactory.create({
+            ...data,
+            x: topologyCoordinate.x + distance.x,
+            y: topologyCoordinate.y + distance.y,
+            size: [data.width, data.height]
+          })
+          initConfig.nodes.push(node)
+          chart.changeData(initConfig)
         }
         // 从当前文档中移除该dom节点
         document.body.removeChild(this.cloneNode)
       })
-  },
-  computed: {
-    ...mapState(
-      'screen',
-      [
-        'view',
-        'scale',
-        'widgets',
-        'activeWidget',
-        'topologyEditable'
-      ]
-    )
   },
   methods: {
     ...mapMutations('screen', {
@@ -285,9 +304,8 @@ export default {
     justify-content: flex-start;
     align-items: center;
     height: 48px;
-    box-shadow: 0 0 11px 0 rgba(0, 0, 0, 0.1);
+    box-shadow: 0 2px 8px #f0f1f2;
     z-index: 1;
-    /*border-bottom: 1px solid rgba(0, 0, 0, 0.23);*/
 
     p {
       flex: none;
@@ -304,6 +322,8 @@ export default {
     align-content: flex-start;
     box-sizing: border-box;
     min-height: calc(100vh - 102px);
+    box-shadow: 4px 8px 8px 0 rgba(0, 0, 0, .12);
+    z-index: 2;
     overflow: auto;
   }
 

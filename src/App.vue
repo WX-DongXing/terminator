@@ -77,7 +77,7 @@ export default {
   padding: 0 16px;
   background: white;
   box-shadow: 0 2px 8px #f0f1f2;
-  z-index: 1;
+  z-index: 3;
 
   p {
     color: #757575;
@@ -100,8 +100,6 @@ export default {
   flex: none;
   width: 240px;
   background: white;
-  box-shadow: 0 0 11px 0 rgba(0, 0, 0, 0.1);
-  overflow: hidden;
 }
 
 .center {
@@ -114,7 +112,6 @@ export default {
   flex: none;
   width: 320px;
   background: white;
-  box-shadow: 0 0 11px 0 rgba(0, 0, 0, 0.1);
 }
 
 /* panel 过度动画 */

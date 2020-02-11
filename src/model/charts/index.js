@@ -79,4 +79,9 @@ export default class Chart {
     // 重新配置图表
     this.chart.setOption(this.chartConfig)
   }
+
+  /**
+   * 销毁事件
+   */
+  destroy () {}
 }
