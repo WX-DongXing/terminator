@@ -125,6 +125,20 @@
               </div>
               <!-- / 尺寸 -->
 
+              <div class="comment-template__item" v-if="topologyEditable">
+                <p class="comment-template__leading">模式:</p>
+                <div class="comment-template__inner topology-config__editable">
+                  <a-radio-group
+                    buttonStyle="solid"
+                    v-model="mode"
+                    @change="modeChange">
+                    <a-radio-button value="default">默认</a-radio-button>
+                    <a-radio-button value="addEdge">连线</a-radio-button>
+                  </a-radio-group>
+                </div>
+              </div>
+              <!-- / 模式 -->
+
             </a-collapse-panel>
             <!-- E 操作 -->
 
@@ -163,7 +177,9 @@ export default {
     DataSourceTemplate
   },
   data: () => ({
+    // 拓扑尺寸编辑
     topologyResizable: true,
+    mode: 'default',
     wrapperService: new WrapperService()
   }),
   methods: {
@@ -274,6 +290,13 @@ export default {
         value: this.topologyResizable,
         widget: this.activeWidget
       })
+    },
+    /**
+     * 模式更改
+     */
+    modeChange () {
+      const { render: { chart } } = this.activeWidget
+      chart.setMode(this.mode)
     }
   }
 }

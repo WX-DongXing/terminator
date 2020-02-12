@@ -305,7 +305,7 @@ export default {
     align-items: center;
     height: 48px;
     box-shadow: 0 2px 8px #f0f1f2;
-    z-index: 1;
+    z-index: 3;
 
     p {
       flex: none;

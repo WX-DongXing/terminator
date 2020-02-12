@@ -25,29 +25,40 @@ export default class TopologyChart extends Chart {
       width,
       height,
       renderer: 'canvas',
+      animate: true,
       modes: {
         default: [
           'zoom-canvas',
           'drag-canvas',
           'drag-node',
+          'select-node',
           {
             type: 'brush-select',
             trigger: 'ctrl',
             includeEdges: true
           }
         ],
-        edit: ['click-select']
+        addEdge: [
+          'zoom-canvas',
+          'drag-canvas',
+          'drag-node',
+          'add-edge',
+          {
+            type: 'brush-select',
+            trigger: 'ctrl',
+            includeEdges: true
+          }
+        ]
       },
       // 节点不同状态下的样式集合
       nodeStateStyles: {
-        // 鼠标 hover 上节点，即 hover 状态为 true 时的样式
-        hover: {
-          fill: 'lightsteelblue'
-        },
         // 鼠标点击节点，即 click 状态为 true 时的样式
-        click: {
-          stroke: '#000',
-          lineWidth: 3
+        active: {
+          lineWidth: 10
+        },
+        inactive: {
+          fill: '#eeeeee',
+          stroke: '#eeeeee'
         }
       },
       // 边不同状态下的样式集合
@@ -56,8 +67,7 @@ export default class TopologyChart extends Chart {
         click: {
           stroke: 'steelblue'
         }
-      },
-      animate: true
+      }
     })
     this.initConfig = {
       nodes: [],
@@ -68,6 +78,14 @@ export default class TopologyChart extends Chart {
 
     // 对于缩放事件的监听
     this.chart.on('wheelzoom', e => {
+    })
+
+    // 点击节点
+    this.chart.on('node:click', e => {
+    })
+
+    // 点击画布
+    this.chart.on('canvas:click', e => {
     })
   }
 

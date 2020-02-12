@@ -77,7 +77,7 @@ export default {
   padding: 0 16px;
   background: white;
   box-shadow: 0 2px 8px #f0f1f2;
-  z-index: 3;
+  z-index: 5;
 
   p {
     color: #757575;

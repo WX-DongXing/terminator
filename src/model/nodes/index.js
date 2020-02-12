@@ -19,12 +19,15 @@ const defaultLabelCfg = {
   offset: 10
 }
 
+// 默认连接点
+const defaultAnchorPoints = []
+
 // 拓扑节点
 export default class Node {
   constructor ({
     x, y, shape, label,
     size = [],
-    anchorPoints = [],
+    anchorPoints = defaultAnchorPoints,
     style = defaultStyle,
     labelCfg = defaultLabelCfg
   }) {
