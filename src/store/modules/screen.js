@@ -8,8 +8,9 @@ export const ScreenMutations = {
   SET_VIEW: 'SET_VIEW[设置视图对象]',
   ADD_WIDGET: 'ADD_WIDGET[添加部件]',
   REMOVE_WIDGET: 'REMOVE_WIDGET[添加部件]',
-  ACTIVATION_WIDGET: 'ACTIVATION_WIDGET[设置激活的窗口]',
-  MODIFY_TOPOLOGY_EDITABLE_STATUS: 'MODIFY_TOPOLOGY_EDITABLE_STATUS[修改拓扑图可编辑状态]'
+  ACTIVATION_WIDGET: 'ACTIVATION_WIDGET[设置激活的部件]',
+  MODIFY_TOPOLOGY_EDITABLE_STATUS: 'MODIFY_TOPOLOGY_EDITABLE_STATUS[修改拓扑图可编辑状态]',
+  ACTIVATION_NODE: 'ACTIVATION_NODE[设置激活的节点]'
 }
 
 export default {
@@ -24,7 +25,9 @@ export default {
     // 拓扑图是否可编辑
     topologyEditable: false,
     // 拓扑图是否可更改尺寸
-    topologyResizable: true
+    topologyResizable: true,
+    // 激活的拓扑节点
+    activeNode: null
   },
   getters: {
     // 画板缩放比例
@@ -65,6 +68,15 @@ export default {
     // 修改拓扑图可编辑状态
     [ScreenMutations.MODIFY_TOPOLOGY_EDITABLE_STATUS] (state, payload) {
       state.topologyEditable = payload.editable
+    },
+    // 设置激活的拓扑节点
+    [ScreenMutations.ACTIVATION_NODE] (state, payload) {
+      state.activeNode = payload.activeNode
+      // 同步配置
+      if (state.activeWidget) {
+        const { render, config } = state.activeWidget
+        render.save(config)
+      }
     }
   },
   actions: {

@@ -7,7 +7,10 @@
 */
 
 import G6 from '@antv/g6'
+import _ from 'lodash'
 import Chart from './index'
+import store from '@/store'
+import { ScreenMutations } from '@/store/modules/screen'
 
 export default class TopologyChart extends Chart {
   constructor ({ widget }) {
@@ -69,24 +72,55 @@ export default class TopologyChart extends Chart {
         }
       }
     })
-    this.initConfig = {
+    this.chart.data({
       nodes: [],
       edges: []
-    }
-    this.chart.data(this.initConfig)
+    })
     this.chart.render()
 
     // 对于缩放事件的监听
     this.chart.on('wheelzoom', e => {
     })
 
-    // 点击节点
+    // 节点点击事件
     this.chart.on('node:click', e => {
+      store.commit('screen/' + ScreenMutations.ACTIVATION_NODE, {
+        activeNode: Object.assign(
+          {},
+          e.item,
+          { model: e.item.getModel() }
+        )
+      })
     })
 
-    // 点击画布
-    this.chart.on('canvas:click', e => {
+    // 节点拖动事件
+    this.chart.on('node:drag', e => {
+      const activeNode = store.state.screen.activeNode
+      if (activeNode) {
+        store.commit('screen/' + ScreenMutations.ACTIVATION_NODE, {
+          activeNode: Object.assign(
+            {},
+            e.item,
+            { model: e.item.getModel() }
+          )
+        })
+      }
     })
+
+    // 画布点击事件
+    this.chart.on('canvas:click', e => {
+      store.commit('screen/' + ScreenMutations.ACTIVATION_NODE, {
+        activeNode: null
+      })
+    })
+  }
+
+  /**
+   * 保存配置
+   * @param widget
+   */
+  save ({ proprietaryConfig }) {
+    Object.assign(proprietaryConfig, _.cloneDeep(this.chart.save()))
   }
 
   /**

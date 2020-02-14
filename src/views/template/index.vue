@@ -224,12 +224,13 @@ export default {
       )
       .subscribe(({ event, data }) => {
         if (this.isWithinTopologyScope(event)) {
-          const { render: { initConfig, chart } } = this.activeWidget
+          const { render, config } = this.activeWidget
+          const graph = render.chart
           const { pageX, pageY } = event
           // 将屏幕/页面坐标转换为视口坐标
-          const topologyCoordinate = chart.getPointByClient(pageX, pageY)
+          const topologyCoordinate = graph.getPointByClient(pageX, pageY)
           const { x, y, width, height } = this.cloneNode.getBoundingClientRect()
-          const zoom = chart.getZoom()
+          const zoom = graph.getZoom()
           const distance = {
             x: (x + (width / 2) - pageX) / this.scale / zoom,
             y: (y + (height / 2) - pageY) / this.scale / zoom
@@ -241,8 +242,10 @@ export default {
             y: topologyCoordinate.y + distance.y,
             size: [data.width, data.height]
           })
-          initConfig.nodes.push(node)
-          chart.changeData(initConfig)
+          // 添加节点
+          graph.addItem('node', node)
+          // 同步配置
+          render.save(config)
         }
         // 从当前文档中移除该dom节点
         document.body.removeChild(this.cloneNode)

@@ -12,7 +12,7 @@ import _ from 'lodash'
 export default class Chart {
   constructor ({ widget }) {
     this.container = document.getElementById(widget.widgetId)
-    this.initConfig = {}
+    this.chartConfig = {}
     this.setContainer(widget)
     this.init(widget)
   }
@@ -56,7 +56,7 @@ export default class Chart {
    * 重置图表默认配置
    */
   reset () {
-    this.chart.setOption(this.initConfig)
+    this.chart.setOption({})
   }
 
   /**

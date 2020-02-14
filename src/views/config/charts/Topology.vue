@@ -96,7 +96,7 @@
 
         <a-tab-pane tab="专有属性" key="2">
 
-          <a-collapse defaultActiveKey="1" :bordered="false">
+          <a-collapse :activeKey="activePanel" :bordered="false">
 
             <!-- S 操作 -->
             <a-collapse-panel header="操作" key="1">
@@ -144,6 +144,24 @@
 
           </a-collapse>
 
+          <!-- S 节点通用配置 -->
+          <CommonNodeTemplate v-if="activeNode" ref="commonNodeTemplate">
+
+            <template v-slot:inside-header="{ model }">
+
+              <div class="comment-template__item">
+                <p class="comment-template__leading">形状:</p>
+                <div class="comment-template__inner topology-config__editable">
+                  <b>{{ shape.get(model.shape) }}</b>
+                </div>
+              </div>
+              <!-- / 形状 -->
+
+            </template>
+
+          </CommonNodeTemplate>
+          <!-- S 节点通用配置 -->
+
         </a-tab-pane>
 
         <a-tab-pane tab="数据配置" key="3">
@@ -167,6 +185,7 @@ import CommonTemplate from '../common/index'
 import ChartProprietaryTemplate from '../chartProprietary/index'
 import DataSourceTemplate from '../dataSource/index'
 import WrapperService from '@/components/wrapper/WrapperService'
+import CommonNodeTemplate from '@/views/config/nodes'
 
 export default {
   name: 'Topology',
@@ -174,18 +193,33 @@ export default {
   components: {
     ColorPicker,
     ChartProprietaryTemplate,
-    DataSourceTemplate
+    DataSourceTemplate,
+    CommonNodeTemplate
   },
   data: () => ({
     // 拓扑尺寸编辑
     topologyResizable: true,
+    // 拓扑模式
     mode: 'default',
-    wrapperService: new WrapperService()
+    wrapperService: new WrapperService(),
+    shape: new Map([
+      ['circle', '圆形'],
+      ['rect', '矩形'],
+      ['ellipse', '椭圆形'],
+      ['image', '图片']
+    ])
   }),
+  computed: {
+    // 激活的面板
+    activePanel () {
+      return this.activeNode ? 2 : 1
+    }
+  },
   methods: {
     ...mapMutations('screen', {
       removeWidget: ScreenMutations.REMOVE_WIDGET,
-      modifyTopologyEditable: ScreenMutations.MODIFY_TOPOLOGY_EDITABLE_STATUS
+      modifyTopologyEditable: ScreenMutations.MODIFY_TOPOLOGY_EDITABLE_STATUS,
+      activationNode: ScreenMutations.ACTIVATION_NODE
     }),
     /**
      * 移除拓扑部件
@@ -202,6 +236,9 @@ export default {
       this.modifyTopologyEditable({
         editable: !this.topologyEditable
       })
+
+      // 当拓扑不可编辑时，清除激活的节点
+      !this.topologyEditable && this.activationNode({ activeNode: null })
 
       // 对当前已激活可编辑的拓扑部件添加样式，以标注状态
       const { render: { container } } = this.activeWidget

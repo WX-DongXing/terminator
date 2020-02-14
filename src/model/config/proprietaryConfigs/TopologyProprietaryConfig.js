@@ -7,4 +7,13 @@
 */
 
 export default class TopologyProprietaryConfig {
+  constructor ({
+    nodes = [],
+    edges = [],
+    groups = []
+  }) {
+    this.nodes = nodes
+    this.edges = edges
+    this.groups = groups
+  }
 }
