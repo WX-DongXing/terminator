@@ -62,6 +62,7 @@ export default {
   name: 'Template',
   data: () => ({
     isSubscribed: true,
+    isIntoTopologyScope: false,
     cloneTemplate: null,
     cloneNode: null,
     xDistance: 0,

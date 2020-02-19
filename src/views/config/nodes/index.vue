@@ -21,6 +21,34 @@
         <slot name="inside-header" :model="model" />
         <!-- / 节点通用配置内部顶部插槽 -->
 
+        <div class="comment-template__item">
+          <p class="comment-template__leading">形状:</p>
+          <div class="comment-template__inner comment-template__end">
+            <b>{{ shape.get(model.shape) }}</b>
+          </div>
+        </div>
+        <!-- / 形状 -->
+
+        <div class="comment-template__item" v-if="model.icon">
+          <p class="comment-template__leading">图标:</p>
+          <div class="comment-template__inner">
+            <IconPicker :icon="model.icon" @change="change('icon')" />
+          </div>
+        </div>
+        <!-- / 图标 -->
+
+        <div class="comment-template__item" v-if="model.shape === 'rect'">
+          <p class="comment-template__leading">圆角:</p>
+          <div class="comment-template__inner topology-config__editable">
+            <a-input
+              type="number"
+              v-model.number="model.style.radius"
+              min="0"
+              @change="change" />
+          </div>
+        </div>
+        <!-- / 圆角 -->
+
         <div class="comment-template__item" v-if="model.shape === 'circle'">
           <p class="comment-template__leading">半径:</p>
           <div class="comment-template__inner">
@@ -31,7 +59,7 @@
               @change="radiusChange" />
           </div>
         </div>
-        <!-- / x坐标位置 -->
+        <!-- / 半径 -->
 
         <div v-else>
           <div class="comment-template__item">
@@ -60,6 +88,97 @@
 
         </div>
 
+        <div v-if="model.shape !== 'image'">
+
+          <div class="comment-template__item">
+            <p class="comment-template__leading">填充颜色:</p>
+            <div class="comment-template__inner comment-template__end">
+              <ColorPicker v-model="model.style.fill" @change="change" />
+            </div>
+          </div>
+          <!-- / 填充颜色 -->
+
+          <div class="comment-template__item">
+            <p class="comment-template__leading">边框粗细:</p>
+            <div class="comment-template__inner">
+              <a-slider
+                :min="0"
+                :max="16"
+                @change="change"
+                v-model.number="model.style.lineWidth" />
+            </div>
+          </div>
+          <!-- / 边框粗细 -->
+
+          <div class="comment-template__item">
+            <p class="comment-template__leading">边框颜色:</p>
+            <div class="comment-template__inner comment-template__end">
+              <ColorPicker v-model="model.style.stroke" @change="change" />
+            </div>
+          </div>
+          <!-- / 边框颜色 -->
+
+        </div>
+
+        <div class="comment-template__item">
+          <p class="comment-template__leading">文本:</p>
+          <div class="comment-template__inner">
+            <a-input
+              type="text"
+              v-model.trim="model.label"
+              @change="change" />
+          </div>
+        </div>
+        <!-- / 文本 -->
+
+        <div class="comment-template__item">
+          <p class="comment-template__leading">文本颜色:</p>
+          <div class="comment-template__inner">
+            <ColorPicker v-model="model.labelCfg.style.fill" @change="change" />
+          </div>
+        </div>
+        <!-- / 文本颜色 -->
+
+        <div class="comment-template__item">
+          <p class="comment-template__leading">文本大小:</p>
+          <div class="comment-template__inner">
+            <a-input
+              type="number"
+              v-model.number="model.labelCfg.style.fontSize"
+              min="0"
+              @change="change" />
+          </div>
+        </div>
+        <!-- / 文本大小 -->
+
+        <div class="comment-template__item">
+          <p class="comment-template__leading">文本距离:</p>
+          <div class="comment-template__inner">
+            <a-input
+              type="number"
+              v-model.number="model.labelCfg.offset"
+              min="0"
+              @change="change" />
+          </div>
+        </div>
+        <!-- / 文本距离 -->
+
+        <div class="comment-template__item">
+          <p class="comment-template__leading">文本位置:</p>
+          <div class="comment-template__inner">
+            <a-select
+              v-model="model.labelCfg.position"
+              @change="change">
+              <a-select-option value="center">居中</a-select-option>
+              <a-select-option value="top">居上</a-select-option>
+              <a-select-option value="bottom">居下</a-select-option>
+              <a-select-option value="left">居左</a-select-option>
+              <a-select-option value="right">居右</a-select-option>
+            </a-select>
+          </div>
+        </div>
+        <!-- / 文本位置 -->
+
         <div class="comment-template__item">
           <p class="comment-template__leading">X:</p>
           <div class="comment-template__inner">
@@ -84,6 +203,14 @@
         </div>
         <!-- / y坐标位置 -->
 
+        <div class="comment-template__item" v-if="model.img">
+          <p class="comment-template__leading">图片:</p>
+          <div class="comment-template__inner">
+            <a-textarea v-model.trim="model.img" @change="change" />
+          </div>
+        </div>
+        <!-- / 图片 -->
+
       </a-collapse-panel>
       <!-- / 节点 -->
 
@@ -101,9 +228,20 @@ import '@/assets/less/template.less'
 import _ from 'lodash'
 import { mapMutations, mapState } from 'vuex'
 import { ScreenMutations } from '@/store/modules/screen'
+import IconPicker from '@/components/iconPicker'
+import ColorPicker from '@/components/colorPicker'
 
 export default {
   name: 'CommonNodeTemplate',
+  components: { IconPicker, ColorPicker },
+  data: () => ({
+    shape: new Map([
+      ['circle', '圆形'],
+      ['rect', '矩形'],
+      ['ellipse', '椭圆形'],
+      ['image', '图片']
+    ])
+  }),
   computed: {
     ...mapState('screen', ['activeWidget', 'activeNode']),
     model () {
@@ -121,14 +259,21 @@ export default {
     /**
      * 节点数据配置更新
      */
-    change () {
+    change (type) {
+      const { render: { chart } } = this.activeWidget
+      // 根据配置更新视图，由于 updateItem 方法只能更新节点配置无法更新视图icon
+      chart.updateItem(this.model.id, this.model)
+
+      if (type === 'icon') {
+        // 通过上一步已经修改后的节点配置项，通过 read 方法更新整个视图以更新 icon
+        const data = chart.save()
+        chart.read(data)
+      }
+
       // 更新激活节点配置
       this.activationNode({
         activeNode: Object.assign({}, { _cfg: this.activeNode._cfg, model: _.omit(this.model, ['radius']) })
       })
-      // 根据配置更新视图
-      const { render: { chart } } = this.activeWidget
-      chart.updateItem(this.model.id, this.model)
     },
     /**
      * 原型节点半径配置更新

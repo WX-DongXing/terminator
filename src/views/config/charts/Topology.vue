@@ -96,71 +96,62 @@
 
         <a-tab-pane tab="专有属性" key="2">
 
-          <a-collapse :activeKey="activePanel" :bordered="false">
+          <div class="topology-proprietary-template">
 
-            <!-- S 操作 -->
-            <a-collapse-panel header="操作" key="1">
+            <a-collapse :activeKey="activePanel" :bordered="false">
 
-              <div class="comment-template__item">
-                <p class="comment-template__leading">编辑:</p>
-                <div class="comment-template__inner topology-config__editable">
-                  <a-switch
-                    checkedChildren="开"
-                    unCheckedChildren="关"
-                    :checked="topologyEditable"
-                    @change="topologyEdit" />
+              <!-- S 操作 -->
+              <a-collapse-panel header="操作" key="1">
+
+                <div class="comment-template__item">
+                  <p class="comment-template__leading">编辑:</p>
+                  <div class="comment-template__inner topology-config__editable">
+                    <a-switch
+                      checkedChildren="开"
+                      unCheckedChildren="关"
+                      :checked="topologyEditable"
+                      @change="topologyEdit" />
+                  </div>
                 </div>
-              </div>
-              <!-- / 编辑 -->
+                <!-- / 编辑 -->
 
-              <div class="comment-template__item" v-if="topologyEditable">
-                <p class="comment-template__leading">尺寸:</p>
-                <div class="comment-template__inner topology-config__editable">
-                  <a-switch
-                    checkedChildren="开"
-                    unCheckedChildren="关"
-                    v-model="topologyResizable"
-                    @change="topologyResize" />
+                <div class="comment-template__item" v-if="topologyEditable">
+                  <p class="comment-template__leading">尺寸:</p>
+                  <div class="comment-template__inner topology-config__editable">
+                    <a-switch
+                      checkedChildren="开"
+                      unCheckedChildren="关"
+                      v-model="topologyResizable"
+                      @change="topologyResize" />
+                  </div>
                 </div>
-              </div>
-              <!-- / 尺寸 -->
+                <!-- / 尺寸 -->
 
-              <div class="comment-template__item" v-if="topologyEditable">
-                <p class="comment-template__leading">模式:</p>
-                <div class="comment-template__inner topology-config__editable">
-                  <a-radio-group
-                    buttonStyle="solid"
-                    v-model="mode"
-                    @change="modeChange">
-                    <a-radio-button value="default">默认</a-radio-button>
-                    <a-radio-button value="addEdge">连线</a-radio-button>
-                  </a-radio-group>
+                <div class="comment-template__item" v-if="topologyEditable">
+                  <p class="comment-template__leading">模式:</p>
+                  <div class="comment-template__inner topology-config__editable">
+                    <a-radio-group
+                      buttonStyle="solid"
+                      v-model="mode"
+                      @change="modeChange">
+                      <a-radio-button value="default">默认</a-radio-button>
+                      <a-radio-button value="addEdge">连线</a-radio-button>
+                    </a-radio-group>
+                  </div>
                 </div>
-              </div>
-              <!-- / 模式 -->
+                <!-- / 模式 -->
 
-            </a-collapse-panel>
-            <!-- E 操作 -->
+              </a-collapse-panel>
+              <!-- E 操作 -->
 
-          </a-collapse>
+            </a-collapse>
 
-          <!-- S 节点通用配置 -->
-          <CommonNodeTemplate v-if="activeNode" ref="commonNodeTemplate">
+            <!-- S 节点通用配置 -->
+            <CommonNodeTemplate v-if="activeNode" ref="commonNodeTemplate">
 
-            <template v-slot:inside-header="{ model }">
-
-              <div class="comment-template__item">
-                <p class="comment-template__leading">形状:</p>
-                <div class="comment-template__inner topology-config__editable">
-                  <b>{{ shape.get(model.shape) }}</b>
-                </div>
-              </div>
-              <!-- / 形状 -->
-
-            </template>
-
-          </CommonNodeTemplate>
-          <!-- S 节点通用配置 -->
+            </CommonNodeTemplate>
+            <!-- S 节点通用配置 -->
+          </div>
 
         </a-tab-pane>
 
@@ -201,13 +192,7 @@ export default {
     topologyResizable: true,
     // 拓扑模式
     mode: 'default',
-    wrapperService: new WrapperService(),
-    shape: new Map([
-      ['circle', '圆形'],
-      ['rect', '矩形'],
-      ['ellipse', '椭圆形'],
-      ['image', '图片']
-    ])
+    wrapperService: new WrapperService()
   }),
   computed: {
     // 激活的面板
@@ -348,5 +333,9 @@ export default {
     justify-content: flex-end;
     align-items: center;
   }
+}
+.topology-proprietary-template {
+  height: calc(100vh - 224px);
+  overflow: auto;
 }
 </style>

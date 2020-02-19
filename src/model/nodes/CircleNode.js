@@ -6,10 +6,11 @@
 * Email: dong.xing@outlook.com
 */
 import Node from './index'
+import { TopologyIcon } from '../common'
 
 export default class CircleNode extends Node {
   constructor ({ icon, ...node }) {
     super(node)
-    this.icon = icon
+    this.icon = new TopologyIcon(icon)
   }
 }

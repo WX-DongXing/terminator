@@ -14,12 +14,12 @@ const defaultClipCfg = {
 
 export default class ImageNode extends Node {
   constructor ({
-    image = 'https://yyb.gtimg.com/aiplat/page/product/visionimgidy/img/demo6-16a47e5d31.jpg?max_age=31536000',
+    img = 'https://yyb.gtimg.com/aiplat/page/product/visionimgidy/img/demo6-16a47e5d31.jpg?max_age=31536000',
     clipCfg = defaultClipCfg,
     ...node
   }) {
     super(node)
-    this.image = image
+    this.img = img
     this.clipCfg = clipCfg
   }
 }

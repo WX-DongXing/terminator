@@ -6,6 +6,9 @@
 * Email: dong.xing@outlook.com
 */
 
+/**
+ * 数据范围
+ */
 class Range {
   constructor (min, max) {
     this.min = min
@@ -13,4 +16,25 @@ class Range {
   }
 }
 
-export { Range }
+/**
+ * 拓扑图标
+ */
+class TopologyIcon {
+  constructor ({
+    show = false,
+    position = 'inside',
+    name = 'network',
+    width = 64,
+    height = 64,
+    img = ''
+  }) {
+    this.show = show
+    this.position = position
+    this.name = name
+    this.width = width
+    this.height = height
+    this.img = img
+  }
+}
+
+export { Range, TopologyIcon }

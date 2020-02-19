@@ -9,14 +9,20 @@ import uuid from 'uuid/v4'
 
 // 默认样式
 const defaultStyle = {
-  fill: '#1890ff',
-  lineWidth: 5
+  fill: 'rgba(24,144,255,1)',
+  stroke: 'rgba(145,213,255,1)',
+  lineWidth: 5,
+  radius: 5
 }
 
 // 默认标签配置
 const defaultLabelCfg = {
   position: 'bottom',
-  offset: 10
+  offset: 10,
+  style: {
+    fill: 'rgba(0,0,0,1)',
+    fontSize: 12
+  }
 }
 
 // 默认连接点

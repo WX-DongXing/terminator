@@ -7,10 +7,11 @@
 */
 
 import Node from './index'
+import { TopologyIcon } from '../common'
 
 export default class EllipseNode extends Node {
   constructor ({ icon, ...node }) {
     super(node)
-    this.icon = icon
+    this.icon = new TopologyIcon(icon)
   }
 }

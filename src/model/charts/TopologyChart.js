@@ -53,15 +53,20 @@ export default class TopologyChart extends Chart {
           }
         ]
       },
+      layout: {
+        // type: 'dagre'
+      },
       // 节点不同状态下的样式集合
       nodeStateStyles: {
         // 鼠标点击节点，即 click 状态为 true 时的样式
         active: {
-          lineWidth: 10
+          // lineWidth: 1
+          // fill: '#eeeeee',
+          // stroke: '#eeeeee'
         },
         inactive: {
-          fill: '#eeeeee',
-          stroke: '#eeeeee'
+          // fill: '#eeeeee',
+          // stroke: '#eeeeee'
         }
       },
       // 边不同状态下的样式集合
@@ -72,11 +77,10 @@ export default class TopologyChart extends Chart {
         }
       }
     })
-    this.chart.data({
+    this.chart.read({
       nodes: [],
       edges: []
     })
-    this.chart.render()
 
     // 对于缩放事件的监听
     this.chart.on('wheelzoom', e => {
