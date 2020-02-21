@@ -1,6 +1,7 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
 import anime from 'animejs'
+import Edge from '../../model/edges'
 
 Vue.use(Vuex)
 
@@ -10,7 +11,10 @@ export const ScreenMutations = {
   REMOVE_WIDGET: 'REMOVE_WIDGET[添加部件]',
   ACTIVATION_WIDGET: 'ACTIVATION_WIDGET[设置激活的部件]',
   MODIFY_TOPOLOGY_EDITABLE_STATUS: 'MODIFY_TOPOLOGY_EDITABLE_STATUS[修改拓扑图可编辑状态]',
-  ACTIVATION_NODE: 'ACTIVATION_NODE[设置激活的节点]'
+  ACTIVATION_NODE: 'ACTIVATION_NODE[设置激活的节点]',
+  ACTIVATION_EDGE: 'ACTIVATION_EDGE[设置激活的边]',
+  RESET_TOPOLOGY_STATE: 'RESET_TOPOLOGY_STATE[重置拓扑状态]',
+  SET_EDGE_CONFIG: 'SET_EDGE_CONFIG[设置边配置]'
 }
 
 export default {
@@ -27,7 +31,11 @@ export default {
     // 拓扑图是否可更改尺寸
     topologyResizable: true,
     // 激活的拓扑节点
-    activeNode: null
+    activeNode: null,
+    // 激活的拓扑边
+    activeEdge: null,
+    // 边配置
+    edgeConfig: new Edge({})
   },
   getters: {
     // 画板缩放比例
@@ -75,8 +83,24 @@ export default {
       // 同步配置
       if (state.activeWidget) {
         const { render, config } = state.activeWidget
-        render.save(config)
+        render && render.save && render.save(config)
       }
+    },
+    // 设置激活的拓扑边
+    [ScreenMutations.ACTIVATION_EDGE] (state, payload) {
+      state.activeEdge = payload.activeEdge
+    },
+    // 重置拓扑状态
+    [ScreenMutations.RESET_TOPOLOGY_STATE] (state) {
+      Object.assign(state, {
+        activeNode: null,
+        activeEdge: null,
+        edgeConfig: new Edge({})
+      })
+    },
+    // 设置边配置
+    [ScreenMutations.SET_EDGE_CONFIG] (state, payload) {
+      state.edgeConfig = payload.edgeConfig
     }
   },
   actions: {

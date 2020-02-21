@@ -5,7 +5,6 @@
 * Time: 1:39 下午
 * Email: dong.xing@outlook.com
 */
-
 <template>
   <div class="common-node-template common-template">
 
@@ -39,7 +38,7 @@
 
         <div class="comment-template__item" v-if="model.shape === 'rect'">
           <p class="comment-template__leading">圆角:</p>
-          <div class="comment-template__inner topology-config__editable">
+          <div class="comment-template__inner comment-template__end">
             <a-input
               type="number"
               v-model.number="model.style.radius"
@@ -64,7 +63,7 @@
         <div v-else>
           <div class="comment-template__item">
             <p class="comment-template__leading">宽:</p>
-            <div class="comment-template__inner topology-config__editable">
+            <div class="comment-template__inner comment-template__end">
               <a-input
                 type="number"
                 v-model.number="model.size[0]"
@@ -76,7 +75,7 @@
 
           <div class="comment-template__item">
             <p class="comment-template__leading">高:</p>
-            <div class="comment-template__inner topology-config__editable">
+            <div class="comment-template__inner comment-template__end">
               <a-input
                 type="number"
                 v-model.number="model.size[1]"

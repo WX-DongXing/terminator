@@ -7,6 +7,13 @@
 */
 
 import G6 from '@antv/g6'
+import _ from 'lodash'
+import store from '@/store'
+import Edge from '../model/edges'
+
+//  节点连线控制点
+// eslint-disable-next-line
+let controlPoints = []
 
 /**
  * 替换 G.Canvas.getPointByClient 函数，适配CSS缩放的场景。
@@ -77,13 +84,16 @@ G6.registerBehavior('add-edge', {
       graph.updateItem(this.edge, {
         target: model.id
       })
+      controlPoints = []
       this.edge = null
       this.addingEdge = false
     } else {
-      this.edge = graph.addItem('edge', {
+      this.edge = graph.addItem('edge', new Edge({
         source: model.id,
-        target: point
-      })
+        target: point,
+        controlPoints,
+        ..._.omit(_.cloneDeep(store.state.screen.edgeConfig), ['id', 'source', 'target', 'controlPoints'])
+      }))
       this.addingEdge = true
     }
   },
@@ -98,13 +108,17 @@ G6.registerBehavior('add-edge', {
       })
     }
   },
-  onEdgeClick (e) {
-    const currentEdge = e.item
+  onEdgeClick ({ item, canvasX, canvasY }) {
     // 拖拽过程中，点击会点击到新增的边上
-    if (this.addingEdge && this.edge === currentEdge) {
-      this.graph.removeItem(this.edge)
-      this.edge = null
-      this.addingEdge = false
+    if (this.addingEdge && this.edge === item) {
+      if (store.state.screen.edgeConfig.shape === 'polyline') {
+        // 折线控制点
+        controlPoints.push({ x: canvasX, y: canvasY })
+      } else {
+        this.graph.removeItem(this.edge)
+        this.edge = null
+        this.addingEdge = false
+      }
     }
   }
 })

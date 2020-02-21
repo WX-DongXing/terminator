@@ -188,7 +188,13 @@ export default {
     ColorPicker
   },
   computed: {
-    ...mapState('screen', ['activeWidget', 'topologyEditable', 'activeNode']),
+    ...mapState('screen', [
+      'activeWidget',
+      'topologyEditable',
+      'activeNode',
+      'activeEdge',
+      'edgeConfig'
+    ]),
     ...mapGetters('screen', ['scale']),
     // 为不修改 state.activeWidget，在此深复制激活部件的配置项，并将其设置为该组件内变量，修改部件后提交再行修改state.activeWidget
     config () {
@@ -197,7 +203,8 @@ export default {
   },
   methods: {
     ...mapMutations('screen', {
-      activationWidget: ScreenMutations.ACTIVATION_WIDGET
+      activationWidget: ScreenMutations.ACTIVATION_WIDGET,
+      removeWidget: ScreenMutations.REMOVE_WIDGET
     }),
     // Todo 为实现移动、更改激活部件，设置wrapper选择器事件，有待于重构该部分
     change (type, trigger = null) {

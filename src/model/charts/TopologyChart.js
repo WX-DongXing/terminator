@@ -74,6 +74,9 @@ export default class TopologyChart extends Chart {
         // 鼠标点击边，即 click 状态为 true 时的样式
         click: {
           stroke: 'steelblue'
+        },
+        enter: {
+          stroke: '#1890ff'
         }
       }
     })
@@ -87,34 +90,61 @@ export default class TopologyChart extends Chart {
     })
 
     // 节点点击事件
-    this.chart.on('node:click', e => {
+    this.chart.on('node:click', ({ item }) => {
       store.commit('screen/' + ScreenMutations.ACTIVATION_NODE, {
         activeNode: Object.assign(
           {},
-          e.item,
-          { model: e.item.getModel() }
+          item,
+          { model: item.getModel() }
         )
       })
     })
 
     // 节点拖动事件
-    this.chart.on('node:drag', e => {
+    this.chart.on('node:drag', ({ item }) => {
       const activeNode = store.state.screen.activeNode
       if (activeNode) {
         store.commit('screen/' + ScreenMutations.ACTIVATION_NODE, {
           activeNode: Object.assign(
             {},
-            e.item,
-            { model: e.item.getModel() }
+            item,
+            { model: item.getModel() }
           )
         })
       }
     })
 
+    // 鼠标移入边事件
+    this.chart.on('edge:mouseenter', ({ item }) => {
+      this.chart.setItemState(item, 'enter', true)
+    })
+
+    // 边点击事件
+    this.chart.on('edge:click', ({ item }) => {
+      store.commit('screen/' + ScreenMutations.ACTIVATION_EDGE, {
+        activeEdge: Object.assign(
+          {},
+          item,
+          { model: item.getModel() }
+        )
+      })
+      console.log(store.state.screen.activeEdge)
+    })
+
+    // 鼠标移出边事件
+    this.chart.on('edge:mouseout', ({ item }) => {
+      this.chart.setItemState(item, 'enter', false)
+    })
+
     // 画布点击事件
     this.chart.on('canvas:click', e => {
+      // 清空激活的节点
       store.commit('screen/' + ScreenMutations.ACTIVATION_NODE, {
         activeNode: null
+      })
+      // 清空激活的边
+      store.commit('screen/' + ScreenMutations.ACTIVATION_EDGE, {
+        activeEdge: null
       })
     })
   }

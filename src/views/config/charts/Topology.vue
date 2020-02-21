@@ -141,16 +141,41 @@
                 </div>
                 <!-- / 模式 -->
 
+                <div class="comment-template__item" v-if="topologyEditable && mode === 'addEdge'">
+                  <p class="comment-template__leading">连线形状:</p>
+                  <div class="comment-template__inner topology-config__editable">
+                    <a-radio-group
+                      buttonStyle="solid"
+                      v-model="edge.shape"
+                      @change="edgeConfigChange">
+                      <a-radio-button value="line">直线</a-radio-button>
+                      <a-radio-button value="polyline">折线</a-radio-button>
+                      <a-radio-button value="cubic">弧线</a-radio-button>
+                    </a-radio-group>
+                  </div>
+                </div>
+                <!-- / 模式 -->
+
+                <EdgeTemplate
+                  :model="edge"
+                  v-if="edge && topologyEditable && mode === 'addEdge'"
+                  @change="edgeConfigChange" />
+
               </a-collapse-panel>
               <!-- E 操作 -->
 
             </a-collapse>
 
             <!-- S 节点通用配置 -->
-            <CommonNodeTemplate v-if="activeNode" ref="commonNodeTemplate">
+            <CommonNodeTemplate v-if="activeNode && mode === 'default'" ref="commonNodeTemplate">
 
             </CommonNodeTemplate>
             <!-- S 节点通用配置 -->
+
+            <!-- E 节点通用配置 -->
+            <CommonEdgeTemplate v-if="activeEdge" ref="commonEdgeTemplate" />
+            <!-- E 节点通用配置 -->
+
           </div>
 
         </a-tab-pane>
@@ -168,6 +193,7 @@
 </template>
 
 <script>
+import _ from 'lodash'
 import anime from 'animejs'
 import { mapMutations } from 'vuex'
 import { ScreenMutations } from '@/store/modules/screen'
@@ -177,6 +203,8 @@ import ChartProprietaryTemplate from '../chartProprietary/index'
 import DataSourceTemplate from '../dataSource/index'
 import WrapperService from '@/components/wrapper/WrapperService'
 import CommonNodeTemplate from '@/views/config/nodes'
+import CommonEdgeTemplate from '@/views/config/edges'
+import EdgeTemplate from '@/views/config/edges/edge'
 
 export default {
   name: 'Topology',
@@ -185,7 +213,9 @@ export default {
     ColorPicker,
     ChartProprietaryTemplate,
     DataSourceTemplate,
-    CommonNodeTemplate
+    CommonNodeTemplate,
+    CommonEdgeTemplate,
+    EdgeTemplate
   },
   data: () => ({
     // 拓扑尺寸编辑
@@ -194,17 +224,25 @@ export default {
     mode: 'default',
     wrapperService: new WrapperService()
   }),
+  created () {
+    // 重置拓扑状态
+    this.resetTopologyState()
+  },
   computed: {
     // 激活的面板
     activePanel () {
-      return this.activeNode ? 2 : 1
+      return (this.activeNode && this.mode === 'default') || this.activeEdge ? 2 : 1
+    },
+    edge () {
+      return _.cloneDeep(this.edgeConfig)
     }
   },
   methods: {
     ...mapMutations('screen', {
-      removeWidget: ScreenMutations.REMOVE_WIDGET,
       modifyTopologyEditable: ScreenMutations.MODIFY_TOPOLOGY_EDITABLE_STATUS,
-      activationNode: ScreenMutations.ACTIVATION_NODE
+      activationNode: ScreenMutations.ACTIVATION_NODE,
+      resetTopologyState: ScreenMutations.RESET_TOPOLOGY_STATE,
+      setEdgeConfig: ScreenMutations.SET_EDGE_CONFIG
     }),
     /**
      * 移除拓扑部件
@@ -319,6 +357,14 @@ export default {
     modeChange () {
       const { render: { chart } } = this.activeWidget
       chart.setMode(this.mode)
+    },
+    /**
+     * 边配置更改事件
+     */
+    edgeConfigChange () {
+      this.setEdgeConfig({
+        edgeConfig: this.edge
+      })
     }
   }
 }

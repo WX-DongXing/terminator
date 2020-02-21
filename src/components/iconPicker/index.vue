@@ -44,7 +44,7 @@
           <a-select
             v-model="icon.position"
             @change="change">
-            <a-select-option value="inside">内联</a-select-option>
+            <a-select-option value="inside">内置</a-select-option>
             <a-select-option value="custom">自定义</a-select-option>
           </a-select>
         </div>
@@ -63,7 +63,7 @@
           </div>
         </div>
       </div>
-      <!-- / 内联图标 -->
+      <!-- / 内置图标 -->
 
       <div class="comment-template__item icon-picker__clear" v-else>
         <p class="comment-template__leading">自定义:</p>
@@ -99,7 +99,7 @@ export default {
   }),
   methods: {
     /**
-     * 内联图标选择
+     * 内置图标选择
      * @param index
      */
     iconChoose (index) {
