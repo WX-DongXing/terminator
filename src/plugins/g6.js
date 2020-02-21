@@ -9,6 +9,7 @@
 import G6 from '@antv/g6'
 import _ from 'lodash'
 import store from '@/store'
+import { ScreenMutations } from '@/store/modules/screen'
 import Edge from '../model/edges'
 
 //  节点连线控制点
@@ -84,6 +85,16 @@ G6.registerBehavior('add-edge', {
       graph.updateItem(this.edge, {
         target: model.id
       })
+      // 连线完毕更新激活边
+      store.commit('screen/' + ScreenMutations.ACTIVATION_EDGE, {
+        activeEdge: Object.assign(
+          {},
+          this.edge,
+          {
+            model: this.edge.getModel()
+          }
+        )
+      })
       controlPoints = []
       this.edge = null
       this.addingEdge = false
@@ -115,6 +126,10 @@ G6.registerBehavior('add-edge', {
         // 折线控制点
         controlPoints.push({ x: canvasX, y: canvasY })
       } else {
+        // 未完成连线清除
+        store.commit('screen/' + ScreenMutations.ACTIVATION_EDGE, {
+          activeEdge: null
+        })
         this.graph.removeItem(this.edge)
         this.edge = null
         this.addingEdge = false
@@ -122,3 +137,57 @@ G6.registerBehavior('add-edge', {
     }
   }
 })
+
+// lineDash 的差值，可以在后面提供 util 方法自动计算
+const dashArray = [
+  [0, 1],
+  [0, 2],
+  [1, 2],
+  [0, 1, 1, 2],
+  [0, 2, 1, 2],
+  [1, 2, 1, 2],
+  [2, 2, 1, 2],
+  [3, 2, 1, 2],
+  [4, 2, 1, 2]
+]
+
+const interval = 9 // lineDash 的总长度。
+
+// 注册自定义直线
+G6.registerEdge('custom-line', {
+  // 复写setState方法
+  setState (name, value, item) {
+    const shape = item.get('keyShape')
+    // 监听 running 状态
+    if (name === 'active') {
+      // running 状态为 true 时
+      if (value) {
+        const length = shape.getTotalLength()
+        let totalArray = []
+        for (var i = 0; i < length; i += interval) {
+          totalArray = totalArray.concat(
+            store.state.screen.activeEdge ? (store.state.screen.activeEdge.model.style.lineDash[0] < 5 ? [5] : store.state.screen.activeEdge.model.style.lineDash) : [5]
+          )
+        }
+        let index = 0
+        shape.animate({
+          // 动画重复
+          repeat: true,
+          // 每一帧的操作，入参 ratio：这一帧的比例值（Number）。返回值：这一帧需要变化的参数集（Object）。
+          onFrame (ratio) {
+            const cfg = {
+              lineDash: dashArray[index].concat(totalArray)
+            }
+            index = (index + 1) % interval
+            return cfg
+          }
+        }, 3000) // 一次动画的时长为 3000
+      } else {
+        // 结束动画
+        shape.stopAnimate()
+        // 重置 lineDash
+        shape.attr('lineDash', store.state.screen.activeEdge.model.style.lineDash)
+      }
+    }
+  }
+}, 'line')

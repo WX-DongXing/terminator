@@ -33,11 +33,13 @@ export default class Edge {
   constructor ({
     source = '',
     target = '',
-    shape = 'line',
+    shape = 'custom-line',
     controlPoints = [],
     style = defaultStyle,
     label = '',
-    labelCfg = defaultLabelCfg
+    labelCfg = defaultLabelCfg,
+    // 启用动画
+    animate = false
   }) {
     this.id = 'edge-' + uuid()
     this.source = source
@@ -47,5 +49,6 @@ export default class Edge {
     this.style = style
     this.label = label
     this.labelCfg = labelCfg
+    this.animate = animate
   }
 }

@@ -15,6 +15,22 @@
 
         <EdgeTemplate :model="model" @change="change" ref="edgeTemplate">
 
+          <template v-slot:header="{ model }">
+
+            <div class="comment-template__item">
+              <p class="comment-template__leading">默认动画:</p>
+              <div class="comment-template__inner comment-template__end">
+                <a-switch
+                  checkedChildren="启用"
+                  unCheckedChildren="不启用"
+                  v-model="model.animate"
+                  @change="animateChange" />
+              </div>
+            </div>
+            <!-- / 默认动画 -->
+
+          </template>
+
           <template v-slot="{ model }">
             <div class="comment-template__item">
               <p class="comment-template__leading">文本:</p>
@@ -82,10 +98,12 @@ import { mapMutations, mapState } from 'vuex'
 import { ScreenMutations } from '@/store/modules/screen'
 import EdgeTemplate from './edge'
 import ColorPicker from '@/components/colorPicker'
+import Template from '../../template/index'
 
 export default {
   name: 'CommonEdgeTemplate',
   components: {
+    Template,
     EdgeTemplate,
     ColorPicker
   },
@@ -107,6 +125,14 @@ export default {
       this.activationEdge({
         activeEdge: Object.assign({}, { _cfg: this.activeEdge._cfg, model: this.model })
       })
+    },
+    /**
+     * 动画启用
+     */
+    animateChange () {
+      const { render: { chart } } = this.activeWidget
+      chart.setItemState(this.activeEdge.model.id, 'active', this.model.animate)
+      this.change()
     }
   }
 }

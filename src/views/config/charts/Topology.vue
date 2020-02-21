@@ -148,13 +148,13 @@
                       buttonStyle="solid"
                       v-model="edge.shape"
                       @change="edgeConfigChange">
-                      <a-radio-button value="line">直线</a-radio-button>
+                      <a-radio-button value="custom-line">直线</a-radio-button>
                       <a-radio-button value="polyline">折线</a-radio-button>
                       <a-radio-button value="cubic">弧线</a-radio-button>
                     </a-radio-group>
                   </div>
                 </div>
-                <!-- / 模式 -->
+                <!-- / 连线形状 -->
 
                 <EdgeTemplate
                   :model="edge"
@@ -220,6 +220,7 @@ export default {
   data: () => ({
     // 拓扑尺寸编辑
     topologyResizable: true,
+    animate: false,
     // 拓扑模式
     mode: 'default',
     wrapperService: new WrapperService()

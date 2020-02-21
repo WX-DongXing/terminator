@@ -28,7 +28,6 @@ export default class TopologyChart extends Chart {
       width,
       height,
       renderer: 'canvas',
-      animate: true,
       modes: {
         default: [
           'zoom-canvas',
@@ -56,6 +55,7 @@ export default class TopologyChart extends Chart {
       layout: {
         // type: 'dagre'
       },
+      animate: true,
       // 节点不同状态下的样式集合
       nodeStateStyles: {
         // 鼠标点击节点，即 click 状态为 true 时的样式
@@ -125,10 +125,11 @@ export default class TopologyChart extends Chart {
         activeEdge: Object.assign(
           {},
           item,
-          { model: item.getModel() }
+          {
+            model: item.getModel()
+          }
         )
       })
-      console.log(store.state.screen.activeEdge)
     })
 
     // 鼠标移出边事件
