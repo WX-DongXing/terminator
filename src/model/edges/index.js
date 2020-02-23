@@ -33,7 +33,7 @@ export default class Edge {
   constructor ({
     source = '',
     target = '',
-    shape = 'custom-line',
+    shape = 'line',
     controlPoints = [],
     style = defaultStyle,
     label = '',

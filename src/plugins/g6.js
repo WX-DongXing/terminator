@@ -92,6 +92,9 @@ G6.registerBehavior('add-edge', {
       controlPoints = []
       this.edge = null
       this.addingEdge = false
+      // 联系完毕后更新配置
+      const { render, config } = store.state.screen.activeWidget
+      render.save(config)
     } else {
       this.edge = graph.addItem('edge', new Edge({
         source: model.id,
@@ -116,7 +119,7 @@ G6.registerBehavior('add-edge', {
   onEdgeClick ({ item, canvasX, canvasY }) {
     // 拖拽过程中，点击会点击到新增的边上
     if (this.addingEdge && this.edge === item) {
-      if (store.state.screen.edgeConfig.shape === 'custom-polyline') {
+      if (store.state.screen.edgeConfig.shape === 'polyline') {
         // 折线控制点
         controlPoints.push({ x: canvasX, y: canvasY })
       } else {
@@ -357,8 +360,8 @@ const dashArray = [
 
 const interval = 9 // lineDash 的总长度。
 
-// 注册自定义直线
-G6.registerEdge('custom-line', {
+// 覆写直线
+G6.registerEdge('line', {
   // 复写setState方法
   setState (name, value, item) {
     const shape = item.get('keyShape')
@@ -396,8 +399,8 @@ G6.registerEdge('custom-line', {
   }
 }, 'line')
 
-// 注册自定义弧线
-G6.registerEdge('custom-cubic', {
+// 覆写弧线
+G6.registerEdge('cubic', {
   // 复写setState方法
   setState (name, value, item) {
     const shape = item.get('keyShape')
@@ -435,8 +438,8 @@ G6.registerEdge('custom-cubic', {
   }
 }, 'cubic')
 
-// 注册自定义折线
-G6.registerEdge('custom-polyline', {
+// 覆写折线
+G6.registerEdge('polyline', {
   // 复写setState方法
   setState (name, value, item) {
     const shape = item.get('keyShape')

@@ -148,9 +148,9 @@
                       buttonStyle="solid"
                       v-model="edge.shape"
                       @change="edgeConfigChange">
-                      <a-radio-button value="custom-line">直线</a-radio-button>
-                      <a-radio-button value="custom-polyline">折线</a-radio-button>
-                      <a-radio-button value="custom-cubic">弧线</a-radio-button>
+                      <a-radio-button value="line">直线</a-radio-button>
+                      <a-radio-button value="polyline">折线</a-radio-button>
+                      <a-radio-button value="cubic">弧线</a-radio-button>
                     </a-radio-group>
                   </div>
                 </div>

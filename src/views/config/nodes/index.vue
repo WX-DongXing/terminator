@@ -275,7 +275,7 @@ export default {
      * 节点数据配置更新
      */
     change (type) {
-      const { render: { chart } } = this.activeWidget
+      const { render: { chart }, config: { proprietaryConfig: { nodes, edges } } } = this.activeWidget
       // 根据配置更新视图，由于 updateItem 方法只能更新节点配置无法更新视图icon
       chart.updateItem(this.model.id, this.model)
 
@@ -283,6 +283,15 @@ export default {
         // 通过上一步已经修改后的节点配置项，通过 read 方法更新整个视图以更新 icon
         const data = chart.save()
         chart.read(data)
+
+        // 设置节点动画
+        if (!_.isEmpty(nodes)) {
+          nodes.forEach(node => chart.setItemState(node.id, node.animateType, true))
+        }
+        // 设置边动画
+        if (!_.isEmpty(edges)) {
+          edges.forEach(edge => chart.setItemState(edge.id, 'active', edge.animate))
+        }
       }
       // 更新配置
       this.updateTopologyConfig()
