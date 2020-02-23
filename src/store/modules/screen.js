@@ -15,7 +15,7 @@ export const ScreenMutations = {
   ACTIVATION_EDGE: 'ACTIVATION_EDGE[设置激活的边]',
   RESET_TOPOLOGY_STATE: 'RESET_TOPOLOGY_STATE[重置拓扑状态]',
   SET_EDGE_CONFIG: 'SET_EDGE_CONFIG[设置边配置]',
-  UPDATE_TOPOLOGY_NODE_CONFIG: 'UPDATE_TOPOLOGY_NODE_CONFIG[更新拓扑节点配置]'
+  UPDATE_TOPOLOGY_CONFIG: 'UPDATE_TOPOLOGY_CONFIG[更新拓扑节点配置]'
 }
 
 export default {
@@ -81,14 +81,9 @@ export default {
     // 设置激活的拓扑节点
     [ScreenMutations.ACTIVATION_NODE] (state, payload) {
       state.activeNode = payload.activeNode
-      // 同步配置
-      if (state.activeWidget) {
-        const { render, config } = state.activeWidget
-        render && render.save && render.save(config)
-      }
     },
     // 更新拓扑节点配置
-    [ScreenMutations.UPDATE_TOPOLOGY_NODE_CONFIG] (state) {
+    [ScreenMutations.UPDATE_TOPOLOGY_CONFIG] (state) {
       if (state.activeWidget) {
         const { render, config } = state.activeWidget
         render && render.save && render.save(config)

@@ -92,10 +92,7 @@ export default class TopologyChart extends Chart {
     // 节点点击事件
     this.chart.on('node:click', ({ item }) => {
       store.commit('screen/' + ScreenMutations.ACTIVATION_NODE, {
-        activeNode: Object.assign(
-          item,
-          { model: item.getModel() }
-        )
+        activeNode: item
       })
     })
 
@@ -104,10 +101,7 @@ export default class TopologyChart extends Chart {
       const activeNode = store.state.screen.activeNode
       if (activeNode) {
         store.commit('screen/' + ScreenMutations.ACTIVATION_NODE, {
-          activeNode: Object.assign(
-            item,
-            { model: item.getModel() }
-          )
+          activeNode: item
         })
       }
     })
@@ -120,13 +114,7 @@ export default class TopologyChart extends Chart {
     // 边点击事件
     this.chart.on('edge:click', ({ item }) => {
       store.commit('screen/' + ScreenMutations.ACTIVATION_EDGE, {
-        activeEdge: Object.assign(
-          {},
-          item,
-          {
-            model: item.getModel()
-          }
-        )
+        activeEdge: item
       })
     })
 

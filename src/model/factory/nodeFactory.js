@@ -9,15 +9,12 @@ import CircleNode from '../nodes/CircleNode'
 import RectNode from '../nodes/RectNode'
 import EllipseNode from '../nodes/EllipseNode'
 import ImageNode from '../nodes/ImageNode'
-import CustomCircleNode from '../nodes/CustomCircleNode'
 
 export class NodeFactory {
   static create (node) {
     switch (node.shape) {
       case 'circle':
         return new CircleNode(node)
-      case 'custom-circle':
-        return new CustomCircleNode(node)
       case 'rect':
         return new RectNode(node)
       case 'ellipse':

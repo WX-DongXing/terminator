@@ -262,14 +262,14 @@ export default {
     model () {
       return Object.assign(
         {},
-        _.cloneDeep(this.activeNode.model),
-        { radius: this.activeNode.model.size[0] / 2 }
+        _.cloneDeep(this.activeNode.getModel()),
+        { radius: this.activeNode.getModel().size[0] / 2 }
       )
     }
   },
   methods: {
     ...mapMutations('screen', {
-      updateTopologyNode: ScreenMutations.UPDATE_TOPOLOGY_NODE_CONFIG
+      updateTopologyConfig: ScreenMutations.UPDATE_TOPOLOGY_CONFIG
     }),
     /**
      * 节点数据配置更新
@@ -284,9 +284,8 @@ export default {
         const data = chart.save()
         chart.read(data)
       }
-
-      // 更新激活节点配置
-      this.updateTopologyNode()
+      // 更新配置
+      this.updateTopologyConfig()
     },
     /**
      * 原型节点半径配置更新
@@ -303,7 +302,7 @@ export default {
       const { id, animateType } = this.model
       chart.clearItemStates(id)
       chart.setItemState(id, animateType, true)
-      console.log(this.activeNode.getStates())
+      // 更新配置
       this.change()
     }
   }

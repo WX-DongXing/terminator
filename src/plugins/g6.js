@@ -87,13 +87,7 @@ G6.registerBehavior('add-edge', {
       })
       // 连线完毕更新激活边
       store.commit('screen/' + ScreenMutations.ACTIVATION_EDGE, {
-        activeEdge: Object.assign(
-          {},
-          this.edge,
-          {
-            model: this.edge.getModel()
-          }
-        )
+        activeEdge: this.edge
       })
       controlPoints = []
       this.edge = null
@@ -138,18 +132,17 @@ G6.registerBehavior('add-edge', {
   }
 })
 
-// 自定义一个名为 inner-animate 的节点
-G6.registerNode('custom-circle', {
+// 覆写圆形节点
+G6.registerNode('circle', {
   afterDraw (cfg, group) {
-    const item = group._cfg.item
+    const item = group.get('item')
     const model = item.getModel()
-    const size = cfg.size
     // 边框
     const border = group.addShape('circle', {
       attrs: {
         x: 0,
         y: 0,
-        r: (size[0] + 14) / 2,
+        r: (model.size[0] + 16) / 2,
         fill: 'transparent',
         lineWidth: 5,
         stroke: 'rgba(24,144,255,1)'
@@ -158,22 +151,196 @@ G6.registerNode('custom-circle', {
     border.animate({
       onFrame (ratio) {
         const cfg = {
-          stroke: `rgba(24,144,255,${ratio})`,
-          r: (model.size[0] + 14) / 2
+          r: (model.size[0] + 16) / 2
+        }
+        const [state] = item.getStates()
+        if (state) {
+          switch (state) {
+            case 'default':
+              cfg.stroke = `rgba(24,144,255,${ratio})`
+              break
+            case 'warning':
+              cfg.stroke = `rgba(255,173,18,${ratio})`
+              break
+            case 'danger':
+              cfg.stroke = `rgba(255,77,79,${ratio})`
+              break
+            case 'success':
+              cfg.stroke = `rgba(81,196,26,${ratio})`
+              break
+            default:
+              cfg.stroke = `rgba(24,144,255,0)`
+              break
+          }
+        } else {
+          cfg.stroke = `rgba(24,144,255,0)`
         }
         return cfg
       },
       repeat: true
-    }, 2000, 'easeCubic')
+    }, 1500, 'easeCubic')
   }
-},
-// 继承了 rect 节点
-'circle')
+}, 'circle')
 
-// 自定义圆形
-// G6.registerNode('custom-circle', {
-//
-// }, 'circle')
+// 覆写椭圆形节点
+G6.registerNode('ellipse', {
+  afterDraw (cfg, group) {
+    const item = group.get('item')
+    const model = item.getModel()
+    // 边框
+    const border = group.addShape('ellipse', {
+      attrs: {
+        x: 0,
+        y: 0,
+        rx: (model.size[0] + 16) / 2,
+        ry: (model.size[1] + 16) / 2,
+        fill: 'transparent',
+        lineWidth: 5,
+        stroke: 'rgba(24,144,255,1)'
+      }
+    })
+    border.animate({
+      onFrame (ratio) {
+        const cfg = {
+          rx: (model.size[0] + 16) / 2,
+          ry: (model.size[1] + 16) / 2
+        }
+        const [state] = item.getStates()
+        if (state) {
+          switch (state) {
+            case 'default':
+              cfg.stroke = `rgba(24,144,255,${ratio})`
+              break
+            case 'warning':
+              cfg.stroke = `rgba(255,173,18,${ratio})`
+              break
+            case 'danger':
+              cfg.stroke = `rgba(255,77,79,${ratio})`
+              break
+            case 'success':
+              cfg.stroke = `rgba(81,196,26,${ratio})`
+              break
+            default:
+              cfg.stroke = `rgba(24,144,255,0)`
+              break
+          }
+        } else {
+          cfg.stroke = `rgba(24,144,255,0)`
+        }
+        return cfg
+      },
+      repeat: true
+    }, 1500, 'easeCubic')
+  }
+}, 'ellipse')
+
+// 覆写椭圆形节点
+G6.registerNode('rect', {
+  afterDraw (cfg, group) {
+    const item = group.get('item')
+    const model = item.getModel()
+    // 边框
+    const border = group.addShape('rect', {
+      attrs: {
+        x: -(model.size[0] + 16) / 2,
+        y: -(model.size[1] + 16) / 2,
+        width: model.size[0] + 16,
+        height: model.size[1] + 16,
+        fill: 'transparent',
+        lineWidth: 5,
+        stroke: 'rgba(24,144,255,1)'
+      }
+    })
+    border.animate({
+      onFrame (ratio) {
+        const cfg = {
+          x: -(model.size[0] + 16) / 2,
+          y: -(model.size[1] + 16) / 2,
+          width: model.size[0] + 16,
+          height: model.size[1] + 16
+        }
+        const [state] = item.getStates()
+        if (state) {
+          switch (state) {
+            case 'default':
+              cfg.stroke = `rgba(24,144,255,${ratio})`
+              break
+            case 'warning':
+              cfg.stroke = `rgba(255,173,18,${ratio})`
+              break
+            case 'danger':
+              cfg.stroke = `rgba(255,77,79,${ratio})`
+              break
+            case 'success':
+              cfg.stroke = `rgba(81,196,26,${ratio})`
+              break
+            default:
+              cfg.stroke = `rgba(24,144,255,0)`
+              break
+          }
+        } else {
+          cfg.stroke = `rgba(24,144,255,0)`
+        }
+        return cfg
+      },
+      repeat: true
+    }, 1500, 'easeCubic')
+  }
+}, 'rect')
+
+// 覆写椭圆形节点
+G6.registerNode('image', {
+  afterDraw (cfg, group) {
+    const item = group.get('item')
+    const model = item.getModel()
+    // 边框
+    const border = group.addShape('rect', {
+      attrs: {
+        x: -(model.size[0] + 16) / 2,
+        y: -(model.size[1] + 16) / 2,
+        width: model.size[0] + 16,
+        height: model.size[1] + 16,
+        fill: 'transparent',
+        lineWidth: 5,
+        stroke: 'rgba(24,144,255,1)'
+      }
+    })
+    border.animate({
+      onFrame (ratio) {
+        const cfg = {
+          x: -(model.size[0] + 16) / 2,
+          y: -(model.size[1] + 16) / 2,
+          width: model.size[0] + 16,
+          height: model.size[1] + 16
+        }
+        const [state] = item.getStates()
+        if (state) {
+          switch (state) {
+            case 'default':
+              cfg.stroke = `rgba(24,144,255,${ratio})`
+              break
+            case 'warning':
+              cfg.stroke = `rgba(255,173,18,${ratio})`
+              break
+            case 'danger':
+              cfg.stroke = `rgba(255,77,79,${ratio})`
+              break
+            case 'success':
+              cfg.stroke = `rgba(81,196,26,${ratio})`
+              break
+            default:
+              cfg.stroke = `rgba(24,144,255,0)`
+              break
+          }
+        } else {
+          cfg.stroke = `rgba(24,144,255,0)`
+        }
+        return cfg
+      },
+      repeat: true
+    }, 1500, 'easeCubic')
+  }
+}, 'image')
 
 // lineDash 的差值，可以在后面提供 util 方法自动计算
 const dashArray = [
@@ -203,7 +370,7 @@ G6.registerEdge('custom-line', {
         let totalArray = []
         for (var i = 0; i < length; i += interval) {
           totalArray = totalArray.concat(
-            store.state.screen.activeEdge ? (store.state.screen.activeEdge.model.style.lineDash[0] < 4 ? [4] : store.state.screen.activeEdge.model.style.lineDash) : [4]
+            store.state.screen.activeEdge ? (store.state.screen.activeEdge.getModel().style.lineDash[0] < 4 ? [4] : store.state.screen.activeEdge.getModel().style.lineDash) : [4]
           )
         }
         let index = 0
@@ -223,7 +390,7 @@ G6.registerEdge('custom-line', {
         // 结束动画
         shape.stopAnimate()
         // 重置 lineDash
-        shape.attr('lineDash', store.state.screen.activeEdge.model.style.lineDash)
+        shape.attr('lineDash', store.state.screen.activeEdge.getModel().style.lineDash)
       }
     }
   }
@@ -242,7 +409,7 @@ G6.registerEdge('custom-cubic', {
         let totalArray = []
         for (var i = 0; i < length; i += interval) {
           totalArray = totalArray.concat(
-            store.state.screen.activeEdge ? (store.state.screen.activeEdge.model.style.lineDash[0] < 4 ? [4] : store.state.screen.activeEdge.model.style.lineDash) : [4]
+            store.state.screen.activeEdge ? (store.state.screen.activeEdge.getModel().style.lineDash[0] < 4 ? [4] : store.state.screen.activeEdge.getModel().style.lineDash) : [4]
           )
         }
         let index = 0
@@ -262,7 +429,7 @@ G6.registerEdge('custom-cubic', {
         // 结束动画
         shape.stopAnimate()
         // 重置 lineDash
-        shape.attr('lineDash', store.state.screen.activeEdge.model.style.lineDash)
+        shape.attr('lineDash', store.state.screen.activeEdge.getModel().style.lineDash)
       }
     }
   }
@@ -281,7 +448,7 @@ G6.registerEdge('custom-polyline', {
         let totalArray = []
         for (var i = 0; i < length; i += interval) {
           totalArray = totalArray.concat(
-            store.state.screen.activeEdge ? (store.state.screen.activeEdge.model.style.lineDash[0] < 4 ? [4] : store.state.screen.activeEdge.model.style.lineDash) : [4]
+            store.state.screen.activeEdge ? (store.state.screen.activeEdge.getModel().style.lineDash[0] < 4 ? [4] : store.state.screen.activeEdge.getModel().style.lineDash) : [4]
           )
         }
         let index = 0
@@ -301,7 +468,7 @@ G6.registerEdge('custom-polyline', {
         // 结束动画
         shape.stopAnimate()
         // 重置 lineDash
-        shape.attr('lineDash', store.state.screen.activeEdge.model.style.lineDash)
+        shape.attr('lineDash', store.state.screen.activeEdge.getModel().style.lineDash)
       }
     }
   }

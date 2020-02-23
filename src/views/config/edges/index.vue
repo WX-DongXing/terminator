@@ -110,28 +110,26 @@ export default {
   computed: {
     ...mapState('screen', ['activeWidget', 'activeEdge']),
     model () {
-      return _.cloneDeep(this.activeEdge.model)
+      return _.cloneDeep(this.activeEdge.getModel())
     }
   },
   methods: {
     ...mapMutations('screen', {
-      activationEdge: ScreenMutations.ACTIVATION_EDGE
+      updateTopologyConfig: ScreenMutations.UPDATE_TOPOLOGY_CONFIG
     }),
     change () {
       const { render: { chart } } = this.activeWidget
       // 根据配置更新视图
       chart.updateItem(this.model.id, this.model)
-
-      this.activationEdge({
-        activeEdge: Object.assign({}, { _cfg: this.activeEdge._cfg, model: this.model })
-      })
+      // 更新配置
+      this.updateTopologyConfig()
     },
     /**
      * 动画启用
      */
     animateChange () {
       const { render: { chart } } = this.activeWidget
-      chart.setItemState(this.activeEdge.model.id, 'active', this.model.animate)
+      chart.setItemState(this.model.id, 'active', this.model.animate)
       this.change()
     }
   }
