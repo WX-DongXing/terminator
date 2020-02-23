@@ -36,6 +36,22 @@
         </div>
         <!-- / 图标 -->
 
+        <div class="comment-template__item">
+          <p class="comment-template__leading">动画类型:</p>
+          <div class="comment-template__inner">
+            <a-select
+              v-model="model.animateType"
+              @change="animateTypeChange">
+              <a-select-option value="none">无</a-select-option>
+              <a-select-option value="default">默认</a-select-option>
+              <a-select-option value="success">成功</a-select-option>
+              <a-select-option value="warning">告警</a-select-option>
+              <a-select-option value="danger">危险</a-select-option>
+            </a-select>
+          </div>
+        </div>
+        <!-- / 动画类型 -->
+
         <div class="comment-template__item" v-if="model.shape === 'rect'">
           <p class="comment-template__leading">圆角:</p>
           <div class="comment-template__inner comment-template__end">
@@ -253,7 +269,7 @@ export default {
   },
   methods: {
     ...mapMutations('screen', {
-      activationNode: ScreenMutations.ACTIVATION_NODE
+      updateTopologyNode: ScreenMutations.UPDATE_TOPOLOGY_NODE_CONFIG
     }),
     /**
      * 节点数据配置更新
@@ -270,15 +286,24 @@ export default {
       }
 
       // 更新激活节点配置
-      this.activationNode({
-        activeNode: Object.assign({}, { _cfg: this.activeNode._cfg, model: _.omit(this.model, ['radius']) })
-      })
+      this.updateTopologyNode()
     },
     /**
      * 原型节点半径配置更新
      */
     radiusChange () {
       this.model.size = [this.model.radius * 2, this.model.radius * 2]
+      this.change()
+    },
+    /**
+     * 节点动画类型更新
+     */
+    animateTypeChange () {
+      const { render: { chart } } = this.activeWidget
+      const { id, animateType } = this.model
+      chart.clearItemStates(id)
+      chart.setItemState(id, animateType, true)
+      console.log(this.activeNode.getStates())
       this.change()
     }
   }

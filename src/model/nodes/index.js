@@ -35,7 +35,8 @@ export default class Node {
     size = [],
     anchorPoints = defaultAnchorPoints,
     style = defaultStyle,
-    labelCfg = defaultLabelCfg
+    labelCfg = defaultLabelCfg,
+    animateType = 'none'
   }) {
     this.id = 'node-' + uuid()
     this.x = x
@@ -46,5 +47,6 @@ export default class Node {
     this.style = style
     this.label = label
     this.labelCfg = labelCfg
+    this.animateType = animateType
   }
 }

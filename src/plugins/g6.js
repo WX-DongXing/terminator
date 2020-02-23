@@ -138,6 +138,43 @@ G6.registerBehavior('add-edge', {
   }
 })
 
+// 自定义一个名为 inner-animate 的节点
+G6.registerNode('custom-circle', {
+  afterDraw (cfg, group) {
+    const item = group._cfg.item
+    const model = item.getModel()
+    const size = cfg.size
+    // 边框
+    const border = group.addShape('circle', {
+      attrs: {
+        x: 0,
+        y: 0,
+        r: (size[0] + 14) / 2,
+        fill: 'transparent',
+        lineWidth: 5,
+        stroke: 'rgba(24,144,255,1)'
+      }
+    })
+    border.animate({
+      onFrame (ratio) {
+        const cfg = {
+          stroke: `rgba(24,144,255,${ratio})`,
+          r: (model.size[0] + 14) / 2
+        }
+        return cfg
+      },
+      repeat: true
+    }, 2000, 'easeCubic')
+  }
+},
+// 继承了 rect 节点
+'circle')
+
+// 自定义圆形
+// G6.registerNode('custom-circle', {
+//
+// }, 'circle')
+
 // lineDash 的差值，可以在后面提供 util 方法自动计算
 const dashArray = [
   [0, 1],

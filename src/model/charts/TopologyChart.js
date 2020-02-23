@@ -93,7 +93,6 @@ export default class TopologyChart extends Chart {
     this.chart.on('node:click', ({ item }) => {
       store.commit('screen/' + ScreenMutations.ACTIVATION_NODE, {
         activeNode: Object.assign(
-          {},
           item,
           { model: item.getModel() }
         )
@@ -106,7 +105,6 @@ export default class TopologyChart extends Chart {
       if (activeNode) {
         store.commit('screen/' + ScreenMutations.ACTIVATION_NODE, {
           activeNode: Object.assign(
-            {},
             item,
             { model: item.getModel() }
           )
