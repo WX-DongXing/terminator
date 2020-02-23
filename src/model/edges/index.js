@@ -14,7 +14,7 @@ const defaultStyle = {
   lineWidth: 1,
   radius: 2,
   lineAppendWidth: 3,
-  lineDash: []
+  lineDash: [0]
 }
 
 // 默认文本样式

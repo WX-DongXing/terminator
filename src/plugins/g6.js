@@ -122,7 +122,7 @@ G6.registerBehavior('add-edge', {
   onEdgeClick ({ item, canvasX, canvasY }) {
     // 拖拽过程中，点击会点击到新增的边上
     if (this.addingEdge && this.edge === item) {
-      if (store.state.screen.edgeConfig.shape === 'polyline') {
+      if (store.state.screen.edgeConfig.shape === 'custom-polyline') {
         // 折线控制点
         controlPoints.push({ x: canvasX, y: canvasY })
       } else {
@@ -166,7 +166,7 @@ G6.registerEdge('custom-line', {
         let totalArray = []
         for (var i = 0; i < length; i += interval) {
           totalArray = totalArray.concat(
-            store.state.screen.activeEdge ? (store.state.screen.activeEdge.model.style.lineDash[0] < 5 ? [5] : store.state.screen.activeEdge.model.style.lineDash) : [5]
+            store.state.screen.activeEdge ? (store.state.screen.activeEdge.model.style.lineDash[0] < 4 ? [4] : store.state.screen.activeEdge.model.style.lineDash) : [4]
           )
         }
         let index = 0
@@ -191,3 +191,81 @@ G6.registerEdge('custom-line', {
     }
   }
 }, 'line')
+
+// 注册自定义弧线
+G6.registerEdge('custom-cubic', {
+  // 复写setState方法
+  setState (name, value, item) {
+    const shape = item.get('keyShape')
+    // 监听 running 状态
+    if (name === 'active') {
+      // running 状态为 true 时
+      if (value) {
+        const length = shape.getTotalLength()
+        let totalArray = []
+        for (var i = 0; i < length; i += interval) {
+          totalArray = totalArray.concat(
+            store.state.screen.activeEdge ? (store.state.screen.activeEdge.model.style.lineDash[0] < 4 ? [4] : store.state.screen.activeEdge.model.style.lineDash) : [4]
+          )
+        }
+        let index = 0
+        shape.animate({
+          // 动画重复
+          repeat: true,
+          // 每一帧的操作，入参 ratio：这一帧的比例值（Number）。返回值：这一帧需要变化的参数集（Object）。
+          onFrame (ratio) {
+            const cfg = {
+              lineDash: dashArray[index].concat(totalArray)
+            }
+            index = (index + 1) % interval
+            return cfg
+          }
+        }, 3000) // 一次动画的时长为 3000
+      } else {
+        // 结束动画
+        shape.stopAnimate()
+        // 重置 lineDash
+        shape.attr('lineDash', store.state.screen.activeEdge.model.style.lineDash)
+      }
+    }
+  }
+}, 'cubic')
+
+// 注册自定义折线
+G6.registerEdge('custom-polyline', {
+  // 复写setState方法
+  setState (name, value, item) {
+    const shape = item.get('keyShape')
+    // 监听 running 状态
+    if (name === 'active') {
+      // running 状态为 true 时
+      if (value) {
+        const length = shape.getTotalLength()
+        let totalArray = []
+        for (var i = 0; i < length; i += interval) {
+          totalArray = totalArray.concat(
+            store.state.screen.activeEdge ? (store.state.screen.activeEdge.model.style.lineDash[0] < 4 ? [4] : store.state.screen.activeEdge.model.style.lineDash) : [4]
+          )
+        }
+        let index = 0
+        shape.animate({
+          // 动画重复
+          repeat: true,
+          // 每一帧的操作，入参 ratio：这一帧的比例值（Number）。返回值：这一帧需要变化的参数集（Object）。
+          onFrame (ratio) {
+            const cfg = {
+              lineDash: dashArray[index].concat(totalArray)
+            }
+            index = (index + 1) % interval
+            return cfg
+          }
+        }, 3000) // 一次动画的时长为 3000
+      } else {
+        // 结束动画
+        shape.stopAnimate()
+        // 重置 lineDash
+        shape.attr('lineDash', store.state.screen.activeEdge.model.style.lineDash)
+      }
+    }
+  }
+}, 'polyline')
