@@ -39,6 +39,24 @@ export default class TopologyChart extends Chart {
             type: 'brush-select',
             trigger: 'ctrl',
             includeEdges: true
+          },
+          {
+            type: 'tooltip', // 节点提示框
+            formatText (model) {
+              // 提示框文本内容
+              const text =
+                'label: ' + model.label + '<br/>'
+              return text
+            }
+          },
+          {
+            type: 'edge-tooltip', // 边提示框
+            formatText (model) { // 边提示框文本内容
+              const text = 'label: ' + model.label +
+                '<br/> source: ' + model.source +
+                '<br/> target: ' + model.target
+              return text
+            }
           }
         ],
         addEdge: [

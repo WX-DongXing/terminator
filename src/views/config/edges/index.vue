@@ -18,6 +18,18 @@
           <template v-slot:header="{ model }">
 
             <div class="comment-template__item">
+              <p class="comment-template__leading">显示:</p>
+              <div class="comment-template__inner comment-template__end">
+                <a-switch
+                  checkedChildren="显示"
+                  unCheckedChildren="隐藏"
+                  v-model="model.display"
+                  @change="displayChange" />
+              </div>
+            </div>
+            <!-- / 默认动画 -->
+
+            <div class="comment-template__item">
               <p class="comment-template__leading">默认动画:</p>
               <div class="comment-template__inner comment-template__end">
                 <a-switch
@@ -125,11 +137,18 @@ export default {
       this.updateTopologyConfig()
     },
     /**
-     * 动画启用
+     * 动画启用更新
      */
     animateChange () {
       const { render: { chart } } = this.activeWidget
       chart.setItemState(this.model.id, 'active', this.model.animate)
+      this.change()
+    },
+    /**
+     * 显示更新
+     */
+    displayChange () {
+      this.model.display ? this.activeEdge.show() : this.activeEdge.hide()
       this.change()
     }
   }

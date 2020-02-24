@@ -28,6 +28,18 @@
         </div>
         <!-- / 形状 -->
 
+        <div class="comment-template__item">
+          <p class="comment-template__leading">显示:</p>
+          <div class="comment-template__inner comment-template__end">
+            <a-switch
+              checkedChildren="显示"
+              unCheckedChildren="隐藏"
+              v-model="model.display"
+              @change="displayChange" />
+          </div>
+        </div>
+        <!-- / 显示 -->
+
         <div class="comment-template__item" v-if="model.icon">
           <p class="comment-template__leading">图标:</p>
           <div class="comment-template__inner">
@@ -261,7 +273,6 @@ export default {
     ...mapState('screen', ['activeWidget', 'activeNode']),
     model () {
       return Object.assign(
-        {},
         _.cloneDeep(this.activeNode.getModel()),
         { radius: this.activeNode.getModel().size[0] / 2 }
       )
@@ -286,11 +297,17 @@ export default {
 
         // 设置节点动画
         if (!_.isEmpty(nodes)) {
-          nodes.forEach(node => chart.setItemState(node.id, node.animateType, true))
+          nodes.forEach(node => {
+            chart.setItemState(node.id, node.animateType, true)
+            node.display ? node.show() : node.hide()
+          })
         }
         // 设置边动画
         if (!_.isEmpty(edges)) {
-          edges.forEach(edge => chart.setItemState(edge.id, 'active', edge.animate))
+          edges.forEach(edge => {
+            chart.setItemState(edge.id, 'active', edge.animate)
+            edge.display ? edge.show() : edge.hide()
+          })
         }
       }
       // 更新配置
@@ -312,6 +329,13 @@ export default {
       chart.clearItemStates(id)
       chart.setItemState(id, animateType, true)
       // 更新配置
+      this.change()
+    },
+    /**
+     * 节点显示更新
+     */
+    displayChange () {
+      this.model.display ? this.activeNode.show() : this.activeNode.hide()
       this.change()
     }
   }
