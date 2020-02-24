@@ -28,6 +28,7 @@ export default class TopologyChart extends Chart {
       width,
       height,
       renderer: 'canvas',
+      plugins: [],
       modes: {
         default: [
           'zoom-canvas',

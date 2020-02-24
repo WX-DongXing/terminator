@@ -115,51 +115,68 @@
                 </div>
                 <!-- / 编辑 -->
 
-                <div class="comment-template__item" v-if="topologyEditable">
-                  <p class="comment-template__leading">尺寸:</p>
-                  <div class="comment-template__inner topology-config__editable">
-                    <a-switch
-                      checkedChildren="开"
-                      unCheckedChildren="关"
-                      v-model="topologyResizable"
-                      @change="topologyResize" />
-                  </div>
-                </div>
-                <!-- / 尺寸 -->
+                <div v-if="topologyEditable">
 
-                <div class="comment-template__item" v-if="topologyEditable">
-                  <p class="comment-template__leading">模式:</p>
-                  <div class="comment-template__inner topology-config__editable">
-                    <a-radio-group
-                      buttonStyle="solid"
-                      v-model="mode"
-                      @change="modeChange">
-                      <a-radio-button value="default">默认</a-radio-button>
-                      <a-radio-button value="addEdge">连线</a-radio-button>
-                    </a-radio-group>
+                  <div class="comment-template__item">
+                    <p class="comment-template__leading">尺寸:</p>
+                    <div class="comment-template__inner topology-config__editable">
+                      <a-switch
+                        checkedChildren="开"
+                        unCheckedChildren="关"
+                        v-model="topologyResizable"
+                        @change="topologyResize" />
+                    </div>
                   </div>
-                </div>
-                <!-- / 模式 -->
+                  <!-- / 尺寸 -->
 
-                <div class="comment-template__item" v-if="topologyEditable && mode === 'addEdge'">
-                  <p class="comment-template__leading">连线形状:</p>
-                  <div class="comment-template__inner topology-config__editable">
-                    <a-radio-group
-                      buttonStyle="solid"
-                      v-model="edge.shape"
-                      @change="edgeConfigChange">
-                      <a-radio-button value="line">直线</a-radio-button>
-                      <a-radio-button value="polyline">折线</a-radio-button>
-                      <a-radio-button value="cubic">弧线</a-radio-button>
-                    </a-radio-group>
+                  <div class="comment-template__item">
+                    <p class="comment-template__leading">网格:</p>
+                    <div class="comment-template__inner topology-config__editable">
+                      <a-switch
+                        checkedChildren="开启"
+                        unCheckedChildren="关闭"
+                        v-model="isDisplayGrid"
+                        @change="gridChange" />
+                    </div>
                   </div>
-                </div>
-                <!-- / 连线形状 -->
+                  <!-- / 网格 -->
 
-                <EdgeTemplate
-                  :model="edge"
-                  v-if="edge && topologyEditable && mode === 'addEdge'"
-                  @change="edgeConfigChange" />
+                  <div class="comment-template__item">
+                    <p class="comment-template__leading">模式:</p>
+                    <div class="comment-template__inner topology-config__editable">
+                      <a-radio-group
+                        buttonStyle="solid"
+                        v-model="mode"
+                        @change="modeChange">
+                        <a-radio-button value="default">默认</a-radio-button>
+                        <a-radio-button value="addEdge">连线</a-radio-button>
+                      </a-radio-group>
+                    </div>
+                  </div>
+                  <!-- / 模式 -->
+
+                  <div class="comment-template__item" v-if="mode === 'addEdge'">
+                    <p class="comment-template__leading">连线形状:</p>
+                    <div class="comment-template__inner topology-config__editable">
+                      <a-radio-group
+                        buttonStyle="solid"
+                        v-model="edge.shape"
+                        @change="edgeConfigChange">
+                        <a-radio-button value="line">直线</a-radio-button>
+                        <a-radio-button value="polyline">折线</a-radio-button>
+                        <a-radio-button value="cubic">弧线</a-radio-button>
+                      </a-radio-group>
+                    </div>
+                  </div>
+                  <!-- / 连线形状 -->
+
+                  <EdgeTemplate
+                    :model="edge"
+                    v-if="edge && mode === 'addEdge'"
+                    @change="edgeConfigChange" />
+                  <!-- / 通用边编辑模板 -->
+
+                </div>
 
               </a-collapse-panel>
               <!-- E 操作 -->
@@ -195,6 +212,7 @@
 <script>
 import _ from 'lodash'
 import anime from 'animejs'
+import Grid from '@antv/g6/build/grid'
 import { mapMutations } from 'vuex'
 import { ScreenMutations } from '@/store/modules/screen'
 import ColorPicker from '@/components/colorPicker/index'
@@ -220,20 +238,19 @@ export default {
   data: () => ({
     // 拓扑尺寸编辑
     topologyResizable: true,
-    animate: false,
     // 拓扑模式
     mode: 'default',
+    // 是否显示拓扑网格
+    isDisplayGrid: false,
+    // 选择器服务
     wrapperService: new WrapperService()
   }),
-  created () {
-    // 重置拓扑状态
-    this.resetTopologyState()
-  },
   computed: {
     // 激活的面板
     activePanel () {
       return (this.activeNode && this.mode === 'default') || this.activeEdge ? 2 : 1
     },
+    // 通用边配置
     edge () {
       return _.cloneDeep(this.edgeConfig)
     }
@@ -261,25 +278,30 @@ export default {
         editable: !this.topologyEditable
       })
 
-      // 当拓扑不可编辑时，清除激活的节点
-      !this.topologyEditable && this.activationNode({ activeNode: null })
-
       // 对当前已激活可编辑的拓扑部件添加样式，以标注状态
       const { render: { container } } = this.activeWidget
       container.className = this.topologyEditable ? 'widget topology-widget' : 'widget'
 
-      // 取消编辑时选中该拓扑部件, 重置状态
-      if (!this.topologyEditable) {
+      // 开启编辑时
+      if (this.topologyEditable) {
+        // 检查网格开启状态
+        this.checkGridStatus()
+      } else {
+        // 取消编辑时选中该拓扑部件, 重置状态
+        // 选中拓扑部件
         this.wrapperService.next({
           el: 'topology',
           value: true,
           widget: this.activeWidget
         })
         this.topologyResizable = true
+        // 重置拓扑对象状态
+        this.resetTopologyState()
       }
 
       // 打开元素添加列表
       const [topology] = document.getElementsByClassName('topology')
+      // FLIP动画
       if (this.topologyEditable) {
         // 正向动画
         // 记录初始位置
@@ -366,6 +388,22 @@ export default {
       this.setEdgeConfig({
         edgeConfig: this.edge
       })
+    },
+    /**
+     * 检查是否开启网格
+     */
+    checkGridStatus () {
+      const { render: { chart } } = this.activeWidget
+      const [hasGridPlugin] = chart.get('plugins')
+      this.isDisplayGrid = !!hasGridPlugin
+    },
+    /**
+     * 拓扑网格显示更改事件
+     */
+    gridChange () {
+      const { render: { chart } } = this.activeWidget
+      const [grid] = chart.get('plugins')
+      this.isDisplayGrid ? chart.addPlugin(new Grid()) : chart.removePlugin(grid)
     }
   }
 }
