@@ -14,27 +14,12 @@
         </span>
         <a-button v-else type="link" icon="appstore">组件库</a-button>
       </div>
-      <div class="screen__title">
-        <!--        <p>画板</p>-->
-      </div>
       <div class="screen__control" @click="panelControl('right')">
         <span v-if="rightPanelExpand">
           <a-icon type="menu-unfold" />
         </span>
         <a-button v-else type="link" icon="setting">配置</a-button>
       </div>
-      <!--      <div class="screen__size">-->
-      <!--        <a-input-->
-      <!--          type="number"-->
-      <!--          addonBefore="宽"-->
-      <!--          v-model="width"-->
-      <!--          @change="() => change$.next({ type: 'width', value: Number(width) })" />-->
-      <!--        <a-input-->
-      <!--          type="number"-->
-      <!--          addonBefore="高"-->
-      <!--          v-model="height"-->
-      <!--          @change="() => change$.next({ type: 'height', value: Number(height) })" />-->
-      <!--      </div>-->
     </div>
 
     <!-- S 画板 -->
@@ -106,7 +91,6 @@ import _ from 'lodash'
 import { ScreenMutations } from '@/store/modules/screen'
 import View from '@/model/view'
 import Wrapper from '@/components/wrapper/index.vue'
-import ViewService from '../config/view'
 import Widget from './widget/index.vue'
 import AdjustMixins from '@/components/wrapper/AdjustMixins.vue'
 import WrapperService from '@/components/wrapper/WrapperService'
@@ -138,15 +122,13 @@ export default {
     isAutoResize: true,
     isSubscribed: true,
     isResize: false,
-    viewChange$: new ViewService().change$,
     wrapperChange$: new WrapperService().change$
   }),
   mounted () {
     // 视图change事件处理
     merge(
       fromEvent(window, 'resize').pipe(mapTo({ type: 'resize' })),
-      this.change$,
-      this.viewChange$
+      this.change$
     )
       .pipe(
         takeWhile(() => this.isSubscribed),
@@ -159,11 +141,9 @@ export default {
         this.setView({
           view: new View({
             el: this.$refs.view,
-            width: this.width,
-            height: this.height,
-            scale: this.scale,
+            gauge: this.$refs.gauge,
             parent: this.$refs.page,
-            backgroundColor: event.type === 'backgroundColor' ? event.value : 'rgba(255,255,255,1)'
+            scale: this.scale
           })
         })
       })
@@ -302,7 +282,7 @@ export default {
       }, 400)
     },
     /**
-     * 设置视图缩放
+     * 设置视图缩放及尺寸
      * @param event
      */
     setScale (event) {
@@ -317,10 +297,7 @@ export default {
       }
       anime({
         targets: this.$refs.view,
-        width: this.width,
-        height: this.height,
         scale: this.scale,
-        backgroundColor: this.backgroundColor,
         duration: 150,
         easing: 'linear'
       })

@@ -97,17 +97,7 @@
 
               <a-collapse :bordered="false">
 
-                <a-collapse-panel header="颜色" key="1">
-
-                  <div class="comment-template__item">
-                    <p class="comment-template__leading">颜色:</p>
-                    <div class="comment-template__inner">
-                      <ColorPicker
-                        v-model="config.commonConfig.backgroundColor"
-                        @change="change('style')" />
-                    </div>
-                  </div>
-                  <!-- / 背景颜色 -->
+                <a-collapse-panel header="柱条颜色" key="1">
 
                   <div class="comment-template__item">
                     <p class="comment-template__leading">颜色类型:</p>
@@ -247,7 +237,7 @@
                 </a-collapse-panel>
                 <!-- / 颜色 -->
 
-                <a-collapse-panel header="圆角" key="2">
+                <a-collapse-panel header="柱条圆角" key="2">
 
                   <div class="comment-template__item">
                     <p class="comment-template__leading">左上:</p>
