@@ -85,7 +85,7 @@ import {
   startWith, mapTo, takeWhile,
   pluck, map, filter
 } from 'rxjs/operators'
-import { mapState, mapMutations } from 'vuex'
+import { mapState, mapGetters, mapMutations } from 'vuex'
 import anime from 'animejs'
 import _ from 'lodash'
 import { ScreenMutations } from '@/store/modules/screen'
@@ -139,12 +139,13 @@ export default {
         this.setScale(event)
         // 设置屏幕对象
         this.setView({
-          view: new View({
+          view: Object.assign(_.cloneDeep(this.view), new View({
             el: this.$refs.view,
             gauge: this.$refs.gauge,
             parent: this.$refs.page,
-            scale: this.scale
-          })
+            scale: this.scale,
+            widgets: this.widgets
+          }))
         })
       })
 
@@ -259,7 +260,8 @@ export default {
       })
   },
   computed: {
-    ...mapState('screen', ['view', 'widgets', 'activeWidget', 'topologyEditable'])
+    ...mapState('screen', ['view', 'activeWidget', 'topologyEditable']),
+    ...mapGetters('screen', ['widgets'])
   },
   methods: {
     ...mapMutations('screen', {

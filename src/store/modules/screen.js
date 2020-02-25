@@ -22,9 +22,9 @@ export default {
   namespaced: true,
   state: {
     // 视图对象
-    view: null,
-    // 视图中所有部件对象
-    widgets: [],
+    view: {
+      widgets: []
+    },
     // 激活的部件对象，作为可读属性使用，不可通过非mutation方式进行修改
     activeWidget: null,
     // 拓扑图是否可编辑
@@ -39,6 +39,10 @@ export default {
     edgeConfig: new Edge({})
   },
   getters: {
+    // 视图中所有部件对象
+    widgets (state) {
+      return state.view.widgets
+    },
     // 画板缩放比例
     scale (state) {
       return state.view.scale || 1
@@ -51,11 +55,11 @@ export default {
     },
     // 向视图部件库中添加部件
     [ScreenMutations.ADD_WIDGET] (state, payload) {
-      state.widgets.push(payload.widget)
+      state.view.widgets.push(payload.widget)
     },
     // 从视图部件库中移除该部件
     [ScreenMutations.REMOVE_WIDGET] (state, payload) {
-      state.widgets = state.widgets.filter(widget => widget.widgetId !== payload.widgetId)
+      state.view.widgets = state.view.widgets.filter(widget => widget.widgetId !== payload.widgetId)
       // 置空激活部件
       state.activeWidget = null
       // 隐藏选择器
@@ -68,7 +72,7 @@ export default {
       state.activeWidget = payload.widget
       // 如果选择的是部件，则更新部件的配置
       if (payload.widget && payload.widget.widgetId) {
-        const activeWidget = state.widgets.find(
+        const activeWidget = state.view.widgets.find(
           widget => widget.widgetId === payload.widget.widgetId
         )
         Object.assign(activeWidget, payload.widget)

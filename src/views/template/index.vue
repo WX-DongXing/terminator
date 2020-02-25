@@ -84,16 +84,8 @@ export default {
     this.documentUp$ = fromEvent(document, 'mouseup')
   },
   computed: {
-    ...mapState(
-      'screen',
-      [
-        'view',
-        'widgets',
-        'activeWidget',
-        'topologyEditable'
-      ]
-    ),
-    ...mapGetters('screen', ['scale'])
+    ...mapState('screen', ['view', 'activeWidget', 'topologyEditable']),
+    ...mapGetters('screen', ['widgets', 'scale'])
   },
   mounted () {
     this.viewUp$ = fromEvent(document.getElementsByClassName('view')[0], 'mouseup')
@@ -148,7 +140,7 @@ export default {
         if (this.isWithinScope(event)) {
           const { rect, scale, parent } = this.view
           const targetRect = event.target.getBoundingClientRect()
-          const zIndexList = this.widgets.map(widget => widget.config.commonConfig.zIndex)
+          const zIndexList = [...this.widgets].map(widget => widget.config.commonConfig.zIndex)
           // 部件层级
           const zIndex = _.isEmpty(zIndexList) ? 0 : Math.max(...zIndexList) + 1
           // 将模板对应为部件

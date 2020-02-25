@@ -12,7 +12,7 @@ export default class Widget {
   constructor ({
     config, render = null
   }) {
-    this.widgetId = uuid()
+    this.widgetId = 'widget-' + uuid()
     this.config = new Config(config)
     this.render = render
   }

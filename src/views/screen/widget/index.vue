@@ -15,7 +15,7 @@
 </template>
 
 <script>
-import { mapMutations, mapState } from 'vuex'
+import { mapMutations } from 'vuex'
 import { ScreenMutations } from '@/store/modules/screen'
 import Factory from '@/model/factory/factory'
 
@@ -30,9 +30,6 @@ export default {
   data: () => ({
     chart: null
   }),
-  computed: {
-    ...mapState('screen', ['widgets'])
-  },
   mounted () {
     const { category, type } = this.widget.config
     const widgetFactory = category === 'CHART'
