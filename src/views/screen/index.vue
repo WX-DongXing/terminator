@@ -137,15 +137,18 @@ export default {
       .subscribe((event) => {
         // 设置缩放
         this.setScale(event)
+
         // 设置屏幕对象
         this.setView({
-          view: Object.assign(_.cloneDeep(this.view), new View({
-            el: this.$refs.view,
-            gauge: this.$refs.gauge,
-            parent: this.$refs.page,
-            scale: this.scale,
-            widgets: this.widgets
-          }))
+          view: new View(Object.assign(
+            _.cloneDeep(this.view),
+            {
+              el: this.$refs.view,
+              gauge: this.$refs.gauge,
+              parent: this.$refs.page,
+              scale: this.scale
+            }
+          ))
         })
       })
 

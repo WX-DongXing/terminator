@@ -11,7 +11,7 @@ class Config {
   }) {
     this.category = category
     this.type = type
-    this.commonConfig = new CommonConfig(commonConfig)
+    this.commonConfig = new CommonConfig(commonConfig || {})
     this.proprietaryConfig = chartProprietaryConfigFactory.create({
       type,
       proprietaryConfig

@@ -40,7 +40,7 @@ export default class Chart {
    */
   init ({ config }) {
     this.chart = echarts.init(this.container, '', {
-      renderer: 'svg'
+      renderer: 'canvas'
     })
     this.mergeOption(config)
   }
