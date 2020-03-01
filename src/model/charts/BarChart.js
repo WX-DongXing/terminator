@@ -11,7 +11,6 @@ import Chart from './index'
 export default class BarChart extends Chart {
   constructor ({ widget }) {
     super({ widget })
-    this.type = 'bar'
   }
 
   /**

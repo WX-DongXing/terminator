@@ -104,7 +104,7 @@
                     <div class="comment-template__inner">
                       <a-select
                         v-model="config.proprietaryConfig.itemStyle.type"
-                        @change="typeChange(config)">
+                        @change="colorGroupChange(config)">
                         <a-select-option value="single">单一</a-select-option>
                         <a-select-option value="combination">组合</a-select-option>
                         <a-select-option value="linear">渐变</a-select-option>
@@ -131,7 +131,7 @@
                       <div class="comment-template__inner">
                         <a-select
                           v-model="config.proprietaryConfig.itemStyle.colorType"
-                          @change="colorTypeChange(config)">
+                          @change="colorGroupChange(config)">
                           <a-select-option value="default">默认</a-select-option>
                           <a-select-option value="custom">自定义</a-select-option>
                         </a-select>
@@ -145,7 +145,7 @@
                         <div class="comment-template__inner">
                           <a-select
                             v-model="config.proprietaryConfig.itemStyle.colorScheme"
-                            @change="$refs.chartProprietaryRef.change()">
+                            @change="colorGroupChange(config)">
                             <a-select-option value="default">默认</a-select-option>
                             <a-select-option value="light">亮</a-select-option>
                             <a-select-option value="dark">暗</a-select-option>
@@ -169,7 +169,7 @@
 
                       <SingleColorSelector
                         v-model="combinationCustomColors"
-                        @change="customColors(config)" />
+                        @change="colorGroupChange(config)" />
                       <!-- / 颜色选择 -->
 
                     </div>
@@ -184,7 +184,7 @@
                       <div class="comment-template__inner">
                         <a-select
                           v-model="config.proprietaryConfig.itemStyle.colorType"
-                          @change="colorTypeChange(config)">
+                          @change="colorGroupChange(config)">
                           <a-select-option value="default">默认</a-select-option>
                           <a-select-option value="custom">自定义</a-select-option>
                         </a-select>
@@ -198,7 +198,7 @@
                         <div class="comment-template__inner">
                           <a-select
                             v-model="config.proprietaryConfig.itemStyle.colorScheme"
-                            @change="$refs.chartProprietaryRef.change()">
+                            @change="colorGroupChange(config)">
                             <a-select-option value="default">默认</a-select-option>
                             <a-select-option value="light">亮</a-select-option>
                             <a-select-option value="dark">暗</a-select-option>
@@ -225,7 +225,7 @@
 
                       <LinearColorSelector
                         v-model="linearCustomColors"
-                        @change="customColors(config)" />
+                        @change="colorGroupChange(config)" />
                       <!-- / 颜色选择 -->
 
                     </div>
@@ -431,51 +431,26 @@ export default {
       removeWidget: ScreenMutations.REMOVE_WIDGET
     }),
     /**
-     * 类型更改
-     */
-    typeChange (config) {
-      Object.assign(config.proprietaryConfig.itemStyle, {
-        color: config.proprietaryConfig.itemStyle.type === 'single'
-          ? 'rgba(7,171,253,1)'
-          : []
-      })
-      this.$refs.chartProprietaryRef.change()
-    },
-    /**
-     * 颜色类型更改
-     * @param config 配置
-     */
-    colorTypeChange (config) {
-      Object.assign(config.proprietaryConfig.itemStyle, {
-        color: config.proprietaryConfig.itemStyle.color || []
-      })
-      this.$refs.chartProprietaryRef.change()
-    },
-    /**
      * 获取配色方案
      * @param config 配置
      * @returns {*}
      */
     getColors (config) {
-      const { typeMapping } = this
-      const { colors } = this[typeMapping.get(config.proprietaryConfig.itemStyle.type)].find(
-        item => item.type === config.proprietaryConfig.itemStyle.colorScheme
-      )
-      Object.assign(config.proprietaryConfig.itemStyle, {
-        color: [...colors]
-      })
-      return colors
-    },
-    /**
-     * 自定义颜色
-     * @param config
-     */
-    customColors (config) {
-      const { customMapping } = this
-      Object.assign(config.proprietaryConfig.itemStyle, {
-        color: [...this[customMapping.get(config.proprietaryConfig.itemStyle.type)]]
-      })
-      this.$refs.chartProprietaryRef.change()
+      const { typeMapping, customMapping } = this
+      if (config.proprietaryConfig.itemStyle.type === 'single') {
+        return 'rgba(7,171,253,1)'
+      }
+
+      let color
+      if (config.proprietaryConfig.itemStyle.colorType === 'custom') {
+        color = [...this[customMapping.get(config.proprietaryConfig.itemStyle.type)]]
+      } else {
+        const { colors } = this[typeMapping.get(config.proprietaryConfig.itemStyle.type)].find(
+          item => item.type === config.proprietaryConfig.itemStyle.colorScheme
+        )
+        color = [...colors]
+      }
+      return color
     },
     /**
      * 柱条宽度类型更改
@@ -487,6 +462,23 @@ export default {
           ? 12
           : 'auto'
       })
+      this.$refs.chartProprietaryRef.change()
+    },
+    /**
+     * 当颜色类型或者模式更改时，判断此时的颜色
+     * @param config
+     */
+    colorChange (config) {
+      Object.assign(config.proprietaryConfig.itemStyle, {
+        color: this.getColors(config)
+      })
+    },
+    /**
+     * 颜色组更改
+     * @param config
+     */
+    colorGroupChange (config) {
+      this.colorChange(config)
       this.$refs.chartProprietaryRef.change()
     }
   }

@@ -5,50 +5,13 @@
 * Time: 8:55 上午
 * Email: dong.xing@outlook.com
 */
-import echarts from 'echarts'
-import anime from 'animejs'
+
 import _ from 'lodash'
+import Chart from './index'
 
-export default class LineChart {
+export default class LineChart extends Chart {
   constructor ({ widget }) {
-    this.container = document.getElementById(widget.widgetId)
-    this.setContainer(widget)
-    this.init(widget)
-  }
-
-  /**
-   * 初始设置图表位置尺寸
-   * @param config
-   */
-  setContainer ({ config }) {
-    const {
-      width, height, top, left, zIndex
-    } = config.commonConfig
-    anime.set(this.container, {
-      width,
-      height,
-      top,
-      left,
-      zIndex
-    })
-  }
-
-  /**
-   * 初始化图表
-   * @param widget
-   */
-  init ({ config }) {
-    this.chart = echarts.init(this.container, '', {
-      renderer: 'svg'
-    })
-    this.mergeOption(config)
-  }
-
-  /**
-   * 图表resize
-   */
-  resize () {
-    this.chart.resize()
+    super({ widget })
   }
 
   /**
@@ -57,7 +20,7 @@ export default class LineChart {
    * @param proprietaryConfig 专有配置
    * @param dataConfig 数据配置
    */
-  static mappingOption ({ commonConfig, proprietaryConfig, dataConfig }) {
+  mappingOption ({ commonConfig, proprietaryConfig, dataConfig }) {
     const { backgroundColor, border, padding } = commonConfig
     const { smooth, legend, lineStyle } = proprietaryConfig
     const { sourceType, staticData } = dataConfig
@@ -118,24 +81,4 @@ export default class LineChart {
       series
     })
   }
-
-  /**
-   * 设置新的配置项渲染图表
-   * @param config widget 配置项
-   */
-  mergeOption (config) {
-    // 向外暴露 echarts 配置
-    this.chartConfig = LineChart.mappingOption(config)
-    // 如果数据为空则清空图表
-    if (_.isEmpty(this.chartConfig.series)) {
-      this.chart.clear()
-    }
-    // 重新配置图表
-    this.chart.setOption(this.chartConfig)
-  }
-
-  /**
-   * 销毁事件
-   */
-  destroy () {}
 }
