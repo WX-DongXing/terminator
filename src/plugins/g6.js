@@ -86,7 +86,7 @@ G6.registerBehavior('add-edge', {
         target: model.id
       })
       // 连线完毕更新激活边
-      store.commit('screen/' + ScreenMutations.ACTIVATION_EDGE, {
+      store.commit('screen/' + ScreenMutations.ACTIVATE_EDGE, {
         activeEdge: this.edge
       })
       controlPoints = []
@@ -124,7 +124,7 @@ G6.registerBehavior('add-edge', {
         controlPoints.push({ x: canvasX, y: canvasY })
       } else {
         // 未完成连线清除
-        store.commit('screen/' + ScreenMutations.ACTIVATION_EDGE, {
+        store.commit('screen/' + ScreenMutations.ACTIVATE_EDGE, {
           activeEdge: null
         })
         this.graph.removeItem(this.edge)

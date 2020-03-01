@@ -158,7 +158,7 @@ export default {
           // 将当期拖动的模板添加到视图的部件库中
           this.addWidget({ widget })
           // 将当前的部件状态激活
-          this.activationWidget({ widget })
+          this.activateWidget({ widget })
           // 选择器选中该部件
           this.wrapperService.next({ el: 'widget', widget })
         }
@@ -247,7 +247,7 @@ export default {
   methods: {
     ...mapMutations('screen', {
       addWidget: ScreenMutations.ADD_WIDGET,
-      activationWidget: ScreenMutations.ACTIVATION_WIDGET
+      activateWidget: ScreenMutations.ACTIVATE_WIDGET
     }),
     isWithinScope ({ pageX, pageY }) {
       const { xRange, yRange } = this.view.area

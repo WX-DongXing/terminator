@@ -6,7 +6,7 @@
 * Email: dong.xing@outlook.com
 */
 
-import Template from '../../model/template'
+import Template from '../../../../model/template'
 
 // 图表模板
 const charts = [

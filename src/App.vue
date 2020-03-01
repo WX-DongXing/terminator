@@ -1,53 +1,29 @@
 <template>
   <div id="app">
-    <div class="header">
-      <p>Terminator</p>
-    </div>
-    <div class="content">
-      <transition name="panel">
-        <div class="left" v-show="leftPanelExpand">
-          <Template />
-        </div>
-      </transition>
-      <div class="center">
-        <Screen @left="leftPanelControl" @right="rightPanelControl"/>
-      </div>
-      <transition name="panel">
-        <div class="right" v-show="rightPanelExpand">
-          <Config />
-        </div>
-      </transition>
-    </div>
+    <router-view></router-view>
   </div>
 </template>
 
 <script>
-import Screen from './views/screen/index.vue'
-import Template from './views/template/index.vue'
-import Config from './views/config/index.vue'
-
 export default {
-  name: 'App',
-  components: {
-    Screen,
-    Template,
-    Config
-  },
-  data: () => ({
-    leftPanelExpand: true,
-    rightPanelExpand: true
-  }),
-  methods: {
-    leftPanelControl (control) {
-      this.leftPanelExpand = control
-    },
-    rightPanelControl (control) {
-      this.rightPanelExpand = control
-    }
-  }
+  name: 'App'
 }
 </script>
 
 <style lang="less">
-@import "assets/less/common";
+@import 'assets/less/common';
+
+#app {
+  display: flex;
+  flex-flow: column nowrap;
+  justify-content: flex-start;
+  align-items: stretch;
+  height: 100vh;
+  width: 100vw;
+  font-family: "Avenir", Helvetica, Arial, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  color: #2c3e50;
+  background: whitesmoke;
+}
 </style>

@@ -14,6 +14,9 @@
         </span>
         <a-button v-else type="link" icon="appstore">组件库</a-button>
       </div>
+      <router-link to="/preview">
+        <a-button type="primary">预览</a-button>
+      </router-link>
       <div class="screen__control" @click="panelControl('right')">
         <span v-if="rightPanelExpand">
           <a-icon type="menu-unfold" />
@@ -90,8 +93,8 @@ import anime from 'animejs'
 import _ from 'lodash'
 import { ScreenMutations } from '@/store/modules/screen'
 import View from '@/model/view'
-import Wrapper from '@/components/wrapper/index.vue'
-import Widget from './widget/index.vue'
+import Wrapper from '@/components/wrapper/index'
+import Widget from '@/components/widget/index'
 import AdjustMixins from '@/components/wrapper/AdjustMixins.vue'
 import WrapperService from '@/components/wrapper/WrapperService'
 
@@ -210,7 +213,7 @@ export default {
         }
         if (el !== 'adjust') {
           // 设置激活的部件
-          this.activationWidget({
+          this.activateWidget({
             widget: activeWidget
           })
           // 设置选择器样式
@@ -242,7 +245,7 @@ export default {
           // 更新部件位置信息
           const widget = _.cloneDeep(this.activeWidget)
           Object.assign(widget.config.commonConfig, widgetPositionState)
-          this.activationWidget({
+          this.activateWidget({
             widget: Object.assign(widget, { render })
           })
           return
@@ -269,7 +272,7 @@ export default {
   methods: {
     ...mapMutations('screen', {
       setView: ScreenMutations.SET_VIEW,
-      activationWidget: ScreenMutations.ACTIVATION_WIDGET
+      activateWidget: ScreenMutations.ACTIVATE_WIDGET
     }),
     /**
      * 左右panel展开与否
@@ -300,6 +303,28 @@ export default {
       } else {
         this[event.type] = event.value
       }
+
+      if (this.view.config) {
+        const {
+          config: {
+            proprietaryConfig: {
+              mode,
+              backgroundColor,
+              backgroundImage,
+              backgroundRepeat,
+              backgroundSize
+            }
+          }
+        } = this.view
+
+        anime.set(this.$refs.view, {
+          backgroundImage: mode === 'image' ? `url(${backgroundImage})` : '',
+          backgroundColor,
+          backgroundRepeat,
+          backgroundSize
+        })
+      }
+
       anime({
         targets: this.$refs.view,
         scale: this.scale,

@@ -125,6 +125,7 @@
               <a-select
                 v-model="targetView.config.proprietaryConfig.scaleMode"
                 @change="change">
+                <a-select-option value="auto">自适应</a-select-option>
                 <a-select-option value="primary">原始尺寸</a-select-option>
                 <a-select-option value="fullscreen">全屏显示</a-select-option>
                 <a-select-option value="fullWidth">等比宽度铺满</a-select-option>

@@ -203,7 +203,7 @@ export default {
   },
   methods: {
     ...mapMutations('screen', {
-      activationWidget: ScreenMutations.ACTIVATION_WIDGET,
+      activateWidget: ScreenMutations.ACTIVATE_WIDGET,
       removeWidget: ScreenMutations.REMOVE_WIDGET
     }),
     // Todo 为实现移动、更改激活部件，设置wrapper选择器事件，有待于重构该部分
@@ -284,7 +284,7 @@ export default {
      */
     updateActionWidget () {
       const activeWidget = _.cloneDeep(this.activeWidget)
-      this.activationWidget({
+      this.activateWidget({
         widget: Object.assign(activeWidget, {
           config: this.config,
           render: this.activeWidget.render

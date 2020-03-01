@@ -280,42 +280,29 @@ export default {
   },
   methods: {
     ...mapMutations('screen', {
-      updateTopologyConfig: ScreenMutations.UPDATE_TOPOLOGY_CONFIG
+      updateTopologyConfig: ScreenMutations.UPDATE_TOPOLOGY_CONFIG,
+      updateNode: ScreenMutations.ACTIVATE_NODE
     }),
     /**
      * 节点数据配置更新
      */
     change (type) {
-      const { render: { chart } } = this.activeWidget
+      const { render, config: { proprietaryConfig } } = this.activeWidget
       // 根据配置更新视图，由于 updateItem 方法只能更新节点配置无法更新视图icon
-      chart.updateItem(this.model.id, this.model)
+      render.chart.updateItem(this.model.id, this.model)
+
+      // 更新配置
+      this.updateTopologyConfig()
 
       if (type === 'icon') {
         // 通过上一步已经修改后的节点配置项，通过 read 方法更新整个视图以更新 icon
-        const data = chart.save()
-        chart.read(data)
-        const nodes = chart.getNodes()
-        const edges = chart.getEdges()
-
-        // 设置节点动画
-        if (!_.isEmpty(nodes)) {
-          nodes.forEach(node => {
-            const model = node.getModel()
-            chart.setItemState(node, model.animateType, true)
-            model.display ? node.show() : node.hide()
-          })
-        }
-        // 设置边动画
-        if (!_.isEmpty(edges)) {
-          edges.forEach(edge => {
-            const model = edge.getModel()
-            chart.setItemState(edge, 'active', model.animate)
-            model.display ? edge.show() : edge.hide()
-          })
-        }
+        render.read(proprietaryConfig)
       }
-      // 更新配置
-      this.updateTopologyConfig()
+
+      // 更新当前节点
+      this.updateNode({
+        activeNode: render.chart.find('node', node => node.getModel().id === this.model.id)
+      })
     },
     /**
      * 原型节点半径配置更新
@@ -330,7 +317,7 @@ export default {
     animateTypeChange () {
       const { render: { chart } } = this.activeWidget
       const { id, animateType } = this.model
-      chart.clearItemStates(id)
+      chart.clearItemStates(this.activeNode)
       chart.setItemState(id, animateType, true)
       // 更新配置
       this.change()

@@ -9,10 +9,10 @@ export const ScreenMutations = {
   SET_VIEW: 'SET_VIEW[设置视图对象]',
   ADD_WIDGET: 'ADD_WIDGET[添加部件]',
   REMOVE_WIDGET: 'REMOVE_WIDGET[添加部件]',
-  ACTIVATION_WIDGET: 'ACTIVATION_WIDGET[设置激活的部件]',
+  ACTIVATE_WIDGET: 'ACTIVATE_WIDGET[设置激活的部件]',
   MODIFY_TOPOLOGY_EDITABLE_STATUS: 'MODIFY_TOPOLOGY_EDITABLE_STATUS[修改拓扑图可编辑状态]',
-  ACTIVATION_NODE: 'ACTIVATION_NODE[设置激活的节点]',
-  ACTIVATION_EDGE: 'ACTIVATION_EDGE[设置激活的边]',
+  ACTIVATE_NODE: 'ACTIVATE_NODE[设置激活的节点]',
+  ACTIVATE_EDGE: 'ACTIVATE_EDGE[设置激活的边]',
   RESET_TOPOLOGY_STATE: 'RESET_TOPOLOGY_STATE[重置拓扑状态]',
   SET_EDGE_CONFIG: 'SET_EDGE_CONFIG[设置边配置]',
   UPDATE_TOPOLOGY_CONFIG: 'UPDATE_TOPOLOGY_CONFIG[更新拓扑节点配置]'
@@ -68,7 +68,7 @@ export default {
       })
     },
     // 设置激活的部件，并修改widgets中的部件，深度复制激活部件，保留render对象
-    [ScreenMutations.ACTIVATION_WIDGET] (state, payload) {
+    [ScreenMutations.ACTIVATE_WIDGET] (state, payload) {
       state.activeWidget = payload.widget
       // 如果选择的是部件，则更新部件的配置
       if (payload.widget && payload.widget.widgetId) {
@@ -83,7 +83,7 @@ export default {
       state.topologyEditable = payload.editable
     },
     // 设置激活的拓扑节点
-    [ScreenMutations.ACTIVATION_NODE] (state, payload) {
+    [ScreenMutations.ACTIVATE_NODE] (state, payload) {
       state.activeNode = payload.activeNode
     },
     // 更新拓扑节点配置
@@ -94,12 +94,13 @@ export default {
       }
     },
     // 设置激活的拓扑边
-    [ScreenMutations.ACTIVATION_EDGE] (state, payload) {
+    [ScreenMutations.ACTIVATE_EDGE] (state, payload) {
       state.activeEdge = payload.activeEdge
     },
     // 重置拓扑状态
     [ScreenMutations.RESET_TOPOLOGY_STATE] (state) {
       Object.assign(state, {
+        topologyEditable: false,
         activeNode: null,
         activeEdge: null,
         edgeConfig: new Edge({})

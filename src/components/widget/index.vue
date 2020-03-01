@@ -8,6 +8,7 @@
 <template>
   <div
     class="widget"
+    :class="[onlyShow ? 'widget' : 'widget widget--hover']"
     :id="widget.widgetId"
     :ref="widget.widgetId"
     @click.stop="() => $emit('select')">
@@ -25,6 +26,10 @@ export default {
     widget: {
       type: Object,
       default: () => ({})
+    },
+    onlyShow: {
+      type: Boolean,
+      default: false
     }
   },
   data: () => ({
@@ -40,13 +45,13 @@ export default {
       widget: this.widget
     })
     // 将渲染的元素更新至部件
-    this.activationWidget({
+    !this.onlyShow && this.activateWidget({
       widget: Object.assign(this.widget, { render: this.chart })
     })
   },
   methods: {
     ...mapMutations('screen', {
-      activationWidget: ScreenMutations.ACTIVATION_WIDGET
+      activateWidget: ScreenMutations.ACTIVATE_WIDGET
     })
   },
   beforeDestroy () {
@@ -59,7 +64,7 @@ export default {
 .widget {
   position: absolute !important;
 
-  &:hover {
+  &--hover:hover {
     box-shadow: 0 0 4px 2px rgba(24, 144, 255, .8) !important;
   }
 }

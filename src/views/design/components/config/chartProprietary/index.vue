@@ -185,14 +185,14 @@ export default {
   },
   methods: {
     ...mapMutations('screen', {
-      activationWidget: ScreenMutations.ACTIVATION_WIDGET,
+      activateWidget: ScreenMutations.ACTIVATE_WIDGET,
       removeWidget: ScreenMutations.REMOVE_WIDGET
     }),
     change () {
       const activeWidget = _.cloneDeep(this.activeWidget)
       const { render } = this.activeWidget
       Object.assign(activeWidget.config, this.config)
-      this.activationWidget({
+      this.activateWidget({
         widget: Object.assign(activeWidget, { render })
       })
       this.$nextTick(() => {

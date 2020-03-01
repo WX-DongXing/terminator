@@ -220,9 +220,9 @@ import CommonTemplate from '../common/index'
 import ChartProprietaryTemplate from '../chartProprietary/index'
 import DataSourceTemplate from '../dataSource/index'
 import WrapperService from '@/components/wrapper/WrapperService'
-import CommonNodeTemplate from '@/views/config/nodes'
-import CommonEdgeTemplate from '@/views/config/edges'
-import EdgeTemplate from '@/views/config/edges/edge'
+import CommonNodeTemplate from '@/views/design/components/config/nodes'
+import CommonEdgeTemplate from '@/views/design/components/config/edges'
+import EdgeTemplate from '@/views/design/components/config/edges/edge'
 
 export default {
   name: 'Topology',
@@ -255,10 +255,13 @@ export default {
       return _.cloneDeep(this.edgeConfig)
     }
   },
+  created () {
+    this.resetTopologyState()
+  },
   methods: {
     ...mapMutations('screen', {
       modifyTopologyEditable: ScreenMutations.MODIFY_TOPOLOGY_EDITABLE_STATUS,
-      activationNode: ScreenMutations.ACTIVATION_NODE,
+      activateNode: ScreenMutations.ACTIVATE_NODE,
       resetTopologyState: ScreenMutations.RESET_TOPOLOGY_STATE,
       setEdgeConfig: ScreenMutations.SET_EDGE_CONFIG
     }),

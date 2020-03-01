@@ -53,13 +53,13 @@ export default {
   },
   methods: {
     ...mapMutations('screen', {
-      activationWidget: ScreenMutations.ACTIVATION_WIDGET
+      activateWidget: ScreenMutations.ACTIVATE_WIDGET
     }),
     change () {
       const activeWidget = _.cloneDeep(this.activeWidget)
       const { render } = this.activeWidget
       Object.assign(activeWidget.config, this.config)
-      this.activationWidget({
+      this.activateWidget({
         widget: Object.assign(activeWidget, { render })
       })
       render.mergeOption(this.config)

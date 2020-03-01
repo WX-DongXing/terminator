@@ -25,6 +25,7 @@
  *  no-repeat: 不重复
  *
  * @param scaleMode 屏幕缩放模式
+ *  auto: 自适应
  *  primary: 原始尺寸
  *  fullscreen: 全屏显示
  *  fullWidth: 等比宽度铺满
@@ -37,7 +38,7 @@ export default class ViewProprietaryConfig {
     backgroundImage = '',
     backgroundRepeat = 'no-repeat',
     backgroundSize = '',
-    scaleMode = 'primary'
+    scaleMode = 'auto'
   }) {
     this.mode = mode
     this.backgroundColor = backgroundColor

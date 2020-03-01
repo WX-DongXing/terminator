@@ -22,7 +22,7 @@ export default class TopologyChart extends Chart {
    * @param widget
    */
   init ({ config }) {
-    const { width, height } = config.commonConfig
+    const { commonConfig: { width, height }, proprietaryConfig } = config
     this.chart = new G6.Graph({
       container: this.container,
       width,
@@ -44,18 +44,15 @@ export default class TopologyChart extends Chart {
             type: 'tooltip', // 节点提示框
             formatText (model) {
               // 提示框文本内容
-              const text =
-                'label: ' + model.label + '<br/>'
-              return text
+              return 'label: ' + model.label + '<br/>'
             }
           },
           {
             type: 'edge-tooltip', // 边提示框
             formatText (model) { // 边提示框文本内容
-              const text = 'label: ' + model.label +
+              return 'label: ' + model.label +
                 '<br/> source: ' + model.source +
                 '<br/> target: ' + model.target
-              return text
             }
           }
         ],
@@ -99,18 +96,17 @@ export default class TopologyChart extends Chart {
         }
       }
     })
-    this.chart.read({
-      nodes: [],
-      edges: []
-    })
+
+    this.read(proprietaryConfig)
 
     // 对于缩放事件的监听
     this.chart.on('wheelzoom', e => {
+      console.log(this.chart.getNodes())
     })
 
     // 节点点击事件
     this.chart.on('node:click', ({ item }) => {
-      store.commit('screen/' + ScreenMutations.ACTIVATION_NODE, {
+      store.commit('screen/' + ScreenMutations.ACTIVATE_NODE, {
         activeNode: item
       })
     })
@@ -119,7 +115,7 @@ export default class TopologyChart extends Chart {
     this.chart.on('node:drag', ({ item }) => {
       const activeNode = store.state.screen.activeNode
       if (activeNode) {
-        store.commit('screen/' + ScreenMutations.ACTIVATION_NODE, {
+        store.commit('screen/' + ScreenMutations.ACTIVATE_NODE, {
           activeNode: item
         })
       }
@@ -132,7 +128,7 @@ export default class TopologyChart extends Chart {
 
     // 边点击事件
     this.chart.on('edge:click', ({ item }) => {
-      store.commit('screen/' + ScreenMutations.ACTIVATION_EDGE, {
+      store.commit('screen/' + ScreenMutations.ACTIVATE_EDGE, {
         activeEdge: item
       })
     })
@@ -145,14 +141,39 @@ export default class TopologyChart extends Chart {
     // 画布点击事件
     this.chart.on('canvas:click', e => {
       // 清空激活的节点
-      store.commit('screen/' + ScreenMutations.ACTIVATION_NODE, {
+      store.commit('screen/' + ScreenMutations.ACTIVATE_NODE, {
         activeNode: null
       })
       // 清空激活的边
-      store.commit('screen/' + ScreenMutations.ACTIVATION_EDGE, {
+      store.commit('screen/' + ScreenMutations.ACTIVATE_EDGE, {
         activeEdge: null
       })
     })
+  }
+
+  /**
+   * 读取配置
+   */
+  read (proprietaryConfig) {
+    this.chart.read(proprietaryConfig)
+    const nodes = this.chart.getNodes()
+    const edges = this.chart.getEdges()
+    // 设置节点动画
+    if (!_.isEmpty(nodes)) {
+      nodes.forEach(node => {
+        const model = node.getModel()
+        this.chart.setItemState(node, model.animateType, true)
+        model.display ? node.show() : node.hide()
+      })
+    }
+    // 设置边动画
+    if (!_.isEmpty(edges)) {
+      edges.forEach(edge => {
+        const model = edge.getModel()
+        this.chart.setItemState(edge, 'active', model.animate)
+        model.display ? edge.show() : edge.hide()
+      })
+    }
   }
 
   /**
