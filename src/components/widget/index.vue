@@ -11,7 +11,7 @@
     :class="[onlyShow ? 'widget' : 'widget widget--hover']"
     :id="widget.widgetId"
     :ref="widget.widgetId"
-    @click.stop="() => $emit('select')">
+    @click.stop="() => $emit('select', selectWidget)">
   </div>
 </template>
 
@@ -33,20 +33,26 @@ export default {
     }
   },
   data: () => ({
-    chart: null
+    render: null
   }),
+  computed: {
+    selectWidget () {
+      return Object.assign({}, this.widget, { render: this.render })
+    }
+  },
   mounted () {
     const { category, type } = this.widget.config
     const widgetFactory = category === 'CHART'
       ? Factory.createChartFactory()
       : Factory.createElementFactory()
     // 根据类型创建图表
-    this.chart = widgetFactory.create(type, {
+    this.render = widgetFactory.create(type, {
       widget: this.widget
     })
+
     // 将渲染的元素更新至部件
     !this.onlyShow && this.activateWidget({
-      widget: Object.assign(this.widget, { render: this.chart })
+      widget: this.selectWidget
     })
   },
   methods: {
@@ -55,7 +61,7 @@ export default {
     })
   },
   beforeDestroy () {
-    this.chart.destroy()
+    this.render.destroy()
   }
 }
 </script>

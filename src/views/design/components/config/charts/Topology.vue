@@ -184,13 +184,13 @@
             </a-collapse>
 
             <!-- S 节点通用配置 -->
-            <CommonNodeTemplate v-if="activeNode && mode === 'default'" ref="commonNodeTemplate">
+            <CommonNodeTemplate v-if="topologyEditable && activeNode && mode === 'default'" ref="commonNodeTemplate">
 
             </CommonNodeTemplate>
             <!-- S 节点通用配置 -->
 
             <!-- E 节点通用配置 -->
-            <CommonEdgeTemplate v-if="activeEdge" ref="commonEdgeTemplate" />
+            <CommonEdgeTemplate v-if="topologyEditable && activeEdge" ref="commonEdgeTemplate" />
             <!-- E 节点通用配置 -->
 
           </div>

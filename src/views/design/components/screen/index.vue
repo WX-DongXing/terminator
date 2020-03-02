@@ -41,7 +41,7 @@
           :widget="widget"
           :key="widget.widgetId"
           :ref="widget.widgetId"
-          @select="() => select$.next({ el: 'widget', widget })"
+          @select="(selectWidget) => select$.next({ el: 'widget', widget: selectWidget })"
         />
         <!-- / 部件渲染 -->
 
@@ -164,11 +164,7 @@ export default {
         fromEvent(this.$refs.view, 'mouseup', { capture: false })
       ).pipe(
         map(events => ({ el: 'view', events })),
-        filter(({ events }) => {
-          // 过滤鼠标 mousedown 事件不在当前视图的事件，仅留下触发再视图上的事件
-          const [mousedownEvent] = events
-          return [...mousedownEvent.target.classList].includes('view')
-        })
+        filter(({ events: [mousedownEvent] }) => [...mousedownEvent.target.classList].includes('view'))
       ),
       this.wrapperChange$
     )
@@ -192,16 +188,21 @@ export default {
           case 'widget':
             activeWidget = widget
             // eslint-disable-next-line no-case-declarations
-            const { config: { commonConfig } } = widget
+            const {
+              config: {
+                commonConfig: { width, height, top, left }
+              }
+            } = widget
             styles = {
               display: 'block',
-              width: commonConfig.width,
-              height: commonConfig.height,
-              top: commonConfig.top,
-              left: commonConfig.left
+              width,
+              height,
+              top,
+              left
             }
             break
           case 'topology':
+            // 拓扑视图尺寸开关开闭时触发
             activeWidget = widget
             styles = {
               display: value ? 'block' : 'none'
@@ -307,6 +308,9 @@ export default {
       if (this.view.config) {
         const {
           config: {
+            commonConfig: {
+              width, height
+            },
             proprietaryConfig: {
               mode,
               backgroundColor,
@@ -318,6 +322,8 @@ export default {
         } = this.view
 
         anime.set(this.$refs.view, {
+          width,
+          height,
           backgroundImage: mode === 'image' ? `url(${backgroundImage})` : '',
           backgroundColor,
           backgroundRepeat,

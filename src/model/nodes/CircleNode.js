@@ -11,6 +11,6 @@ import { TopologyIcon } from '../common'
 export default class CircleNode extends Node {
   constructor ({ icon, ...node }) {
     super(node)
-    this.icon = new TopologyIcon(icon)
+    this.icon = new TopologyIcon(icon || {})
   }
 }

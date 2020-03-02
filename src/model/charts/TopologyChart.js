@@ -195,4 +195,8 @@ export default class TopologyChart extends Chart {
       )
     }
   }
+
+  destroy () {
+    this.chart.destroy()
+  }
 }
