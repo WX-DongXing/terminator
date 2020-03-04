@@ -91,12 +91,14 @@ import {
 import { mapState, mapGetters, mapMutations } from 'vuex'
 import anime from 'animejs'
 import _ from 'lodash'
+import PerfectScrollbar from 'perfect-scrollbar'
 import { ScreenMutations } from '@/store/modules/screen'
 import View from '@/model/view'
 import Wrapper from '@/components/wrapper/index'
 import Widget from '@/components/widget/index'
 import AdjustMixins from '@/components/wrapper/AdjustMixins.vue'
 import WrapperService from '@/components/wrapper/WrapperService'
+import 'perfect-scrollbar/css/perfect-scrollbar.css'
 
 export default {
   name: 'Screen',
@@ -125,9 +127,22 @@ export default {
     isAutoResize: true,
     isSubscribed: true,
     isResize: false,
-    wrapperChange$: new WrapperService().change$
+    wrapperChange$: new WrapperService().change$,
+    // 滚动条
+    perfectScrollBar: null
   }),
   mounted () {
+    const { platform } = navigator
+    // 如果是 windows 平台，美化滚动条
+    if (platform === 'Win32' || platform === 'Windows') {
+      // 设置滚动条
+      this.perfectScrollBar = new PerfectScrollbar(this.$refs.page, {
+        wheelSpeed: 1,
+        wheelPropagation: true,
+        minScrollbarLength: 20
+      })
+    }
+
     // 视图change事件处理
     merge(
       fromEvent(window, 'resize').pipe(mapTo({ type: 'resize' })),
@@ -140,6 +155,11 @@ export default {
       .subscribe((event) => {
         // 设置缩放
         this.setScale(event)
+
+        // 更新滚动条
+        if (event.type === 'resize') {
+          this.perfectScrollBar && this.perfectScrollBar.update()
+        }
 
         // 设置屏幕对象
         this.setView({
@@ -348,6 +368,8 @@ export default {
   },
   beforeDestroy () {
     this.isSubscribed = false
+    // 销毁滚动条
+    this.perfectScrollBar && this.perfectScrollBar.destroy()
   }
 }
 </script>
