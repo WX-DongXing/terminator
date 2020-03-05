@@ -39,7 +39,7 @@ export default class BarChart extends Chart {
       })
       const { legend: staticLegend, xAxis: staticXAxis, yAxis: staticYAxis } = staticData
       Object.assign(option, {
-        legend: staticLegend,
+        legend: Object.assign(legend, staticLegend),
         xAxis: Object.assign(xAxis, staticXAxis),
         yAxis: Object.assign(yAxis, staticYAxis),
         series

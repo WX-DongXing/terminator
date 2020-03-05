@@ -7,9 +7,7 @@
 */
 
 const BarStaticData = {
-  legend: {
-    show: false
-  },
+  legend: {},
   xAxis: {
     type: 'category',
     data: ['Forest', 'Steppe', 'Desert', 'Wetland']

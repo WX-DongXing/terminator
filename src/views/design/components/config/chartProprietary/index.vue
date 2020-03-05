@@ -299,9 +299,10 @@
 
             <div class="comment-template__item">
               <p class="comment-template__leading">轴线宽度:</p>
-              <div class="comment-template__inner comment-template__end">
-                <a-input
-                  type="number"
+              <div class="comment-template__inner">
+                <a-slider
+                  :min="0"
+                  :max="16"
                   @change="change"
                   v-model.number="config.proprietaryConfig.xAxis.axisLine.lineStyle.width" />
               </div>
@@ -351,8 +352,9 @@
             <div class="comment-template__item">
               <p class="comment-template__leading">刻度长度:</p>
               <div class="comment-template__inner">
-                <a-input
-                  type="number"
+                <a-slider
+                  :min="0"
+                  :max="16"
                   @change="change"
                   v-model.number="config.proprietaryConfig.xAxis.axisTick.length" />
               </div>
@@ -362,13 +364,14 @@
             <div class="comment-template__item">
               <p class="comment-template__leading">刻度宽度:</p>
               <div class="comment-template__inner">
-                <a-input
-                  type="number"
+                <a-slider
+                  :min="0"
+                  :max="16"
                   @change="change"
                   v-model.number="config.proprietaryConfig.xAxis.axisTick.lineStyle.width" />
               </div>
             </div>
-            <!-- / 刻度长度 -->
+            <!-- / 刻度宽度 -->
 
             <div class="comment-template__item">
               <p class="comment-template__leading">刻度类型:</p>
@@ -403,12 +406,11 @@
             <div class="comment-template__item">
               <p class="comment-template__leading">标签角度:</p>
               <div class="comment-template__inner">
-                <a-input
-                  type="number"
-                  min="-90"
-                  max="90"
+                <a-slider
+                  :min="-90"
+                  :max="90"
                   @change="change"
-                  v-model.number="config.proprietaryConfig.xAxis.axisLabel.rotate" />
+                  v-model="config.proprietaryConfig.xAxis.axisLabel.rotate" />
               </div>
             </div>
             <!-- / 标签角度 -->
@@ -686,9 +688,10 @@
 
             <div class="comment-template__item">
               <p class="comment-template__leading">轴线宽度:</p>
-              <div class="comment-template__inner comment-template__end">
-                <a-input
-                  type="number"
+              <div class="comment-template__inner">
+                <a-slider
+                  :min="0"
+                  :max="16"
                   @change="change"
                   v-model.number="config.proprietaryConfig.yAxis.axisLine.lineStyle.width" />
               </div>
@@ -738,8 +741,9 @@
             <div class="comment-template__item">
               <p class="comment-template__leading">刻度长度:</p>
               <div class="comment-template__inner">
-                <a-input
-                  type="number"
+                <a-slider
+                  :min="0"
+                  :max="16"
                   @change="change"
                   v-model.number="config.proprietaryConfig.yAxis.axisTick.length" />
               </div>
@@ -749,8 +753,9 @@
             <div class="comment-template__item">
               <p class="comment-template__leading">刻度宽度:</p>
               <div class="comment-template__inner">
-                <a-input
-                  type="number"
+                <a-slider
+                  :min="0"
+                  :max="16"
                   @change="change"
                   v-model.number="config.proprietaryConfig.yAxis.axisTick.lineStyle.width" />
               </div>
@@ -790,12 +795,11 @@
             <div class="comment-template__item">
               <p class="comment-template__leading">标签角度:</p>
               <div class="comment-template__inner">
-                <a-input
-                  type="number"
-                  min="-90"
-                  max="90"
+                <a-slider
+                  :min="-90"
+                  :max="90"
                   @change="change"
-                  v-model.number="config.proprietaryConfig.yAxis.axisLabel.rotate" />
+                  v-model="config.proprietaryConfig.yAxis.axisLabel.rotate" />
               </div>
             </div>
             <!-- / 标签角度 -->

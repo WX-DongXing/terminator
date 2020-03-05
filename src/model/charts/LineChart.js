@@ -21,64 +21,33 @@ export default class LineChart extends Chart {
    * @param dataConfig 数据配置
    */
   mappingOption ({ commonConfig, proprietaryConfig, dataConfig }) {
-    const { backgroundColor, border, padding } = commonConfig
-    const { smooth, legend, lineStyle } = proprietaryConfig
+    const { grid } = commonConfig.getOption()
+    const { smooth, legend, lineStyle, xAxis, yAxis } = _.cloneDeep(proprietaryConfig)
     const { sourceType, staticData } = dataConfig
-    const [top, right, bottom, left] = padding
-    const chartLegend = _.cloneDeep(legend)
     const line = {
       type: 'line',
-      smooth: smooth === 1,
+      smooth,
       lineStyle
     }
-    let xAxis = {}
-    let yAxis = {}
     let series = []
 
+    // 总体配置
+    const option = { grid, legend, series, xAxis: [xAxis], yAxis: [yAxis] }
+
     if (sourceType === 'static') {
-      Object.assign(chartLegend, { data: staticData.legend })
       series = staticData.series.map((item) => {
         Object.assign(item, line)
         return item
       })
-      xAxis = _.cloneDeep(staticData.xAxis)
-      yAxis = _.cloneDeep(staticData.yAxis)
+      const { legend: staticLegend, xAxis: staticXAxis, yAxis: staticYAxis } = staticData
+      Object.assign(option, {
+        legend: Object.assign(legend, staticLegend),
+        xAxis: Object.assign(xAxis, staticXAxis),
+        yAxis: Object.assign(yAxis, staticYAxis),
+        series
+      })
     }
 
-    return Object.assign({}, {
-      legend: {
-        ...chartLegend
-      },
-      grid: [
-        {
-          show: true,
-          top: 0,
-          right: 0,
-          bottom: 0,
-          left: 0,
-          backgroundColor,
-          borderColor: border.color,
-          borderWidth: border.width
-        },
-        {
-          show: true,
-          top: 30 + top,
-          right: 30 + right,
-          bottom: 30 + bottom,
-          left: 30 + left,
-          borderWidth: 0,
-          backgroundColor: 'transparent'
-        }
-      ],
-      xAxis: [{
-        gridIndex: 1,
-        ...xAxis
-      }],
-      yAxis: [{
-        gridIndex: 1,
-        ...yAxis
-      }],
-      series
-    })
+    return option
   }
 }

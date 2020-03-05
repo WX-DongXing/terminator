@@ -60,13 +60,12 @@
 
                   <div class="comment-template__item">
                     <p class="comment-template__leading">平滑:</p>
-                    <div class="comment-template__inner">
-                      <a-select
+                    <div class="comment-template__inner comment-template__end">
+                      <a-switch
+                        checkedChildren="平滑"
+                        unCheckedChildren="正常"
                         v-model="config.proprietaryConfig.smooth"
-                        @change="$refs.chartProprietaryRef.change()">
-                        <a-select-option :value="0">正常</a-select-option>
-                        <a-select-option :value="1">平滑</a-select-option>
-                      </a-select>
+                        @change="$refs.chartProprietaryRef.change()" />
                     </div>
                   </div>
                   <!-- / 平滑 -->

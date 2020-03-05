@@ -6,7 +6,9 @@
 * Email: dong.xing@outlook.com
 */
 const LinesStaticData = {
-  legend: ['折线图示例'],
+  legend: {
+    data: ['折线图示例']
+  },
   xAxis: {
     type: 'category',
     data: ['周一', '周二', '周三', '周四', '周五', '周六', '周日']
