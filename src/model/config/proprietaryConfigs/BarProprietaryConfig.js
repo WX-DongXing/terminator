@@ -6,7 +6,8 @@
  * Email: dong.xing@outlook.com
  */
 
-import { ItemStyle, Legend } from './index'
+import _ from 'lodash'
+import { BarItemStyle, Legend, XAixs, YAixs } from './index'
 
 /**
  * 折现图专有属性配置
@@ -20,12 +21,31 @@ export default class BarProprietaryConfig {
     itemStyle = {},
     legend = {},
     barWidthType = 'auto',
-    barWidth = 'auto'
+    barWidth = 'auto',
+    xAxis = {},
+    yAxis = {}
   }) {
     this.barType = barType
     this.legend = new Legend(legend)
-    this.itemStyle = new ItemStyle(itemStyle)
+    this.barItemStyle = new BarItemStyle(itemStyle)
     this.barWidthType = barWidthType
     this.barWidth = barWidth
+    this.xAxis = new XAixs(xAxis)
+    this.yAxis = new YAixs(yAxis)
+  }
+
+  /**
+   * 获取柱形图专有配置
+   */
+  getOption () {
+    return _.cloneDeep({
+      barType: this.barType,
+      barWidthType: this.barWidthType,
+      barWidth: this.barWidth,
+      legend: this.legend,
+      itemStyle: this.barItemStyle.getOption(),
+      xAxis: this.xAxis,
+      yAxis: this.yAxis
+    })
   }
 }

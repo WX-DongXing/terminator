@@ -103,7 +103,7 @@
                     <p class="comment-template__leading">颜色类型:</p>
                     <div class="comment-template__inner">
                       <a-select
-                        v-model="config.proprietaryConfig.itemStyle.type"
+                        v-model="config.proprietaryConfig.barItemStyle.type"
                         @change="colorGroupChange(config)">
                         <a-select-option value="single">单一</a-select-option>
                         <a-select-option value="combination">组合</a-select-option>
@@ -115,22 +115,22 @@
 
                   <div
                     class="comment-template__item"
-                    v-if="config.proprietaryConfig.itemStyle.type === 'single'">
+                    v-if="config.proprietaryConfig.barItemStyle.type === 'single'">
                     <p class="comment-template__leading">单一颜色:</p>
                     <div class="comment-template__inner">
                       <ColorPicker
-                        v-model="config.proprietaryConfig.itemStyle.color"
+                        v-model="config.proprietaryConfig.barItemStyle.color"
                         @change="$refs.chartProprietaryRef.change()"/>
                     </div>
                   </div>
                   <!-- / 单一颜色 -->
 
-                  <div v-if="config.proprietaryConfig.itemStyle.type === 'combination'">
+                  <div v-if="config.proprietaryConfig.barItemStyle.type === 'combination'">
                     <div class="comment-template__item">
                       <p class="comment-template__leading">组合类型:</p>
                       <div class="comment-template__inner">
                         <a-select
-                          v-model="config.proprietaryConfig.itemStyle.colorType"
+                          v-model="config.proprietaryConfig.barItemStyle.colorType"
                           @change="colorGroupChange(config)">
                           <a-select-option value="default">默认</a-select-option>
                           <a-select-option value="custom">自定义</a-select-option>
@@ -139,12 +139,12 @@
                     </div>
                     <!-- / 组合类型 -->
 
-                    <div v-if="config.proprietaryConfig.itemStyle.colorType === 'default'">
+                    <div v-if="config.proprietaryConfig.barItemStyle.colorType === 'default'">
                       <div class="comment-template__item">
                         <p class="comment-template__leading">配色方案:</p>
                         <div class="comment-template__inner">
                           <a-select
-                            v-model="config.proprietaryConfig.itemStyle.colorScheme"
+                            v-model="config.proprietaryConfig.barItemStyle.colorScheme"
                             @change="colorGroupChange(config)">
                             <a-select-option value="default">默认</a-select-option>
                             <a-select-option value="light">亮</a-select-option>
@@ -165,7 +165,7 @@
                     </div>
                     <!-- / 配色方案 -->
 
-                    <div v-if="config.proprietaryConfig.itemStyle.colorType === 'custom'">
+                    <div v-if="config.proprietaryConfig.barItemStyle.colorType === 'custom'">
 
                       <SingleColorSelector
                         v-model="combinationCustomColors"
@@ -178,12 +178,12 @@
                   </div>
                   <!-- / 组合颜色 -->
 
-                  <div v-if="config.proprietaryConfig.itemStyle.type === 'linear'">
+                  <div v-if="config.proprietaryConfig.barItemStyle.type === 'linear'">
                     <div class="comment-template__item">
                       <p class="comment-template__leading">渐变类型:</p>
                       <div class="comment-template__inner">
                         <a-select
-                          v-model="config.proprietaryConfig.itemStyle.colorType"
+                          v-model="config.proprietaryConfig.barItemStyle.colorType"
                           @change="colorGroupChange(config)">
                           <a-select-option value="default">默认</a-select-option>
                           <a-select-option value="custom">自定义</a-select-option>
@@ -192,12 +192,12 @@
                     </div>
                     <!-- / 渐变类型 -->
 
-                    <div v-if="config.proprietaryConfig.itemStyle.colorType === 'default'">
+                    <div v-if="config.proprietaryConfig.barItemStyle.colorType === 'default'">
                       <div class="comment-template__item">
                         <p class="comment-template__leading">配色方案:</p>
                         <div class="comment-template__inner">
                           <a-select
-                            v-model="config.proprietaryConfig.itemStyle.colorScheme"
+                            v-model="config.proprietaryConfig.barItemStyle.colorScheme"
                             @change="colorGroupChange(config)">
                             <a-select-option value="default">默认</a-select-option>
                             <a-select-option value="light">亮</a-select-option>
@@ -221,7 +221,7 @@
                     </div>
                     <!-- / 配色方案 -->
 
-                    <div v-if="config.proprietaryConfig.itemStyle.colorType === 'custom'">
+                    <div v-if="config.proprietaryConfig.barItemStyle.colorType === 'custom'">
 
                       <LinearColorSelector
                         v-model="linearCustomColors"
@@ -247,7 +247,7 @@
                         min="0"
                         max="100"
                         @change="$refs.chartProprietaryRef.change()"
-                        v-model.number="config.proprietaryConfig.itemStyle.barBorderRadius[0]" />
+                        v-model.number="config.proprietaryConfig.barItemStyle.barBorderRadius[0]" />
                     </div>
                   </div>
                   <!-- / 左上圆角 -->
@@ -260,7 +260,7 @@
                         min="0"
                         max="100"
                         @change="$refs.chartProprietaryRef.change()"
-                        v-model.number="config.proprietaryConfig.itemStyle.barBorderRadius[1]" />
+                        v-model.number="config.proprietaryConfig.barItemStyle.barBorderRadius[1]" />
                     </div>
                   </div>
                   <!-- / 左上圆角 -->
@@ -273,7 +273,7 @@
                         min="0"
                         max="100"
                         @change="$refs.chartProprietaryRef.change()"
-                        v-model.number="config.proprietaryConfig.itemStyle.barBorderRadius[2]" />
+                        v-model.number="config.proprietaryConfig.barItemStyle.barBorderRadius[2]" />
                     </div>
                   </div>
                   <!-- / 左上圆角 -->
@@ -286,7 +286,7 @@
                         min="0"
                         max="100"
                         @change="$refs.chartProprietaryRef.change()"
-                        v-model.number="config.proprietaryConfig.itemStyle.barBorderRadius[3]" />
+                        v-model.number="config.proprietaryConfig.barItemStyle.barBorderRadius[3]" />
                     </div>
                   </div>
                   <!-- / 左上圆角 -->
@@ -437,16 +437,16 @@ export default {
      */
     getColors (config) {
       const { typeMapping, customMapping } = this
-      if (config.proprietaryConfig.itemStyle.type === 'single') {
+      if (config.proprietaryConfig.barItemStyle.type === 'single') {
         return 'rgba(7,171,253,1)'
       }
 
       let color
-      if (config.proprietaryConfig.itemStyle.colorType === 'custom') {
-        color = [...this[customMapping.get(config.proprietaryConfig.itemStyle.type)]]
+      if (config.proprietaryConfig.barItemStyle.colorType === 'custom') {
+        color = [...this[customMapping.get(config.proprietaryConfig.barItemStyle.type)]]
       } else {
-        const { colors } = this[typeMapping.get(config.proprietaryConfig.itemStyle.type)].find(
-          item => item.type === config.proprietaryConfig.itemStyle.colorScheme
+        const { colors } = this[typeMapping.get(config.proprietaryConfig.barItemStyle.type)].find(
+          item => item.type === config.proprietaryConfig.barItemStyle.colorScheme
         )
         color = [...colors]
       }
@@ -469,7 +469,7 @@ export default {
      * @param config
      */
     colorChange (config) {
-      Object.assign(config.proprietaryConfig.itemStyle, {
+      Object.assign(config.proprietaryConfig.barItemStyle, {
         color: this.getColors(config)
       })
     },

@@ -19,13 +19,12 @@
 
         <div class="comment-template__item">
           <p class="comment-template__leading">显示:</p>
-          <div class="comment-template__inner">
-            <a-select
+          <div class="comment-template__inner comment-template__end">
+            <a-switch
+              checkedChildren="显示"
+              unCheckedChildren="不显示"
               v-model="config.proprietaryConfig.legend.show"
-              @change="change">
-              <a-select-option :value="1">显示</a-select-option>
-              <a-select-option :value="0">不显示</a-select-option>
-            </a-select>
+              @change="change" />
           </div>
         </div>
         <!-- / 显示 -->
@@ -142,6 +141,393 @@
           </div>
         </div>
         <!-- / 文字大小 -->
+
+      </a-collapse-panel>
+      <!-- / 图例 -->
+
+      <a-collapse-panel header="X坐标轴" key="2">
+
+        <div class="comment-template__item">
+          <p class="comment-template__leading">显示:</p>
+          <div class="comment-template__inner comment-template__end">
+            <a-switch
+              checkedChildren="显示"
+              unCheckedChildren="不显示"
+              v-model="config.proprietaryConfig.xAxis.show"
+              @change="change" />
+          </div>
+        </div>
+        <!-- / 显示 -->
+
+        <div v-if="config.proprietaryConfig.xAxis.show">
+          <div class="comment-template__item">
+            <p class="comment-template__leading">位置:</p>
+            <div class="comment-template__inner comment-template__end">
+              <a-radio-group
+                buttonStyle="solid"
+                v-model="config.proprietaryConfig.xAxis.position"
+                @change="change">
+                <a-radio-button value="top">顶部</a-radio-button>
+                <a-radio-button value="bottom">底部</a-radio-button>
+              </a-radio-group>
+            </div>
+          </div>
+          <!-- / 位置 -->
+
+          <div class="comment-template__item">
+            <p class="comment-template__leading">数据类型:</p>
+            <div class="comment-template__inner comment-template__end">
+              <a-radio-group
+                buttonStyle="solid"
+                v-model="config.proprietaryConfig.xAxis.type"
+                @change="change">
+                <a-radio-button value="category">类别</a-radio-button>
+                <a-radio-button value="value">数值</a-radio-button>
+                <a-radio-button value="time">时间</a-radio-button>
+              </a-radio-group>
+            </div>
+          </div>
+          <!-- / 数据类型 -->
+
+          <div class="comment-template__item">
+            <p class="comment-template__leading">名称:</p>
+            <div class="comment-template__inner">
+              <a-input
+                type="text"
+                @change="change"
+                v-model="config.proprietaryConfig.xAxis.name" />
+            </div>
+          </div>
+          <!-- / 名称 -->
+
+          <div class="comment-template__item">
+            <p class="comment-template__leading">名称位置:</p>
+            <div class="comment-template__inner comment-template__end">
+              <a-select
+                v-model="config.proprietaryConfig.xAxis.nameLocation"
+                @change="change">
+                <a-select-option value="start">前</a-select-option>
+                <a-select-option value="center">中</a-select-option>
+                <a-select-option value="end">后</a-select-option>
+              </a-select>
+            </div>
+          </div>
+          <!-- / 名称位置 -->
+
+          <div class="comment-template__item">
+            <p class="comment-template__leading">名称颜色:</p>
+            <div class="comment-template__inner comment-template__end">
+              <ColorPicker
+                v-model="config.proprietaryConfig.xAxis.nameTextStyle.color"
+                @change="change()"/>
+            </div>
+          </div>
+          <!-- / 名称颜色 -->
+
+          <div class="comment-template__item">
+            <p class="comment-template__leading">名称大小:</p>
+            <div class="comment-template__inner">
+              <a-input
+                type="number"
+                @change="change"
+                v-model.number="config.proprietaryConfig.xAxis.nameTextStyle.fontSize" />
+            </div>
+          </div>
+          <!-- / 名称大小 -->
+
+          <div class="comment-template__item">
+            <p class="comment-template__leading">名称粗细:</p>
+            <div class="comment-template__inner comment-template__end">
+              <a-select
+                v-model="config.proprietaryConfig.xAxis.nameTextStyle.fontWeight"
+                @change="change">
+                <a-select-option value="normal">正常</a-select-option>
+                <a-select-option value="lighter">细</a-select-option>
+                <a-select-option value="bold">粗</a-select-option>
+                <a-select-option value="bolder">更粗</a-select-option>
+              </a-select>
+            </div>
+          </div>
+          <!-- / 名称粗细 -->
+
+          <div class="comment-template__item">
+            <p class="comment-template__leading">名称风格:</p>
+            <div class="comment-template__inner comment-template__end">
+              <a-select
+                v-model="config.proprietaryConfig.xAxis.nameTextStyle.fontStyle"
+                @change="change">
+                <a-select-option value="normal">正常</a-select-option>
+                <a-select-option value="italic">斜体</a-select-option>
+              </a-select>
+            </div>
+          </div>
+          <!-- / 名称风格 -->
+
+          <div class="comment-template__item">
+            <p class="comment-template__leading">间距:</p>
+            <div class="comment-template__inner">
+              <a-input
+                type="number"
+                @change="change"
+                v-model.number="config.proprietaryConfig.xAxis.nameGap" />
+            </div>
+          </div>
+          <!-- / 间距 -->
+
+          <div class="comment-template__item">
+            <p class="comment-template__leading">坐标轴线:</p>
+            <div class="comment-template__inner comment-template__end">
+              <a-switch
+                checkedChildren="显示"
+                unCheckedChildren="不显示"
+                v-model="config.proprietaryConfig.xAxis.axisLine.show"
+                @change="change" />
+            </div>
+          </div>
+          <!-- / 坐标轴线 -->
+
+          <div v-if="config.proprietaryConfig.xAxis.axisLine.show">
+            <div class="comment-template__item">
+              <p class="comment-template__leading">轴线颜色:</p>
+              <div class="comment-template__inner comment-template__end">
+                <ColorPicker
+                  v-model="config.proprietaryConfig.xAxis.axisLine.lineStyle.color"
+                  @change="change()"/>
+              </div>
+            </div>
+            <!-- / 轴线颜色 -->
+
+            <div class="comment-template__item">
+              <p class="comment-template__leading">轴线宽度:</p>
+              <div class="comment-template__inner comment-template__end">
+                <a-input
+                  type="number"
+                  @change="change"
+                  v-model.number="config.proprietaryConfig.xAxis.axisLine.lineStyle.width" />
+              </div>
+            </div>
+            <!-- / 轴线宽度 -->
+
+            <div class="comment-template__item">
+              <p class="comment-template__leading">轴线类型:</p>
+              <div class="comment-template__inner comment-template__end">
+                <a-select
+                  v-model="config.proprietaryConfig.xAxis.axisLine.lineStyle.type"
+                  @change="change">
+                  <a-select-option value="solid">直线</a-select-option>
+                  <a-select-option value="dashed">虚线</a-select-option>
+                  <a-select-option value="dotted">点线</a-select-option>
+                </a-select>
+              </div>
+            </div>
+            <!-- / 轴线类型 -->
+
+          </div>
+          <!-- / 坐标轴线设置 -->
+
+          <div class="comment-template__item">
+            <p class="comment-template__leading">坐标刻度:</p>
+            <div class="comment-template__inner comment-template__end">
+              <a-switch
+                checkedChildren="显示"
+                unCheckedChildren="不显示"
+                v-model="config.proprietaryConfig.xAxis.axisTick.show"
+                @change="change" />
+            </div>
+          </div>
+          <!-- / 坐标刻度 -->
+
+          <div v-if="config.proprietaryConfig.xAxis.axisTick.show">
+            <div class="comment-template__item">
+              <p class="comment-template__leading">刻度颜色:</p>
+              <div class="comment-template__inner comment-template__end">
+                <ColorPicker
+                  v-model="config.proprietaryConfig.xAxis.axisTick.lineStyle.color"
+                  @change="change()"/>
+              </div>
+            </div>
+            <!-- / 刻度颜色 -->
+
+            <div class="comment-template__item">
+              <p class="comment-template__leading">刻度长度:</p>
+              <div class="comment-template__inner">
+                <a-input
+                  type="number"
+                  @change="change"
+                  v-model.number="config.proprietaryConfig.xAxis.axisTick.length" />
+              </div>
+            </div>
+            <!-- / 刻度长度 -->
+
+            <div class="comment-template__item">
+              <p class="comment-template__leading">刻度宽度:</p>
+              <div class="comment-template__inner">
+                <a-input
+                  type="number"
+                  @change="change"
+                  v-model.number="config.proprietaryConfig.xAxis.axisTick.lineStyle.width" />
+              </div>
+            </div>
+            <!-- / 刻度长度 -->
+
+            <div class="comment-template__item">
+              <p class="comment-template__leading">刻度类型:</p>
+              <div class="comment-template__inner comment-template__end">
+                <a-select
+                  v-model="config.proprietaryConfig.xAxis.axisTick.lineStyle.type"
+                  @change="change">
+                  <a-select-option value="solid">直线</a-select-option>
+                  <a-select-option value="dashed">虚线</a-select-option>
+                  <a-select-option value="dotted">点线</a-select-option>
+                </a-select>
+              </div>
+            </div>
+            <!-- / 轴线类型 -->
+
+          </div>
+          <!-- / 坐标刻度设置 -->
+
+          <div class="comment-template__item">
+            <p class="comment-template__leading">坐标标签:</p>
+            <div class="comment-template__inner comment-template__end">
+              <a-switch
+                checkedChildren="显示"
+                unCheckedChildren="不显示"
+                v-model="config.proprietaryConfig.xAxis.axisLabel.show"
+                @change="change" />
+            </div>
+          </div>
+          <!-- / 坐标标签 -->
+
+          <div v-if="config.proprietaryConfig.xAxis.axisLabel.show">
+            <div class="comment-template__item">
+              <p class="comment-template__leading">标签角度:</p>
+              <div class="comment-template__inner">
+                <a-input
+                  type="number"
+                  min="-90"
+                  max="90"
+                  @change="change"
+                  v-model.number="config.proprietaryConfig.xAxis.axisLabel.rotate" />
+              </div>
+            </div>
+            <!-- / 标签角度 -->
+
+            <div class="comment-template__item">
+              <p class="comment-template__leading">标签间距:</p>
+              <div class="comment-template__inner">
+                <a-input
+                  type="number"
+                  @change="change"
+                  v-model.number="config.proprietaryConfig.xAxis.axisLabel.margin" />
+              </div>
+            </div>
+            <!-- / 标签间距 -->
+
+            <div class="comment-template__item">
+              <p class="comment-template__leading">标签颜色:</p>
+              <div class="comment-template__inner comment-template__end">
+                <ColorPicker
+                  v-model="config.proprietaryConfig.xAxis.axisLabel.color"
+                  @change="change()"/>
+              </div>
+            </div>
+            <!-- / 刻度颜色 -->
+
+            <div class="comment-template__item">
+              <p class="comment-template__leading">标签大小:</p>
+              <div class="comment-template__inner">
+                <a-input
+                  type="number"
+                  @change="change"
+                  v-model.number="config.proprietaryConfig.xAxis.axisLabel.fontSize" />
+              </div>
+            </div>
+            <!-- / 标签大小 -->
+
+            <div class="comment-template__item">
+              <p class="comment-template__leading">标签粗细:</p>
+              <div class="comment-template__inner comment-template__end">
+                <a-select
+                  v-model="config.proprietaryConfig.xAxis.axisLabel.fontWeight"
+                  @change="change">
+                  <a-select-option value="normal">正常</a-select-option>
+                  <a-select-option value="lighter">细</a-select-option>
+                  <a-select-option value="bold">粗</a-select-option>
+                  <a-select-option value="bolder">更粗</a-select-option>
+                </a-select>
+              </div>
+            </div>
+            <!-- / 标签粗细 -->
+
+            <div class="comment-template__item">
+              <p class="comment-template__leading">标签风格:</p>
+              <div class="comment-template__inner comment-template__end">
+                <a-select
+                  v-model="config.proprietaryConfig.xAxis.axisLabel.fontStyle"
+                  @change="change">
+                  <a-select-option value="normal">正常</a-select-option>
+                  <a-select-option value="italic">斜体</a-select-option>
+                </a-select>
+              </div>
+            </div>
+            <!-- / 标签风格 -->
+
+          </div>
+          <!-- / 坐标刻度设置 -->
+
+          <div class="comment-template__item">
+            <p class="comment-template__leading">分隔线:</p>
+            <div class="comment-template__inner comment-template__end">
+              <a-switch
+                checkedChildren="显示"
+                unCheckedChildren="不显示"
+                v-model="config.proprietaryConfig.xAxis.splitLine.show"
+                @change="change" />
+            </div>
+          </div>
+          <!-- / 分隔线 -->
+
+          <div v-if="config.proprietaryConfig.xAxis.splitLine.show">
+            <div class="comment-template__item">
+              <p class="comment-template__leading">隔线颜色:</p>
+              <div class="comment-template__inner comment-template__end">
+                <ColorPicker
+                  v-model="config.proprietaryConfig.xAxis.splitLine.lineStyle.color"
+                  @change="change()"/>
+              </div>
+            </div>
+            <!-- / 隔线颜色 -->
+
+            <div class="comment-template__item">
+              <p class="comment-template__leading">隔线宽度:</p>
+              <div class="comment-template__inner">
+                <a-input
+                  type="number"
+                  @change="change"
+                  v-model.number="config.proprietaryConfig.xAxis.splitLine.lineStyle.width" />
+              </div>
+            </div>
+            <!-- / 隔线宽度 -->
+
+            <div class="comment-template__item">
+              <p class="comment-template__leading">隔线类型:</p>
+              <div class="comment-template__inner comment-template__end">
+                <a-select
+                  v-model="config.proprietaryConfig.xAxis.splitLine.lineStyle.type"
+                  @change="change">
+                  <a-select-option value="solid">直线</a-select-option>
+                  <a-select-option value="dashed">虚线</a-select-option>
+                  <a-select-option value="dotted">点线</a-select-option>
+                </a-select>
+              </div>
+            </div>
+            <!-- / 轴线类型 -->
+
+          </div>
+          <!-- / 分隔线设置 -->
+
+        </div>
 
       </a-collapse-panel>
       <!-- / 图例 -->

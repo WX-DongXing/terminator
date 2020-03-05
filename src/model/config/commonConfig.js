@@ -1,4 +1,14 @@
 /**
+* 公共配置
+* Author: dong xing
+* Date: 2020/3/5
+* Time: 16:53
+* Email: dong.xing@outlook.com
+*/
+
+import _ from 'lodash'
+
+/**
  * 边框类型
  */
 class BorderTypeOption {
@@ -49,5 +59,34 @@ export default class CommonConfig {
     this.backgroundColor = backgroundColor
     this.border = new Border(border)
     this.padding = padding
+  }
+
+  /**
+   * 获取布局配置
+   */
+  getOption () {
+    return _.cloneDeep({
+      grid: [
+        {
+          show: true,
+          top: 0,
+          right: 0,
+          bottom: 0,
+          left: 0,
+          backgroundColor: this.backgroundColor,
+          borderColor: this.border.color,
+          borderWidth: this.border.width
+        },
+        {
+          show: true,
+          top: 30 + this.padding[0],
+          right: 30 + this.padding[1],
+          bottom: 30 + this.padding[2],
+          left: 30 + this.padding[3],
+          borderWidth: 0,
+          backgroundColor: 'transparent'
+        }
+      ]
+    })
   }
 }
