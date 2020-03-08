@@ -1,3 +1,11 @@
+/**
+* vue-router 引入
+* Author: dong xing
+* Date: 2020/3/8
+* Time: 17:40
+* Email: dong.xing@outlook.com
+*/
+
 import Vue from 'vue'
 import VueRouter from 'vue-router'
 import Design from '../views/design'

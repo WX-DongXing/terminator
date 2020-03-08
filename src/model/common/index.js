@@ -37,4 +37,33 @@ class TopologyIcon {
   }
 }
 
-export { Range, TopologyIcon }
+/**
+ * 边框类型
+ */
+class BorderTypeOption {
+  constructor (name, value) {
+    this.name = name
+    this.value = value
+  }
+}
+
+/**
+ * 边框
+ */
+class Border {
+  constructor ({
+    type = 'solid',
+    color = '#333',
+    width = 0
+  }) {
+    this.type = type
+    this.typeOptions = [
+      new BorderTypeOption('无边框', 'none'),
+      new BorderTypeOption('直线', 'solid')
+    ]
+    this.color = color
+    this.width = width
+  }
+}
+
+export { Range, TopologyIcon, Border }
