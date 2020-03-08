@@ -79,7 +79,7 @@
 视图设计器分为组件库区域，设计区域，窗口配置区域以及模型
 
 #### 组件库
-##### 目录：src/views/design/components/template
+##### 目录：src/views/design/modules/template
 
 * 内容：
     * 组件库视图
@@ -89,7 +89,7 @@
     * 将部件模板以及拓扑节点拖拽至视图区域行为
 
 #### 设计区域
-##### 目录：src/views/design/components/screen
+##### 目录：src/views/design/modules/screen
 
 * 内容：
     * 设计器画板视图
@@ -100,7 +100,7 @@
     * 调整部件基础属性（大小，位置）行为
     
 #### 配置区域
-##### 目录：src/views/design/components/config
+##### 目录：src/views/design/modules/config
 
 * 内容：
     * 画板及部件的配置视图

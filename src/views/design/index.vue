@@ -30,9 +30,9 @@
 </template>
 
 <script>
-import Screen from './components/screen/index'
-import Template from './components/template/index'
-import Config from './components/config/index'
+import Screen from './modules/screen/index'
+import Template from './modules/template/index'
+import Config from './modules/config/index'
 
 export default {
   name: 'Design',

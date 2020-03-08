@@ -220,9 +220,9 @@ import CommonTemplate from '../common/index'
 import ChartProprietaryTemplate from '../chartProprietary/index'
 import DataSourceTemplate from '../dataSource/index'
 import WrapperService from '@/components/wrapper/WrapperService'
-import CommonNodeTemplate from '@/views/design/components/config/nodes'
-import CommonEdgeTemplate from '@/views/design/components/config/edges'
-import EdgeTemplate from '@/views/design/components/config/edges/edge'
+import CommonNodeTemplate from '@/views/design/modules/config/nodes'
+import CommonEdgeTemplate from '@/views/design/modules/config/edges'
+import EdgeTemplate from '@/views/design/modules/config/edges/edge'
 
 export default {
   name: 'Topology',
