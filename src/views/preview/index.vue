@@ -8,7 +8,7 @@
 
 <template>
   <div class="preview">
-    <Renderer :view="view" />
+    <Renderer :view="preview" />
   </div>
 </template>
 
@@ -21,7 +21,10 @@ export default {
     Renderer
   },
   computed: {
-    ...mapState('screen', ['view'])
+    ...mapState('screen', ['view']),
+    preview () {
+      return this.view.getOption()
+    }
   }
 }
 </script>

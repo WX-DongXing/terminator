@@ -40,4 +40,20 @@ export default class View {
       yRange: new Range(this.rect.y, this.rect.y + this.config.commonConfig.height * this.scale)
     }
   }
+
+  /**
+   * 获取视图配置
+   * @returns {{widgets: *[], config: Config}}
+   */
+  getOption () {
+    const { config, widgets } = this
+    return {
+      config,
+      widgets: widgets.map(item => {
+        // 删除部件渲染对象，以持久化数据
+        delete item.render
+        return item
+      })
+    }
+  }
 }
