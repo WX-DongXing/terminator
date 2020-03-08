@@ -1,5 +1,5 @@
 import Factory from '../factory/factory'
-import Index from './commonConfig'
+import CommonConfig from './commonConfig'
 import DataConfig from './dataConfig'
 
 // 图表专有属性工厂
@@ -11,7 +11,7 @@ class Config {
   }) {
     this.category = category
     this.type = type
-    this.commonConfig = new Index(commonConfig || {})
+    this.commonConfig = new CommonConfig(commonConfig || {})
     this.proprietaryConfig = chartProprietaryConfigFactory.create({
       type,
       proprietaryConfig

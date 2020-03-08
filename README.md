@@ -60,7 +60,7 @@
     │  └─modules
     └─views  视图模块
         ├─design  视图设计模块
-        │  └─components  
+        │  └─modules  
         │      ├─config  配置区块视图
         │      │  ├─chartProprietary  图表专有配置视图
         │      │  ├─charts  图表配置视图

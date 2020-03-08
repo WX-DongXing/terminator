@@ -12,7 +12,7 @@ import { Border } from '../../common'
 /**
  * 通用配置
  */
-export default class Index {
+export default class CommonConfig {
   constructor ({
     width = 0,
     height = 0,
