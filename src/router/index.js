@@ -15,7 +15,7 @@ import Exception404 from '../views/exception/404'
 Vue.use(VueRouter)
 
 const router = new VueRouter({
-  mode: 'history',
+  mode: 'hash',
   routes: [
     { path: '', redirect: './design' },
     { path: '/design', component: Design },
