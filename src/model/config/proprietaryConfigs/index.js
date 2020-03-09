@@ -50,6 +50,22 @@ class LineStyle {
 }
 
 /**
+ * 通用元素样式
+ */
+class ItemStyle {
+  constructor ({
+    color = 'rgba(255, 0, 0, 1)',
+    borderColor = '#000',
+    borderWidth = 0,
+    borderType = 'solid'
+  }) {
+    this.color = color
+    this.borderWidth = borderWidth
+    this.borderType = borderType
+  }
+}
+
+/**
  * 图形样式
  * @param type 类型 'single' | 'combination' | 'linear'
  * @param colorType 颜色类型 'default' | 'custom'
@@ -272,9 +288,10 @@ class YAixs extends Aixs {
 }
 
 export {
+  BarItemStyle,
+  ItemStyle,
   Legend,
   LineStyle,
-  BarItemStyle,
   XAixs,
   YAixs
 }

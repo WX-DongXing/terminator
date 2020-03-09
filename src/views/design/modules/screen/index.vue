@@ -156,14 +156,12 @@ export default {
         startWith({ type: 'init' })
       )
       .subscribe((event) => {
-        console.log(event)
         // 更新滚动条
         this.perfectScrollBar && this.perfectScrollBar.update()
 
         if (event.type === 'init' && !this.view.config) {
           this.setInitStyle()
         } else {
-          console.log('here')
           this.setStyle(event)
         }
 

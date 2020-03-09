@@ -22,12 +22,11 @@ export default class LineChart extends Chart {
    */
   mappingOption ({ commonConfig, proprietaryConfig, dataConfig }) {
     const { grid } = commonConfig.getOption()
-    const { smooth, legend, lineStyle, xAxis, yAxis } = _.cloneDeep(proprietaryConfig)
+    const { legend, xAxis, yAxis, ...options } = _.cloneDeep(proprietaryConfig)
     const { sourceType, staticData } = dataConfig
     const line = {
       type: 'line',
-      smooth,
-      lineStyle
+      ...options
     }
     let series = []
 

@@ -16,12 +16,12 @@ const charts = [
   {
     category: 'CHART', type: 'Bar', name: '柱形图', icon: 'bar-chart', width: 300, height: 300
   },
-  {
-    category: 'CHART', type: 'Pie', name: '饼图', icon: 'pie-chart', width: 300, height: 300
-  },
-  {
-    category: 'CHART', type: 'Area', name: '区域图', icon: 'area-chart', width: 300, height: 300
-  },
+  // {
+  //   category: 'CHART', type: 'Pie', name: '饼图', icon: 'pie-chart', width: 300, height: 300
+  // },
+  // {
+  //   category: 'CHART', type: 'Area', name: '区域图', icon: 'area-chart', width: 300, height: 300
+  // },
   {
     category: 'CHART', type: 'Topology', name: '拓扑图', icon: 'branches', width: 800, height: 600
   }
@@ -29,9 +29,9 @@ const charts = [
 
 // 元素模板
 const elements = [
-  {
-    category: 'ELEMENT', type: 'text', name: '文本', icon: 'font-colors', width: 300, height: 200
-  }
+  // {
+  //   category: 'ELEMENT', type: 'text', name: '文本', icon: 'font-colors', width: 300, height: 200
+  // }
 ]
 
 // 可拓展模板
