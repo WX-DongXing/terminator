@@ -174,13 +174,13 @@
 <script>
 import '@/assets/less/template.less'
 import _ from 'lodash'
-import anime from 'animejs'
 import { fromEvent } from 'rxjs'
 import { takeWhile, map, filter, switchMap } from 'rxjs/operators'
 import { mapState, mapMutations } from 'vuex'
 import { ScreenMutations } from '@/store/modules/screen'
 import View from '@/model/view'
 import ColorPicker from '@/components/colorPicker/index.vue'
+import ViewService from './index'
 
 export default {
   name: 'ViewConfig',
@@ -188,7 +188,8 @@ export default {
     ColorPicker
   },
   data: () => ({
-    isSubscribed: true
+    isSubscribed: true,
+    viewService: new ViewService()
   }),
   mounted () {
     fromEvent(this.$refs.screenshot.$el, 'paste')
@@ -221,39 +222,7 @@ export default {
       this.setView({
         view: new View(this.targetView)
       })
-      const { el, gauge, scale } = this.view
-      const {
-        commonConfig: { height, width },
-        proprietaryConfig: {
-          mode,
-          backgroundColor,
-          backgroundImage,
-          backgroundRepeat,
-          backgroundSize
-        }
-      } = this.targetView.config
-
-      anime.set(el, {
-        backgroundImage: mode === 'image' ? `url(${backgroundImage})` : '',
-        backgroundRepeat,
-        backgroundSize
-      })
-
-      anime({
-        targets: el,
-        width,
-        height,
-        backgroundColor: mode === 'color' ? backgroundColor : '',
-        duration: 150,
-        easing: 'linear'
-      })
-      anime({
-        targets: gauge,
-        width: width * scale + 32,
-        height: height * scale + 32,
-        duration: 150,
-        easing: 'linear'
-      })
+      this.viewService.next('adjust')
     }
   },
   destroyed () {

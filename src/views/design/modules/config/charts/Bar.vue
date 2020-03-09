@@ -120,7 +120,7 @@
                     <div class="comment-template__inner">
                       <ColorPicker
                         v-model="config.proprietaryConfig.barItemStyle.color"
-                        @change="$refs.chartProprietaryRef.change()"/>
+                        @change="singleColorChange(config)"/>
                     </div>
                   </div>
                   <!-- / 单一颜色 -->
@@ -336,6 +336,7 @@ export default {
     LinearColorSelector
   },
   data: () => ({
+    singleColor: 'rgba(7,171,253,1)',
     combinationColors: [
       {
         type: 'default',
@@ -438,7 +439,7 @@ export default {
     getColors (config) {
       const { typeMapping, customMapping } = this
       if (config.proprietaryConfig.barItemStyle.type === 'single') {
-        return 'rgba(7,171,253,1)'
+        return this.singleColor
       }
 
       let color
@@ -451,6 +452,10 @@ export default {
         color = [...colors]
       }
       return color
+    },
+    singleColorChange (config) {
+      this.singleColor = config.proprietaryConfig.barItemStyle.color
+      this.$refs.chartProprietaryRef.change()
     },
     /**
      * 柱条宽度类型更改
