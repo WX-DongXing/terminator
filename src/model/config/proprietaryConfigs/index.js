@@ -55,11 +55,12 @@ class LineStyle {
 class ItemStyle {
   constructor ({
     color = 'rgba(255, 0, 0, 1)',
-    borderColor = '#000',
-    borderWidth = 0,
+    borderColor = 'rgba(0, 0, 0, 1)',
+    borderWidth = 1,
     borderType = 'solid'
   }) {
     this.color = color
+    this.borderColor = borderColor
     this.borderWidth = borderWidth
     this.borderType = borderType
   }

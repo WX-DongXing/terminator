@@ -9,7 +9,7 @@
 <template>
   <div class="design">
     <div class="header">
-      <p>Terminator</p>
+      <p>Terminator - 数据可视化设计器</p>
     </div>
     <div class="content">
       <transition name="panel">
