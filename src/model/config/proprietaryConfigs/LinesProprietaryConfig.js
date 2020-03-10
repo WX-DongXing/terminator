@@ -6,7 +6,11 @@
 * Email: dong.xing@outlook.com
 */
 
-import { LineStyle, Legend, XAixs, YAixs, ItemStyle } from './index'
+import _ from 'lodash'
+import {
+  LineStyle, Legend, XAixs,
+  YAixs, ItemStyle, AreaStyle
+} from './index'
 
 /**
  * 折现图专有属性配置
@@ -26,6 +30,7 @@ export default class LinesProprietaryConfig {
     symbolRotate = 0,
     lineStyle = {},
     itemStyle = {},
+    areaStyle = {},
     legend = {},
     xAxis = {},
     yAxis = {}
@@ -38,8 +43,20 @@ export default class LinesProprietaryConfig {
     this.symbolRotate = symbolRotate
     this.lineStyle = new LineStyle(lineStyle)
     this.itemStyle = new ItemStyle(itemStyle)
+    this.areaStyle = new AreaStyle(areaStyle)
     this.legend = new Legend(legend)
     this.xAxis = new XAixs(xAxis)
     this.yAxis = new YAixs(yAxis)
+  }
+
+  /**
+   * 获取折线图专有配置
+   */
+  getOption () {
+    return Object.assign(_.cloneDeep(this), {
+      areaStyle: this.areaStyle.getOption(),
+      xAxis: this.xAxis.getOption(),
+      yAxis: this.yAxis.getOption()
+    })
   }
 }

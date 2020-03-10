@@ -189,90 +189,118 @@
           </div>
           <!-- / 数据类型 -->
 
-          <div class="comment-template__item">
-            <p class="comment-template__leading">名称:</p>
-            <div class="comment-template__inner">
-              <a-input
-                type="text"
-                @change="change"
-                v-model="config.proprietaryConfig.xAxis.name" />
+          <div class="comment-template__item" v-if="config.proprietaryConfig.xAxis.type === 'category'">
+            <p class="comment-template__leading">数轴留白:</p>
+            <div class="comment-template__inner comment-template__end">
+              <a-switch
+                checkedChildren="留白"
+                unCheckedChildren="不留白"
+                v-model="config.proprietaryConfig.xAxis.boundaryGap"
+                @change="change" />
             </div>
+          </div>
+          <!-- / 数轴留白 -->
+
+          <div class="comment-template__item">
+            <p class="comment-template__leading">显示名称:</p>
+            <div class="comment-template__inner comment-template__end">
+              <a-switch
+                checkedChildren="显示"
+                unCheckedChildren="不显示"
+                v-model="config.proprietaryConfig.xAxis.showName"
+                @change="change" />
+            </div>
+          </div>
+          <!-- / 显示名称 -->
+
+          <div v-if="config.proprietaryConfig.xAxis.showName">
+            <div class="comment-template__item">
+              <p class="comment-template__leading">名称:</p>
+              <div class="comment-template__inner">
+                <a-input
+                  type="text"
+                  @change="change"
+                  v-model="config.proprietaryConfig.xAxis.name" />
+              </div>
+            </div>
+            <!-- / 名称 -->
+
+            <div class="comment-template__item">
+              <p class="comment-template__leading">名称位置:</p>
+              <div class="comment-template__inner comment-template__end">
+                <a-select
+                  v-model="config.proprietaryConfig.xAxis.nameLocation"
+                  @change="change">
+                  <a-select-option value="start">前</a-select-option>
+                  <a-select-option value="center">中</a-select-option>
+                  <a-select-option value="end">后</a-select-option>
+                </a-select>
+              </div>
+            </div>
+            <!-- / 名称位置 -->
+
+            <div class="comment-template__item">
+              <p class="comment-template__leading">名称颜色:</p>
+              <div class="comment-template__inner comment-template__end">
+                <ColorPicker
+                  v-model="config.proprietaryConfig.xAxis.nameTextStyle.color"
+                  @change="change()"/>
+              </div>
+            </div>
+            <!-- / 名称颜色 -->
+
+            <div class="comment-template__item">
+              <p class="comment-template__leading">名称大小:</p>
+              <div class="comment-template__inner">
+                <a-input
+                  type="number"
+                  @change="change"
+                  v-model.number="config.proprietaryConfig.xAxis.nameTextStyle.fontSize" />
+              </div>
+            </div>
+            <!-- / 名称大小 -->
+
+            <div class="comment-template__item">
+              <p class="comment-template__leading">名称粗细:</p>
+              <div class="comment-template__inner comment-template__end">
+                <a-select
+                  v-model="config.proprietaryConfig.xAxis.nameTextStyle.fontWeight"
+                  @change="change">
+                  <a-select-option value="normal">正常</a-select-option>
+                  <a-select-option value="lighter">细</a-select-option>
+                  <a-select-option value="bold">粗</a-select-option>
+                  <a-select-option value="bolder">更粗</a-select-option>
+                </a-select>
+              </div>
+            </div>
+            <!-- / 名称粗细 -->
+
+            <div class="comment-template__item">
+              <p class="comment-template__leading">名称风格:</p>
+              <div class="comment-template__inner comment-template__end">
+                <a-select
+                  v-model="config.proprietaryConfig.xAxis.nameTextStyle.fontStyle"
+                  @change="change">
+                  <a-select-option value="normal">正常</a-select-option>
+                  <a-select-option value="italic">斜体</a-select-option>
+                </a-select>
+              </div>
+            </div>
+            <!-- / 名称风格 -->
+
+            <div class="comment-template__item">
+              <p class="comment-template__leading">间距:</p>
+              <div class="comment-template__inner">
+                <a-input
+                  type="number"
+                  @change="change"
+                  v-model.number="config.proprietaryConfig.xAxis.nameGap" />
+              </div>
+            </div>
+            <!-- / 间距 -->
+
           </div>
           <!-- / 名称 -->
-
-          <div class="comment-template__item">
-            <p class="comment-template__leading">名称位置:</p>
-            <div class="comment-template__inner comment-template__end">
-              <a-select
-                v-model="config.proprietaryConfig.xAxis.nameLocation"
-                @change="change">
-                <a-select-option value="start">前</a-select-option>
-                <a-select-option value="center">中</a-select-option>
-                <a-select-option value="end">后</a-select-option>
-              </a-select>
-            </div>
-          </div>
-          <!-- / 名称位置 -->
-
-          <div class="comment-template__item">
-            <p class="comment-template__leading">名称颜色:</p>
-            <div class="comment-template__inner comment-template__end">
-              <ColorPicker
-                v-model="config.proprietaryConfig.xAxis.nameTextStyle.color"
-                @change="change()"/>
-            </div>
-          </div>
-          <!-- / 名称颜色 -->
-
-          <div class="comment-template__item">
-            <p class="comment-template__leading">名称大小:</p>
-            <div class="comment-template__inner">
-              <a-input
-                type="number"
-                @change="change"
-                v-model.number="config.proprietaryConfig.xAxis.nameTextStyle.fontSize" />
-            </div>
-          </div>
-          <!-- / 名称大小 -->
-
-          <div class="comment-template__item">
-            <p class="comment-template__leading">名称粗细:</p>
-            <div class="comment-template__inner comment-template__end">
-              <a-select
-                v-model="config.proprietaryConfig.xAxis.nameTextStyle.fontWeight"
-                @change="change">
-                <a-select-option value="normal">正常</a-select-option>
-                <a-select-option value="lighter">细</a-select-option>
-                <a-select-option value="bold">粗</a-select-option>
-                <a-select-option value="bolder">更粗</a-select-option>
-              </a-select>
-            </div>
-          </div>
-          <!-- / 名称粗细 -->
-
-          <div class="comment-template__item">
-            <p class="comment-template__leading">名称风格:</p>
-            <div class="comment-template__inner comment-template__end">
-              <a-select
-                v-model="config.proprietaryConfig.xAxis.nameTextStyle.fontStyle"
-                @change="change">
-                <a-select-option value="normal">正常</a-select-option>
-                <a-select-option value="italic">斜体</a-select-option>
-              </a-select>
-            </div>
-          </div>
-          <!-- / 名称风格 -->
-
-          <div class="comment-template__item">
-            <p class="comment-template__leading">间距:</p>
-            <div class="comment-template__inner">
-              <a-input
-                type="number"
-                @change="change"
-                v-model.number="config.proprietaryConfig.xAxis.nameGap" />
-            </div>
-          </div>
-          <!-- / 间距 -->
 
           <div class="comment-template__item">
             <p class="comment-template__leading">坐标轴线:</p>

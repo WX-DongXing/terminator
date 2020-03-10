@@ -15,12 +15,13 @@ export default class BarChart extends Chart {
   /**
    * 映射成 echarts 配置项
    */
-  // eslint-disable-next-line class-methods-use-this
   mappingOption ({ commonConfig, proprietaryConfig, dataConfig }) {
     const { grid } = commonConfig.getOption()
-    const { barType, legend, itemStyle, barWidth, xAxis, yAxis } = proprietaryConfig.getOption()
+    const {
+      barType, legend, barWidth, xAxis, yAxis,
+      itemStyle: { color, ...otherItemStyle }
+    } = proprietaryConfig.getOption()
     const { sourceType, staticData } = dataConfig
-    const { color, ...otherItemStyle } = itemStyle
     let series = []
 
     // 总体配置

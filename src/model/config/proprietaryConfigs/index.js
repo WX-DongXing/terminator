@@ -5,6 +5,7 @@
 * Time: 6:04 下午
 * Email: dong.xing@outlook.com
 */
+import _ from 'lodash'
 
 /**
  * 图例
@@ -63,6 +64,60 @@ class ItemStyle {
     this.borderColor = borderColor
     this.borderWidth = borderWidth
     this.borderType = borderType
+  }
+}
+
+/**
+ * 区域样式
+ * @param showArea 显示区域样式
+ * @param colorType 颜色类型 single | linear
+ * @param color 区域颜色
+ */
+class AreaStyle {
+  constructor ({
+    show = false,
+    colorType = 'single',
+    color = 'rgba(0, 0, 0, 1)'
+  }) {
+    this.show = show
+    this.colorType = colorType
+    this.color = color
+  }
+
+  getOption () {
+    if (!this.show) {
+      return null
+    }
+    let color
+    switch (this.colorType) {
+      case 'single':
+        color = this.color
+        break
+      case 'linear':
+        color = {
+          type: 'linear',
+          x: 1,
+          y: 0,
+          x2: 1,
+          y2: 1,
+          colorStops: [
+            {
+              offset: 0,
+              color: this.color.start
+            },
+            {
+              offset: 1,
+              color: this.color.end
+            }
+          ]
+        }
+        break
+      default:
+        break
+    }
+    return {
+      color
+    }
   }
 }
 
@@ -220,6 +275,7 @@ class SplitLine {
  * @param show 是否显示
  * @param position x轴位置 'bottom' | 'top'
  * @param type 坐标轴数据类型 'category' | 'value' | 'time'
+ * @param boundaryGap 坐标轴留白 true | false | []
  * @param name 坐标轴名称 'category' | 'value' | 'time'
  * @param nameLocation 坐标轴名称位置 'end' | 'center' | 'start'
  * @param nameTextStyle 坐标轴名称样式
@@ -234,6 +290,8 @@ class Aixs {
     aixsName = '',
     show = true,
     type = 'category',
+    boundaryGap = true,
+    showName = false,
     name = '',
     nameLocation = 'end',
     nameTextStyle = {},
@@ -246,6 +304,8 @@ class Aixs {
   }) {
     this.show = show
     this.type = type
+    this.boundaryGap = boundaryGap
+    this.showName = showName
     this.name = name
     this.nameLocation = nameLocation
     this.nameTextStyle = new TextStyle(nameTextStyle)
@@ -255,6 +315,16 @@ class Aixs {
     this.axisTick = new AxisTick(axisTick)
     this.axisLabel = new AxisLabel(axisLabel)
     this.splitLine = new SplitLine(splitLine)
+  }
+
+  /**
+   * 获取坐标轴配置
+   * @returns {any}
+   */
+  getOption () {
+    return Object.assign(_.cloneDeep(this), {
+      name: this.showName ? this.name : ''
+    })
   }
 }
 
@@ -289,6 +359,7 @@ class YAixs extends Aixs {
 }
 
 export {
+  AreaStyle,
   BarItemStyle,
   ItemStyle,
   Legend,

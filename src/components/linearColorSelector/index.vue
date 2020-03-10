@@ -32,7 +32,7 @@
 </template>
 
 <script>
-import ColorPicker from '@/components/colorPicker/index.vue'
+import ColorPicker from '@/components/colorPicker/index'
 
 export default {
   name: 'LinearColorSelector',

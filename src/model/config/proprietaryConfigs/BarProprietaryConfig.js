@@ -38,14 +38,8 @@ export default class BarProprietaryConfig {
    * 获取柱形图专有配置
    */
   getOption () {
-    return _.cloneDeep({
-      barType: this.barType,
-      barWidthType: this.barWidthType,
-      barWidth: this.barWidth,
-      legend: this.legend,
-      itemStyle: this.barItemStyle.getOption(),
-      xAxis: this.xAxis,
-      yAxis: this.yAxis
+    return Object.assign(_.cloneDeep(this), {
+      itemStyle: this.barItemStyle.getOption()
     })
   }
 }
