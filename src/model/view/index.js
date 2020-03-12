@@ -1,3 +1,12 @@
+/**
+* 视图对象
+* Author: dong xing
+* Date: 2020/3/10
+* Time: 18:07
+* Email: dong.xing@outlook.com
+*/
+
+import uuid from 'uuid/v4'
 import Config from '../config'
 import { Range } from '../common'
 
@@ -19,6 +28,9 @@ export default class View {
     el,
     gauge,
     parent,
+    id = 'view-' + uuid(),
+    name = '',
+    views = [],
     widgets = [],
     scale = 1,
     cover = '',
@@ -27,7 +39,10 @@ export default class View {
     this.el = el
     this.gauge = gauge
     this.parent = parent
+    this.id = id
     this.rect = el.getBoundingClientRect()
+    this.name = name
+    this.views = views
     this.widgets = widgets
     this.scale = scale
     this.cover = cover
@@ -46,9 +61,12 @@ export default class View {
    * @returns {{widgets: *[], config: Config}}
    */
   getOption () {
-    const { config, widgets } = this
+    const { id, name, config, views, widgets } = this
     return {
+      id,
+      name,
       config,
+      views,
       widgets: widgets.map(item => {
         // 删除部件渲染对象，以持久化数据
         delete item.render

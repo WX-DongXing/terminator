@@ -14,9 +14,34 @@
         </span>
         <a-button v-else type="link" icon="appstore">组件库</a-button>
       </div>
-      <router-link to="/preview">
-        <a-button type="primary">预览</a-button>
-      </router-link>
+      <div class="screen__bar">
+        <div class="screen__front">
+          <a-button-group>
+            <a-button type="primary" icon="save" @click="save">保存</a-button>
+            <a-button type="primary" icon="export" @click="exportFile">导出</a-button>
+            <a-upload
+              name="file"
+              :before-upload="importConfig"
+              :show-upload-list="false"
+              :multiple="false"
+            >
+              <a-button type="primary" icon="upload">导入</a-button>
+            </a-upload>
+            <a-popconfirm
+              title="确定清空画板？"
+              @confirm="clear"
+              okText="确定"
+              cancelText="取消">
+              <a-button type="danger" icon="delete">清空</a-button>
+            </a-popconfirm>
+          </a-button-group>
+        </div>
+        <div class="screen__back">
+          <router-link to="/preview">
+            <a-button type="primary" icon="eye">预览</a-button>
+          </router-link>
+        </div>
+      </div>
       <div class="screen__control" @click="panelControl('right')">
         <span v-if="rightPanelExpand">
           <a-icon type="menu-unfold" />
@@ -93,11 +118,13 @@ import anime from 'animejs'
 import _ from 'lodash'
 import PerfectScrollbar from 'perfect-scrollbar'
 import { ScreenMutations } from '@/store/modules/screen'
+import { downloadFile } from '@/utils'
 import View from '@/model/view'
+import WidgetModel from '@/model/widget'
 import ViewService from '../config/view'
-import Wrapper from '@/components/wrapper/index'
-import Widget from '@/components/widget/index'
-import AdjustMixins from '@/components/wrapper/AdjustMixins.vue'
+import Wrapper from '@/components/wrapper'
+import Widget from '@/components/widget'
+import AdjustMixins from '@/components/wrapper/AdjustMixins'
 import WrapperService from '@/components/wrapper/WrapperService'
 import 'perfect-scrollbar/css/perfect-scrollbar.css'
 
@@ -131,7 +158,9 @@ export default {
     wrapperChange$: new WrapperService().change$,
     viewChange$: new ViewService().change$,
     // 滚动条
-    perfectScrollBar: null
+    perfectScrollBar: null,
+    // 视图配置
+    viewOption: null
   }),
   mounted () {
     const { platform } = navigator
@@ -159,12 +188,6 @@ export default {
         // 更新滚动条
         this.perfectScrollBar && this.perfectScrollBar.update()
 
-        if (event.type === 'init' && !this.view.config) {
-          this.setInitStyle()
-        } else {
-          this.setStyle(event)
-        }
-
         // 设置屏幕对象
         this.setView({
           view: new View(Object.assign(
@@ -177,6 +200,14 @@ export default {
             }
           ))
         })
+
+        // 初始化场景进行样式设置
+        if (event.type === 'init' && !this.view.config) {
+          this.setInitStyle()
+        } else {
+          // 其他场景中，设置画板样式
+          this.setStyle(event)
+        }
       })
 
     // 选择激活的部件
@@ -314,6 +345,9 @@ export default {
         this.change$.next({ type: 'resize' })
       }, 400)
     },
+    /**
+     * 设置初始化样式
+     */
     setInitStyle () {
       const { width, height } = this.$refs.page.getBoundingClientRect()
       const xScale = ((width - 32) / this.width)
@@ -332,9 +366,16 @@ export default {
         duration: 150,
         easing: 'linear'
       })
+      // 更新视图缩放
+      this.setView({
+        view: Object.assign(new View({
+          ...this.view,
+          scale: this.scale
+        }))
+      })
     },
     /**
-     * 设置视图缩放及尺寸
+     * 设置视图样式
      * @param event
      */
     setStyle (event) {
@@ -370,6 +411,14 @@ export default {
         }
       }
 
+      // 更新视图缩放
+      this.setView({
+        view: Object.assign(new View({
+          ...this.view,
+          scale: this.scale
+        }))
+      })
+
       anime.set(this.$refs.view, {
         backgroundImage: mode === 'image' ? `url(${backgroundImage})` : '',
         backgroundRepeat,
@@ -392,6 +441,59 @@ export default {
         duration: 150,
         easing: 'linear'
       })
+    },
+    /**
+     * 保存视图配置
+     */
+    save () {
+      this.viewOptions = this.view.getOption()
+    },
+    /**
+     * 导入视图配置
+     * @param file
+     * @returns {boolean}
+     */
+    importConfig (file) {
+      const reader = new FileReader()
+      reader.readAsText(file)
+      reader.onload = () => {
+        this.viewOptions = _.omit(JSON.parse(reader.result), ['id', 'name'])
+        // 实例化部件对象
+        const widgets = this.viewOptions.widgets.map(config => new WidgetModel(config))
+        // 更新视图对象
+        this.setView({
+          view: new View({
+            ...this.view,
+            ...this.viewOptions,
+            widgets
+          })
+        })
+        // 设置视图样式
+        this.setStyle({ type: 'input' })
+      }
+      return false
+    },
+    /**
+     * 导出视图配置至json文件
+     */
+    exportFile () {
+      const option = this.view.getOption()
+      downloadFile(`${this.view.id}.json`, JSON.stringify(option))
+    },
+    /**
+     * 清空画板
+     */
+    clear () {
+      // 清空部件列表
+      this.setView({
+        view: new View({ ..._.pick(this.view, ['id', 'el', 'gauge', 'parent']) })
+      })
+      // 设置当前激活为当前画板
+      this.activateWidget({ widget: this.view })
+      // 初始化样式
+      this.setStyle({ type: 'reset' })
+      // 移除部件选择器
+      anime.set('#wrapper', { display: 'none' })
     }
   },
   beforeDestroy () {
@@ -450,6 +552,14 @@ export default {
         background: rgba(0, 0, 0, 0.025);
       }
     }
+  }
+
+  &__bar {
+    display: flex;
+    flex-flow: row nowrap;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
   }
 
   &__size {

@@ -31,6 +31,7 @@ const defaultLabelCfg = {
 
 export default class Edge {
   constructor ({
+    id = 'edge-' + uuid(),
     source = '',
     target = '',
     shape = 'line',
@@ -42,7 +43,7 @@ export default class Edge {
     animate = false,
     display = true
   }) {
-    this.id = 'edge-' + uuid()
+    this.id = id
     this.source = source
     this.target = target
     this.shape = shape

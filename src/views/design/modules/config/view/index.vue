@@ -90,8 +90,8 @@
                   @change="change">
                   <a-select-option value="no-repeat">不重复</a-select-option>
                   <a-select-option value="repeat">重复</a-select-option>
-                  <a-select-option value="repeat-x">重复X轴</a-select-option>
-                  <a-select-option value="repeat-y">重复Y轴</a-select-option>
+                  <a-select-option value="repeat-x">水平重复</a-select-option>
+                  <a-select-option value="repeat-y">垂直重复</a-select-option>
                 </a-select>
               </div>
             </div>

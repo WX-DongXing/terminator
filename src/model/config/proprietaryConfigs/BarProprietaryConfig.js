@@ -18,7 +18,7 @@ import { BarItemStyle, Legend, XAixs, YAixs } from './index'
 export default class BarProprietaryConfig {
   constructor ({
     barType = 'single',
-    itemStyle = {},
+    barItemStyle = {},
     legend = {},
     barWidthType = 'auto',
     barWidth = 'auto',
@@ -27,7 +27,7 @@ export default class BarProprietaryConfig {
   }) {
     this.barType = barType
     this.legend = new Legend(legend)
-    this.barItemStyle = new BarItemStyle(itemStyle)
+    this.barItemStyle = new BarItemStyle(barItemStyle)
     this.barWidthType = barWidthType
     this.barWidth = barWidth
     this.xAxis = new XAixs(xAxis)

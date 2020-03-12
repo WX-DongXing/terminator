@@ -11,7 +11,7 @@ cd dist
 
 git init
 git add -A
-git commit -m '部署'
+git commit -m 'deploy to github pages'
 
 
 # 部署到 https://WX-DongXing.github.io/terminator

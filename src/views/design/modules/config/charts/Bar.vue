@@ -168,8 +168,8 @@
                     <div v-if="config.proprietaryConfig.barItemStyle.colorType === 'custom'">
 
                       <SingleColorSelector
-                        v-model="combinationCustomColors"
-                        @change="colorGroupChange(config)" />
+                        v-model="config.proprietaryConfig.barItemStyle.color"
+                        @change="combinationColorChange(config)" />
                       <!-- / 颜色选择 -->
 
                     </div>
@@ -224,8 +224,8 @@
                     <div v-if="config.proprietaryConfig.barItemStyle.colorType === 'custom'">
 
                       <LinearColorSelector
-                        v-model="linearCustomColors"
-                        @change="colorGroupChange(config)" />
+                        v-model="config.proprietaryConfig.barItemStyle.color"
+                        @change="linearColorChange(config)" />
                       <!-- / 颜色选择 -->
 
                     </div>
@@ -453,8 +453,28 @@ export default {
       }
       return color
     },
+    /**
+     * 单一颜色选择
+     * @param config 配置
+     */
     singleColorChange (config) {
       this.singleColor = config.proprietaryConfig.barItemStyle.color
+      this.$refs.chartProprietaryRef.change()
+    },
+    /**
+     * 组合颜色选择
+     * @param config 配置
+     */
+    combinationColorChange (config) {
+      this.combinationCustomColors = config.proprietaryConfig.barItemStyle.color
+      this.$refs.chartProprietaryRef.change()
+    },
+    /**
+     * 渐变颜色选择
+     * @param config 配置
+     */
+    linearColorChange (config) {
+      this.linearCustomColors = config.proprietaryConfig.barItemStyle.color
       this.$refs.chartProprietaryRef.change()
     },
     /**

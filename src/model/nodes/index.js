@@ -31,6 +31,7 @@ const defaultAnchorPoints = []
 // 拓扑节点
 export default class Node {
   constructor ({
+    id = 'node-' + uuid(),
     x, y, shape, label,
     size = [],
     anchorPoints = defaultAnchorPoints,
@@ -39,7 +40,7 @@ export default class Node {
     animateType = 'none',
     display = true
   }) {
-    this.id = 'node-' + uuid()
+    this.id = id
     this.x = x
     this.y = y
     this.shape = shape
