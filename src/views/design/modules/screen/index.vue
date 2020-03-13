@@ -457,6 +457,9 @@ export default {
       const reader = new FileReader()
       reader.readAsText(file)
       reader.onload = () => {
+        // 清空当前视图配置
+        this.clear()
+        // 保留当前视图ID及名称
         this.viewOptions = _.omit(JSON.parse(reader.result), ['id', 'name'])
         // 实例化部件对象
         const widgets = this.viewOptions.widgets.map(config => new WidgetModel(config))

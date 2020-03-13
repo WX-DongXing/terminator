@@ -8,6 +8,7 @@
 import LinesProprietaryConfig from '../config/proprietaryConfigs/LinesProprietaryConfig'
 import BarProprietaryConfig from '../config/proprietaryConfigs/BarProprietaryConfig'
 import TopologyProprietaryConfig from '../config/proprietaryConfigs/TopologyProprietaryConfig'
+import TextsProprietaryConfig from '../config/proprietaryConfigs/TextsProprietaryConfig'
 import ViewProprietaryConfig from '../config/proprietaryConfigs/ViewProprietaryConfig'
 
 export default class ChartProprietaryConfigFactory {
@@ -19,6 +20,8 @@ export default class ChartProprietaryConfigFactory {
         return new BarProprietaryConfig(proprietaryConfig || {})
       case 'Topology':
         return new TopologyProprietaryConfig(proprietaryConfig || {})
+      case 'Texts':
+        return new TextsProprietaryConfig(proprietaryConfig || {})
       case 'ViewConfig':
         return new ViewProprietaryConfig(proprietaryConfig || {})
       default:

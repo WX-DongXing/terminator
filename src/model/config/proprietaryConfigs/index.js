@@ -202,6 +202,100 @@ class TextStyle {
 }
 
 /**
+ * 位置对象
+ * @param mode 位置所处模式 'center' | 'center_left' | 'center_right' | 'top_center' | 'bottom_center' | 'custom'
+ * @param editablePosition 可编辑位置
+ * @param top 居上位置 'center' | 'auto' | Number
+ * @param bottom 居下位置 'auto' | 'center' | Number
+ * @param top 居上位置 'center' | 'auto' | Number
+ * @param top 居上位置 'auto' | 'center' | Number
+ */
+class Position {
+  constructor ({
+    mode = 'center',
+    editablePosition = [],
+    top = 'center',
+    bottom = 'auto',
+    left = 'center',
+    right = 'auto'
+  }) {
+    this.mode = mode
+    this.editablePosition = editablePosition
+    this.top = top
+    this.bottom = bottom
+    this.left = left
+    this.right = right
+  }
+
+  /**
+   * 获取位置模式对应配置
+   * @returns {{top: string, left: string, bottom: string, right: string}|{top: string, left: number, bottom: string, right: string}|{top: string, left: string, bottom: string, right: number}|{top: number, left: string, bottom: string, right: string}|{top: string, left: string, bottom: number, right: string}}
+   */
+  getOption () {
+    let position
+    switch (this.mode) {
+      case 'center':
+        position = { top: 'center', bottom: 'auto', left: 'center', right: 'auto' }
+        break
+      case 'center_left':
+        position = { top: 'center', bottom: 'auto', left: this.left, right: 'auto' }
+        break
+      case 'center_right':
+        position = { top: 'center', bottom: 'auto', left: 'auto', right: this.right }
+        break
+      case 'top_center':
+        position = { top: this.top, bottom: 'auto', left: 'center', right: 'auto' }
+        break
+      case 'bottom_center':
+        position = { top: 'auto', bottom: this.bottom, left: 'center', right: 'auto' }
+        break
+      case 'custom':
+        position = { top: this.top, bottom: this.bottom, left: this.left, right: this.right }
+        break
+      default:
+        position = { top: 'center', bottom: 'auto', left: 'center', right: 'auto' }
+        break
+    }
+    return position
+  }
+}
+
+/**
+ * 标题对象
+ * 官方配置 https://www.echartsjs.com/zh/option.html#title
+ * @param text 文本
+ * @param link 文本链接地址  'blank' | 'self'
+ * @param target 文本超链接打开方式
+ * @param textStyle 文本样式
+ * @param top 文本距离上边距位置
+ * @param bottom 文本距离底边距位置
+ * @param left 文本距离左边距位置
+ * @param right 文本距离右边距位置
+ */
+class Title {
+  constructor ({
+    text = '文本',
+    link = '',
+    target = 'blank',
+    textStyle = {},
+    position = {}
+  }) {
+    this.text = text
+    this.link = link
+    this.target = target
+    this.textStyle = new TextStyle(textStyle)
+    this.position = new Position(position)
+  }
+
+  /**
+   * 获取标题配置
+   */
+  getOption () {
+    return Object.assign(_.cloneDeep(this), this.position.getOption())
+  }
+}
+
+/**
  * 坐标轴轴线相关配置
  * @param show 是否显示坐标轴线
  * @param lineStyle 坐标轴轴线样式
@@ -364,6 +458,7 @@ export {
   ItemStyle,
   Legend,
   LineStyle,
+  Title,
   XAixs,
   YAixs
 }

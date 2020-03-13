@@ -6,19 +6,21 @@
 * Email: dong.xing@outlook.com
 */
 import ViewConfig from './view/index.vue'
-import Lines from './charts/Lines.vue'
-import Bar from './charts/Bar.vue'
+import Lines from './charts/Lines'
+import Bar from './charts/Bar'
+import Texts from './charts/Texts'
 import Topology from './charts/Topology'
 
 // 图表模板配置
 const charts = {
   Bar,
-  Lines
+  Lines,
+  Texts,
+  Topology
 }
 
 // 元素模板配置
 const elements = {
-  Topology
 }
 
 // 模板配置组件
