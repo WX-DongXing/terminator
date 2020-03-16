@@ -20,6 +20,7 @@ export default class CommonConfig {
     left = 0,
     zIndex = 0,
     padding = [0, 0, 0, 0],
+    colorMode = 'single',
     backgroundColor = 'rgba(255,255,255,1)',
     border = {}
   }) {
@@ -28,6 +29,7 @@ export default class CommonConfig {
     this.top = top
     this.left = left
     this.zIndex = zIndex
+    this.colorMode = colorMode
     this.backgroundColor = backgroundColor
     this.border = new Border(border)
     this.padding = padding
@@ -45,9 +47,8 @@ export default class CommonConfig {
           right: 0,
           bottom: 0,
           left: 0,
-          backgroundColor: this.backgroundColor,
-          borderColor: this.border.color,
-          borderWidth: this.border.width
+          backgroundColor: 'transparent',
+          borderWidth: 0
         },
         {
           show: true,

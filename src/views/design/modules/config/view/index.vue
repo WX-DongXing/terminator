@@ -52,25 +52,35 @@
               <a-radio-group
                 buttonStyle="solid"
                 v-model="targetView.config.proprietaryConfig.mode"
-                @change="change">
-                <a-radio-button value="color">颜色</a-radio-button>
+                @change="modeChange">
+                <a-radio-button value="single">单一</a-radio-button>
+                <a-radio-button value="linear">渐变</a-radio-button>
                 <a-radio-button value="image">图片</a-radio-button>
               </a-radio-group>
             </div>
           </div>
           <!-- / 模式 -->
 
-          <div class="comment-template__item" v-if="targetView.config.proprietaryConfig.mode === 'color'">
-            <p class="comment-template__leading">颜色:</p>
+          <div class="comment-template__item" v-if="targetView.config.proprietaryConfig.mode === 'single'">
             <div class="comment-template__inner">
               <ColorPicker
                 v-model="targetView.config.proprietaryConfig.backgroundColor"
-                @change="change" />
+                @change="singleColorChange" />
             </div>
           </div>
-          <!-- / 颜色 -->
+          <!-- / 单一颜色 -->
 
-          <div v-else>
+          <div class="comment-template__item" v-if="targetView.config.proprietaryConfig.mode === 'linear'">
+            <div class="comment-template__inner">
+              <LinearColorPicker
+                show-angle
+                v-model="targetView.config.proprietaryConfig.backgroundColor"
+                @change="linearColorChange" />
+            </div>
+          </div>
+          <!-- / 渐变颜色 -->
+
+          <div v-if="targetView.config.proprietaryConfig.mode === 'image'">
             <div class="comment-template__item">
               <p class="comment-template__leading">图片:</p>
               <div class="comment-template__inner">
@@ -179,16 +189,24 @@ import { takeWhile, map, filter, switchMap } from 'rxjs/operators'
 import { mapState, mapMutations } from 'vuex'
 import { ScreenMutations } from '@/store/modules/screen'
 import View from '@/model/view'
-import ColorPicker from '@/components/colorPicker/index.vue'
+import ColorPicker from '@/components/colorPicker'
+import LinearColorPicker from '@/components/linearColorPicker'
 import ViewService from './index'
 
 export default {
   name: 'ViewConfig',
   components: {
-    ColorPicker
+    ColorPicker,
+    LinearColorPicker
   },
   data: () => ({
     isSubscribed: true,
+    singleColor: 'rgba(255, 255, 255, 1)',
+    linearColor: {
+      start: 'rgba(255, 255, 255, 1)',
+      end: 'rgba(0, 0, 0, 1)',
+      angle: 180
+    },
     viewService: new ViewService()
   }),
   mounted () {
@@ -218,6 +236,32 @@ export default {
     ...mapMutations('screen', {
       setView: ScreenMutations.SET_VIEW
     }),
+    /**
+     * 单一颜色更改
+     */
+    singleColorChange () {
+      this.singleColor = this.targetView.config.proprietaryConfig.backgroundColor
+      this.change()
+    },
+    /**
+     * 渐变颜色更改
+     */
+    linearColorChange () {
+      this.linearColor = this.targetView.config.proprietaryConfig.backgroundColor
+      this.change()
+    },
+    /**
+     * 模式更改
+     */
+    modeChange () {
+      if (this.targetView.config.proprietaryConfig.mode !== 'image') {
+        const backgroundColor = this.targetView.config.proprietaryConfig.mode === 'single'
+          ? this.singleColor
+          : this.linearColor
+        Object.assign(this.targetView.config.proprietaryConfig, { backgroundColor })
+      }
+      this.change()
+    },
     change () {
       this.setView({
         view: new View(this.targetView)

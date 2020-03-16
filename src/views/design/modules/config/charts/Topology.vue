@@ -33,29 +33,9 @@
             <!-- S 尺寸 -->
             <a-collapse-panel header="尺寸" key="1">
 
-              <div class="comment-template__item">
-                <p class="comment-template__leading">宽:</p>
-                <div class="comment-template__inner">
-                  <a-input
-                    type="number"
-                    v-model.number="config.commonConfig.width"
-                    min="0"
-                    @change="change('size', 'width')" />
-                </div>
-              </div>
-              <!-- / 宽 -->
-
-              <div class="comment-template__item">
-                <p class="comment-template__leading">高:</p>
-                <div class="comment-template__inner">
-                  <a-input
-                    type="number"
-                    v-model.number="config.commonConfig.height"
-                    min="0"
-                    @change="change('size', 'height')" />
-                </div>
-              </div>
-              <!-- / 高 -->
+              <!-- S 公共配置模板 -->
+              <CommonTemplate />
+              <!-- E 公共配置模板 -->
 
             </a-collapse-panel>
             <!-- E 尺寸 -->
@@ -213,7 +193,7 @@
 import _ from 'lodash'
 import anime from 'animejs'
 import Grid from '@antv/g6/build/grid'
-import { mapMutations } from 'vuex'
+import { mapState, mapMutations } from 'vuex'
 import { ScreenMutations } from '@/store/modules/screen'
 import ColorPicker from '@/components/colorPicker/index'
 import CommonTemplate from '../common/index'
@@ -229,6 +209,7 @@ export default {
   mixins: [CommonTemplate],
   components: {
     ColorPicker,
+    CommonTemplate,
     ChartProprietaryTemplate,
     DataSourceTemplate,
     CommonNodeTemplate,
@@ -246,6 +227,10 @@ export default {
     wrapperService: new WrapperService()
   }),
   computed: {
+    ...mapState('screen', ['activeWidget']),
+    config () {
+      return _.cloneDeep(this.activeWidget.config)
+    },
     // 激活的面板
     activePanel () {
       return (this.activeNode && this.mode === 'default') || this.activeEdge ? 2 : 1

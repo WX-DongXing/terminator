@@ -8,7 +8,8 @@
 
 /**
  * @param mode 背景样式模式
- *  color: 单一颜色
+ *  single: 单一颜色
+ *  linear: 单一颜色
  *  image: 背景图片
  *
  * @param backgroundImage 背景图片
@@ -33,7 +34,7 @@
  */
 export default class ViewProprietaryConfig {
   constructor ({
-    mode = 'color',
+    mode = 'single',
     backgroundColor = 'rgba(255,255,255,1)',
     backgroundImage = '',
     backgroundRepeat = 'no-repeat',

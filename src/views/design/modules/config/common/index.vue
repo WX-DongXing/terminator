@@ -14,11 +14,34 @@
       <a-collapse-panel header="背景" key="1">
 
         <div class="comment-template__item">
-          <p class="comment-template__leading">颜色:</p>
+          <p class="comment-template__leading">颜色模式:</p>
+          <div class="comment-template__inner comment-template__end">
+            <a-radio-group
+              buttonStyle="solid"
+              v-model="config.commonConfig.colorMode"
+              @change="colorModeChange(config)">
+              <a-radio-button value="single">单一</a-radio-button>
+              <a-radio-button value="linear">线性</a-radio-button>
+            </a-radio-group>
+          </div>
+        </div>
+        <!-- / 颜色模式 -->
+
+        <div class="comment-template__item" v-if="config.commonConfig.colorMode === 'single'">
           <div class="comment-template__inner">
             <ColorPicker
               v-model="config.commonConfig.backgroundColor"
-              @change="change('style')" />
+              @change="singleColorChange(config)" />
+          </div>
+        </div>
+        <!-- / 背景颜色 -->
+
+        <div class="comment-template__item" v-if="config.commonConfig.colorMode === 'linear'">
+          <div class="comment-template__inner">
+            <LinearColorPicker
+              show-angle
+              v-model="config.commonConfig.backgroundColor"
+              @change="linearColorChange(config)" />
           </div>
         </div>
         <!-- / 背景颜色 -->
@@ -30,13 +53,28 @@
       <a-collapse-panel header="边框" key="2">
 
         <div class="comment-template__item">
+          <p class="comment-template__leading">类型:</p>
+          <div class="comment-template__inner comment-template__end">
+            <a-radio-group
+              buttonStyle="solid"
+              v-model="config.commonConfig.border.borderStyle"
+              @change="change('native')">
+              <a-radio-button value="solid">直线</a-radio-button>
+              <a-radio-button value="dashed">折线</a-radio-button>
+              <a-radio-button value="dotted">点线</a-radio-button>
+            </a-radio-group>
+          </div>
+        </div>
+        <!-- / 类型 -->
+
+        <div class="comment-template__item">
           <p class="comment-template__leading">宽度:</p>
           <div class="comment-template__inner">
             <a-slider
               :min="0"
               :max="16"
-              @change="change('style')"
-              v-model.number="config.commonConfig.border.width" />
+              @change="change('native')"
+              v-model.number="config.commonConfig.border.borderWidth" />
           </div>
         </div>
         <!-- / 宽度 -->
@@ -45,8 +83,8 @@
           <p class="comment-template__leading">颜色:</p>
           <div class="comment-template__inner">
             <ColorPicker
-              v-model="config.commonConfig.border.color"
-              @change="change('style')" />
+              v-model="config.commonConfig.border.borderColor"
+              @change="change('native')" />
           </div>
         </div>
         <!-- / 颜色 -->
@@ -54,8 +92,62 @@
       </a-collapse-panel>
       <!-- E 边框 -->
 
+      <!-- S 圆角 -->
+      <a-collapse-panel header="圆角" key="3">
+
+        <div class="comment-template__item">
+          <p class="comment-template__leading">左上:</p>
+          <div class="comment-template__inner">
+            <a-input
+              type="number"
+              min="0"
+              v-model.number="config.commonConfig.border.borderRadius.borderTopLeftRadius"
+              @change="change('native')" />
+          </div>
+        </div>
+        <!-- / 左上圆角 -->
+
+        <div class="comment-template__item">
+          <p class="comment-template__leading">右上:</p>
+          <div class="comment-template__inner">
+            <a-input
+              type="number"
+              v-model.number="config.commonConfig.border.borderRadius.borderTopRightRadius"
+              min="0"
+              @change="change('native')" />
+          </div>
+        </div>
+        <!-- / 右上圆角 -->
+
+        <div class="comment-template__item">
+          <p class="comment-template__leading">右下:</p>
+          <div class="comment-template__inner">
+            <a-input
+              type="number"
+              v-model.number="config.commonConfig.border.borderRadius.borderBottomRightRadius"
+              min="0"
+              @change="change('native')" />
+          </div>
+        </div>
+        <!-- / 右下圆角 -->
+
+        <div class="comment-template__item">
+          <p class="comment-template__leading">左下:</p>
+          <div class="comment-template__inner">
+            <a-input
+              type="number"
+              v-model.number="config.commonConfig.border.borderRadius.borderBottomLeftRadius"
+              min="0"
+              @change="change('native')" />
+          </div>
+        </div>
+        <!-- / 左下圆角 -->
+
+      </a-collapse-panel>
+      <!-- E 圆角 -->
+
       <!-- S 边距 -->
-      <a-collapse-panel header="边距" key="3">
+      <a-collapse-panel header="边距" key="4">
 
         <div class="comment-template__item">
           <p class="comment-template__leading">上:</p>
@@ -64,7 +156,7 @@
               type="number"
               min="0"
               v-model.number="config.commonConfig.padding[0]"
-              @change="change('style')" />
+              @change="change('padding')" />
           </div>
         </div>
         <!-- / 上边距 -->
@@ -76,7 +168,7 @@
               type="number"
               v-model.number="config.commonConfig.padding[1]"
               min="0"
-              @change="change('style')" />
+              @change="change('padding')" />
           </div>
         </div>
         <!-- / 右边距 -->
@@ -88,7 +180,7 @@
               type="number"
               v-model.number="config.commonConfig.padding[2]"
               min="0"
-              @change="change('style')" />
+              @change="change('padding')" />
           </div>
         </div>
         <!-- / 下边距 -->
@@ -100,7 +192,7 @@
               type="number"
               v-model.number="config.commonConfig.padding[3]"
               min="0"
-              @change="change('style')" />
+              @change="change('padding')" />
           </div>
         </div>
         <!-- / 左边距 -->
@@ -109,7 +201,7 @@
       <!-- E 边距 -->
 
       <!-- S 尺寸 -->
-      <a-collapse-panel header="尺寸" key="4">
+      <a-collapse-panel header="尺寸" key="5">
 
         <div class="comment-template__item">
           <p class="comment-template__leading">宽:</p>
@@ -139,7 +231,7 @@
       <!-- E 尺寸 -->
 
       <!-- S 位置 -->
-      <a-collapse-panel header="位置" key="5">
+      <a-collapse-panel header="位置" key="6">
 
         <div class="comment-template__item">
           <p class="comment-template__leading">X:</p>
@@ -178,15 +270,25 @@ import '@/assets/less/template.less'
 import _ from 'lodash'
 import { mapState, mapGetters, mapMutations } from 'vuex'
 import { ScreenMutations } from '@/store/modules/screen'
-import ColorPicker from '@/components/colorPicker/index.vue'
-import AdjustMixins from '@/components/wrapper/AdjustMixins.vue'
+import ColorPicker from '@/components/colorPicker'
+import LinearColorPicker from '@/components/linearColorPicker'
+import AdjustMixins from '@/components/wrapper/AdjustMixins'
 
 export default {
   name: 'CommonTemplate',
   mixins: [AdjustMixins],
   components: {
-    ColorPicker
+    ColorPicker,
+    LinearColorPicker
   },
+  data: () => ({
+    singleColor: 'rgba(255, 255, 255, 1)',
+    linearColor: {
+      start: 'rgba(255, 255, 255, 1)',
+      end: 'rgba(0, 0, 0, 1)',
+      angle: 180
+    }
+  }),
   computed: {
     ...mapState('screen', [
       'activeWidget',
@@ -206,11 +308,41 @@ export default {
       activateWidget: ScreenMutations.ACTIVATE_WIDGET,
       removeWidget: ScreenMutations.REMOVE_WIDGET
     }),
+    /**
+     * 单一颜色更改
+     * @param config 配置
+     */
+    singleColorChange ({ commonConfig: { backgroundColor } }) {
+      this.singleColor = backgroundColor
+      this.change('native')
+    },
+    /**
+     * 渐变颜色更改
+     * @param config 配置
+     */
+    linearColorChange ({ commonConfig: { backgroundColor } }) {
+      this.linearColor = backgroundColor
+      this.change('native')
+    },
+    /**
+     * 颜色模式更改
+     */
+    colorModeChange (config) {
+      const backgroundColor = config.commonConfig.colorMode === 'single'
+        ? this.singleColor
+        : this.linearColor
+      Object.assign(this.config.commonConfig, { backgroundColor })
+      this.change('native')
+    },
     // Todo 为实现移动、更改激活部件，设置wrapper选择器事件，有待于重构该部分
     change (type, trigger = null) {
       switch (type) {
-        case 'style':
-          // 图表样式更改，只需更新数据即可
+        case 'native':
+          const { render } = this.activeWidget
+          render.setStyle(this.config)
+          break
+        case 'padding':
+          // 图表Padding样式更改，只需更新数据即可
           this.activeWidget.render.mergeOption(this.config)
           break
         case 'size':
@@ -265,8 +397,10 @@ export default {
         default:
           break
       }
+
       // 更新部件配置
-      this.updateActionWidget()
+      this.updateActiveWidget()
+
       // 更新部件后，如果进行尺寸的修改则重新resize图表
       if (type === 'size') {
         const { config, render } = this.activeWidget
@@ -282,7 +416,7 @@ export default {
     /**
      * 更新部件配置
      */
-    updateActionWidget () {
+    updateActiveWidget () {
       const activeWidget = _.cloneDeep(this.activeWidget)
       this.activateWidget({
         widget: Object.assign(activeWidget, {

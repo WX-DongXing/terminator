@@ -95,7 +95,7 @@ export default {
           width,
           height,
           backgroundImage: mode === 'image' ? `url(${backgroundImage})` : '',
-          backgroundColor,
+          background: mode === 'single' ? backgroundColor : `linear-gradient(${backgroundColor.angle}deg, ${backgroundColor.start}, ${backgroundColor.end})`,
           backgroundRepeat,
           backgroundSize,
           transformOrigin: '0 0',

@@ -10,8 +10,11 @@
     <div
       class="linear-color-picker__bar"
       :style="{
-        background: `linear-gradient(180deg, ${color.start}, ${color.end})`
+        background: `linear-gradient(${color.angle || 180}deg, ${color.start}, ${color.end})`
       }">
+    </div>
+    <div class="linear-color-picker__angle" v-if="showAngle">
+      <a-slider vertical :min="0" :max="360" v-model="color.angle" @change="colorChange" />
     </div>
     <div class="linear-color-picker__selectors">
       <ColorPicker v-model="color.start" @change="colorChange" />
@@ -33,8 +36,13 @@ export default {
       type: Object,
       default: () => ({
         start: 'rgba(255,255,255,1)',
-        end: 'rgba(0,0,0,1)'
+        end: 'rgba(0,0,0,1)',
+        angle: 180
       })
+    },
+    showAngle: {
+      type: Boolean,
+      default: false
     }
   },
   model: {
@@ -60,6 +68,17 @@ export default {
     flex: none;
     width: 22px;
     height: 72px;
+    margin-right: 12px;
+  }
+
+  &__angle {
+    flex: none;
+    display: flex;
+    flex-flow: row nowrap;
+    justify-content: center;
+    align-items: center;
+    height: 72px;
+    width: 20px;
     margin-right: 12px;
   }
 

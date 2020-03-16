@@ -50,7 +50,7 @@ export default {
       widget: this.widget
     })
 
-    // 将渲染的元素更新至部件
+    // 如果在编辑状态，将渲染的元素更新至部件
     !this.onlyShow && this.activateWidget({
       widget: this.selectWidget
     })
@@ -69,6 +69,7 @@ export default {
 <style scoped lang="less">
 .widget {
   position: absolute !important;
+  overflow: hidden;
 
   &--hover:hover {
     box-shadow: 0 0 4px 2px rgba(24, 144, 255, .8) !important;

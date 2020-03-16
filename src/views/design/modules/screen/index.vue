@@ -431,7 +431,7 @@ export default {
         width,
         height,
         scale: this.scale,
-        backgroundColor: mode === 'color' ? backgroundColor : '',
+        background: mode === 'single' ? backgroundColor : `linear-gradient(${backgroundColor.angle}deg, ${backgroundColor.start}, ${backgroundColor.end})`,
         duration: 150,
         easing: 'linear'
       })
