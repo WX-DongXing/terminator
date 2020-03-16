@@ -277,7 +277,9 @@ class Title {
     text = '文本',
     link = '',
     target = 'blank',
-    textStyle = {},
+    textStyle = {
+      fontSize: 24
+    },
     position = {}
   }) {
     this.text = text

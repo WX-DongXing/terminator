@@ -366,6 +366,7 @@ export default {
         duration: 150,
         easing: 'linear'
       })
+
       // 更新视图缩放
       this.setView({
         view: Object.assign(new View({

@@ -26,7 +26,7 @@ const charts = [
     category: 'CHART', type: 'Topology', name: '拓扑图', icon: 'branches', width: 800, height: 600
   },
   {
-    category: 'CHART', type: 'Texts', name: '文本', icon: 'font-colors', width: 200, height: 100
+    category: 'CHART', type: 'Texts', name: '文本', icon: 'font-colors', width: 350, height: 150
   }
 ]
 

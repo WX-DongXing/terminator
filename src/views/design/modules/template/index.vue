@@ -335,12 +335,20 @@ export default {
     background: white;
     border-radius: 5px;
     cursor: pointer;
-    box-shadow: 0 2px 1px -1px rgba(0, 0, 0, 0.2), 0 1px 1px 0 rgba(0, 0, 0, 0.14),
-      0 1px 3px 0 rgba(0, 0, 0, 0.12);
-    /*transition: transform, width, height 1350ms cubic-bezier(0, 1, 0.85, 1);*/
+    border: 1px solid #d4d4d4;
+    transition: border-color 750ms cubic-bezier(0, 1, 0.85, 1);
+
+    &:hover {
+      border: 1px solid #1890ff;
+
+      & i,p {
+        color: #1890ff;
+      }
+    }
 
     i {
       font-size: 32px;
+      transition: color 750ms cubic-bezier(0, 1, 0.85, 1);
     }
 
     p {
@@ -348,6 +356,7 @@ export default {
       margin: 8px 0 0 0;
       font-size: 14px;
       font-weight: bold;
+      transition: color 750ms cubic-bezier(0, 1, 0.85, 1);
     }
 
     &--expand {
@@ -355,6 +364,15 @@ export default {
       flex-flow: column nowrap !important;
       justify-content: space-between !important;
       align-items: flex-start;
+      border: none;
+
+      &:hover {
+        border: none;
+
+        & i,p {
+          color: #757575;
+        }
+      }
     }
   }
 
