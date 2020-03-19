@@ -13,7 +13,7 @@
         <a-icon type="bg-colors" />
       </div>
     </div>
-    <a-input v-model="inputColor" @change="() => $emit('change', this.inputColor)"/>
+    <a-input v-model="color" @change="() => $emit('change', this.color)"/>
     <div
       class="color-picker__painter"
       v-show="display"
@@ -45,12 +45,8 @@ export default {
   },
   data: () => ({
     display: false,
-    inputColor: 'rgba(255,255,255,1)',
     colors: {}
   }),
-  created () {
-    this.inputColor = this.color
-  },
   methods: {
     openPicker () {
       this.display = true
@@ -59,10 +55,7 @@ export default {
   },
   watch: {
     colors (v) {
-      const {
-        r, g, b, a
-      } = v.rgba
-      this.inputColor = `rgba(${r},${g},${b},${a})`
+      const { r, g, b, a } = v.rgba
       this.$emit('change', `rgba(${r},${g},${b},${a})`)
     }
   }
