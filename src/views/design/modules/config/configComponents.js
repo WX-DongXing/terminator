@@ -9,6 +9,7 @@ import ViewConfig from './view/index.vue'
 import Lines from './charts/Lines'
 import Bar from './charts/Bar'
 import Texts from './charts/Texts'
+import Rects from './charts/Rects'
 import Topology from './charts/Topology'
 
 // 图表模板配置
@@ -16,6 +17,7 @@ const charts = {
   Bar,
   Lines,
   Texts,
+  Rects,
   Topology
 }
 

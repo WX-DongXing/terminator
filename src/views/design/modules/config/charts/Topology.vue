@@ -30,45 +30,9 @@
 
           <a-collapse defaultActiveKey="1" :bordered="false">
 
-            <!-- S 尺寸 -->
-            <a-collapse-panel header="尺寸" key="1">
-
-              <!-- S 公共配置模板 -->
-              <CommonTemplate />
-              <!-- E 公共配置模板 -->
-
-            </a-collapse-panel>
-            <!-- E 尺寸 -->
-
-            <!-- S 位置 -->
-            <a-collapse-panel header="位置" key="2">
-
-              <div class="comment-template__item">
-                <p class="comment-template__leading">X:</p>
-                <div class="comment-template__inner">
-                  <a-input
-                    type="number"
-                    v-model.number="config.commonConfig.left"
-                    min="0"
-                    @change="change('position')" />
-                </div>
-              </div>
-              <!-- / x坐标位置 -->
-
-              <div class="comment-template__item">
-                <p class="comment-template__leading">Y:</p>
-                <div class="comment-template__inner">
-                  <a-input
-                    type="number"
-                    v-model.number="config.commonConfig.top"
-                    min="0"
-                    @change="change('position')" />
-                </div>
-              </div>
-              <!-- / y坐标位置 -->
-
-            </a-collapse-panel>
-            <!-- E 位置 -->
+            <!-- S 公共配置模板 -->
+            <CommonTemplate />
+            <!-- E 公共配置模板 -->
 
           </a-collapse>
 
@@ -76,7 +40,7 @@
 
         <a-tab-pane tab="专有属性" key="2">
 
-          <div class="topology-proprietary-template">
+          <div class="topology-config__template">
 
             <a-collapse :activeKey="activePanel" :bordered="false">
 
@@ -193,12 +157,13 @@
 import _ from 'lodash'
 import anime from 'animejs'
 import Grid from '@antv/g6/build/grid'
-import { mapState, mapMutations } from 'vuex'
+import { mapMutations } from 'vuex'
 import { ScreenMutations } from '@/store/modules/screen'
 import ColorPicker from '@/components/colorPicker/index'
-import CommonTemplate from '../common/index'
-import ChartProprietaryTemplate from '../chartProprietary/index'
-import DataSourceTemplate from '../dataSource/index'
+import CommonTemplate from '../common'
+import ChartProprietaryTemplate from '../chartProprietary'
+import DataSourceTemplate from '../dataSource'
+import ProprietaryMixins from '../propietaryMixins'
 import WrapperService from '@/components/wrapper/WrapperService'
 import CommonNodeTemplate from '@/views/design/modules/config/nodes'
 import CommonEdgeTemplate from '@/views/design/modules/config/edges'
@@ -206,7 +171,7 @@ import EdgeTemplate from '@/views/design/modules/config/edges/edge'
 
 export default {
   name: 'Topology',
-  mixins: [CommonTemplate],
+  mixins: [ProprietaryMixins],
   components: {
     ColorPicker,
     CommonTemplate,
@@ -227,10 +192,6 @@ export default {
     wrapperService: new WrapperService()
   }),
   computed: {
-    ...mapState('screen', ['activeWidget']),
-    config () {
-      return _.cloneDeep(this.activeWidget.config)
-    },
     // 激活的面板
     activePanel () {
       return (this.activeNode && this.mode === 'default') || this.activeEdge ? 2 : 1
@@ -406,9 +367,5 @@ export default {
     justify-content: flex-end;
     align-items: center;
   }
-}
-.topology-proprietary-template {
-  height: calc(100vh - 224px);
-  overflow: auto;
 }
 </style>

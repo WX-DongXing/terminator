@@ -312,13 +312,13 @@ export default {
           mutation
         })
         // 调整图表尺寸
-        if (config.type === 'Topology') {
-          this.activeWidget.render.resize(
-            render.container.offsetWidth,
-            render.container.offsetHeight
-          )
-        }
-        this.activeWidget.render.resize()
+        // if (config.type === 'Topology') {
+        //   this.activeWidget.render.resize(
+        //     render.container.offsetWidth,
+        //     render.container.offsetHeight
+        //   )
+        // }
+        this.activeWidget.render.resize(config)
       })
   },
   computed: {

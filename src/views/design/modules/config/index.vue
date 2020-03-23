@@ -11,7 +11,21 @@
       <p>窗口配置</p>
     </div>
     <div class="config__content">
-      <component v-if="activeWidget" :is="activeWidget.config.type" />
+      <div class="comment-template" v-if="activeWidget">
+        <div class="comment-template__header" v-if="hasCommonTitle">
+          <p class="comment-template__name">{{ templateName }}</p>
+          <a-popconfirm
+            title="从视图中删除该部件?"
+            placement="left"
+            @confirm="() => removeWidget({ widgetId: activeWidget.widgetId })"
+            okText="确定"
+            cancelText="取消"
+          >
+            <a-button shape="circle" type="danger" icon="delete" />
+          </a-popconfirm>
+        </div>
+        <component :is="templateComponentName" />
+      </div>
       <div class="config__none" v-else>
         <a-icon type="disconnect" />
         <p>无激活窗口配置</p>
@@ -21,16 +35,45 @@
 </template>
 
 <script>
-import { mapState } from 'vuex'
+import '@/assets/less/template.less'
+import { mapState, mapMutations } from 'vuex'
+import { ScreenMutations } from '@/store/modules/screen'
 import CONFIGCOMPONENTS from './configComponents'
+import TEMPLATES from '../template/templates'
 
 export default {
   name: 'Config',
   components: {
     ...CONFIGCOMPONENTS
   },
+  data: () => ({
+    // todo 之后更改命名，使其更加语义化: ['line', 'LineConfigTemplate']
+    templateMapping: new Map([
+      ['Bar', 'Bar'],
+      ['Lines', 'Lines'],
+      ['Texts', 'Texts'],
+      ['Rect', 'Rects'],
+      ['Topology', 'Topology'],
+      ['ViewConfig', 'ViewConfig']
+    ])
+  }),
   computed: {
-    ...mapState('screen', ['activeWidget'])
+    ...mapState('screen', ['activeWidget']),
+    templateName () {
+      const template = TEMPLATES.find(template => template.type === this.activeWidget.config.type)
+      return template ? template.name : '画板'
+    },
+    hasCommonTitle () {
+      return this.activeWidget.config.type !== 'Topology'
+    },
+    templateComponentName () {
+      return this.templateMapping.get(this.activeWidget.config.type)
+    }
+  },
+  methods: {
+    ...mapMutations('screen', {
+      removeWidget: ScreenMutations.REMOVE_WIDGET
+    })
   }
 }
 </script>

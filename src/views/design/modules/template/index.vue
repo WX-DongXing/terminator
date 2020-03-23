@@ -155,7 +155,6 @@ export default {
               }
             }
           })
-          console.log(widget.config)
           // 将当期拖动的模板添加到视图的部件库中
           this.addWidget({ widget })
           // 将当前的部件状态激活

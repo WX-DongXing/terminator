@@ -72,7 +72,7 @@
           <div class="comment-template__inner">
             <a-slider
               :min="0"
-              :max="16"
+              :max="48"
               @change="change('native')"
               v-model.number="config.commonConfig.border.borderWidth" />
           </div>
@@ -291,11 +291,7 @@ export default {
   }),
   computed: {
     ...mapState('screen', [
-      'activeWidget',
-      'topologyEditable',
-      'activeNode',
-      'activeEdge',
-      'edgeConfig'
+      'activeWidget'
     ]),
     ...mapGetters('screen', ['scale']),
     // 为不修改 state.activeWidget，在此深复制激活部件的配置项，并将其设置为该组件内变量，修改部件后提交再行修改state.activeWidget
@@ -403,14 +399,7 @@ export default {
 
       // 更新部件后，如果进行尺寸的修改则重新resize图表
       if (type === 'size') {
-        const { config, render } = this.activeWidget
-        if (config.type === 'Topology') {
-          this.activeWidget.render.resize(
-            render.container.offsetWidth,
-            render.container.offsetHeight
-          )
-        }
-        this.activeWidget.render.resize()
+        this.activeWidget.render.resize(this.activeWidget.config)
       }
     },
     /**

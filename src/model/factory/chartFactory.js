@@ -9,6 +9,7 @@ import LineChart from '../charts/LineChart'
 import BarChart from '../charts/BarChart'
 import TopologyChart from '../charts/TopologyChart'
 import TextsChart from '../charts/TextsChart'
+import RectChart from '../charts/RectChart'
 
 export default class ChartFactory {
   static create (type, widget) {
@@ -21,6 +22,8 @@ export default class ChartFactory {
         return new TopologyChart(widget)
       case 'Texts':
         return new TextsChart(widget)
+      case 'Rect':
+        return new RectChart(widget)
       default:
         return null
     }

@@ -187,11 +187,11 @@ export default class TopologyChart extends Chart {
   /**
    * 图表resize
    */
-  resize (width, height) {
-    if (width && height) {
+  resize () {
+    if (this.container) {
       this.chart.changeSize(
-        width,
-        height
+        this.container.offsetWidth,
+        this.container.offsetHeight
       )
     }
   }

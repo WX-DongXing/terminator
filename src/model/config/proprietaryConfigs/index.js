@@ -454,13 +454,128 @@ class YAixs extends Aixs {
   }
 }
 
+/**
+ * 形状样式
+ */
+class Style {
+  constructor ({
+    fill = 'rgba(64,169,255, 1)',
+    stroke = 'rgba(12,142,255, 1)',
+    lineWidth = 0
+  }) {
+    this.fill = fill
+    this.stroke = stroke
+    this.lineWidth = lineWidth
+  }
+}
+
+/**
+ * echart图形
+ * @param originType
+ * 'container_center' 容器居中
+ * 'container_topLeft' 容器左上
+ * 'container_topRight' 容器右上
+ * 'container_bottomRight' 容器右下
+ * 'container_bottomLeft' 容器左下
+ * 'graph_center' 图形居中
+ * 'graph_topLeft' 图形左上
+ * 'graph_topRight' 图形右上
+ * 'graph_bottomRight' 图形右下
+ * 'graph_bottomLeft' 图形左下
+ */
+class Graphic {
+  constructor ({
+    top = 0,
+    left = 0,
+    right = 0,
+    bottom = 0,
+    style = {}
+  }) {
+    this.top = top
+    this.left = left
+    this.right = right
+    this.bottom = bottom
+    this.style = new Style(style)
+  }
+}
+
+/**
+ * 矩形形状
+ */
+class RectShape {
+  constructor ({
+    width = 300,
+    height = 300,
+    borderTopLeftRadius = 0,
+    borderTopRightRadius = 0,
+    borderBottomRightRadius = 0,
+    borderBottomLeftRadius = 0
+  }) {
+    this.width = width
+    this.height = height
+    this.borderTopLeftRadius = borderTopLeftRadius
+    this.borderTopRightRadius = borderTopRightRadius
+    this.borderBottomRightRadius = borderBottomRightRadius
+    this.borderBottomLeftRadius = borderBottomLeftRadius
+  }
+
+  /**
+   * 映射配置
+   */
+  getOption () {
+    return {
+      width: this.width,
+      height: this.height,
+      r: [
+        this.borderTopLeftRadius,
+        this.borderTopRightRadius,
+        this.borderBottomRightRadius,
+        this.borderBottomLeftRadius
+      ]
+    }
+  }
+}
+
+/**
+ * 矩形
+ */
+class RectGraphic extends Graphic {
+  constructor ({
+    shape = {},
+    ...graphicOption
+  }) {
+    super(graphicOption)
+    this.type = 'rect'
+    this.shape = new RectShape(shape)
+  }
+
+  /**
+   * 映射配置
+   * @param chart
+   * @param padding
+   * @returns {any}
+   */
+  getOption (chart, padding) {
+    const { top, left, right, bottom } = padding
+    const width = chart.getWidth() - this.style.lineWidth - left - right
+    const height = chart.getHeight() - this.style.lineWidth - top - bottom
+    const shape = Object.assign({}, this.shape, { width, height })
+    return Object.assign(_.cloneDeep(this),
+      { shape: new RectShape(shape).getOption() },
+      padding
+    )
+  }
+}
+
 export {
   AreaStyle,
   BarItemStyle,
   ItemStyle,
   Legend,
   LineStyle,
+  Graphic,
   Title,
   XAixs,
-  YAixs
+  YAixs,
+  RectGraphic
 }

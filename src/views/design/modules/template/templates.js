@@ -27,6 +27,9 @@ const charts = [
   },
   {
     category: 'CHART', type: 'Texts', name: '文本', icon: 'font-colors', width: 350, height: 150
+  },
+  {
+    category: 'CHART', type: 'Rect', name: '矩形', icon: 'border', width: 300, height: 300
   }
 ]
 

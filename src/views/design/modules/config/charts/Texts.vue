@@ -7,230 +7,205 @@
 */
 
 <template>
-  <div class="comment-template">
-    <div class="comment-template__header">
-      <p class="comment-template__name">文本</p>
-      <a-popconfirm
-        title="从视图中删除该部件?"
-        placement="left"
-        @confirm="() => removeWidget({ widgetId: activeWidget.widgetId })"
-        okText="确定"
-        cancelText="取消"
-      >
-        <a-button shape="circle" type="danger" icon="delete" />
-      </a-popconfirm>
-    </div>
-    <div class="texts-config">
-      <a-tabs
-        defaultActiveKey="1"
-        tabPosition="top"
-        :style="{ height: '100%'}"
-      >
-        <a-tab-pane tab="公共属性" key="1">
+  <div class="texts-config">
+    <a-tabs
+      defaultActiveKey="1"
+      tabPosition="top"
+      :style="{ height: '100%'}"
+    >
+      <a-tab-pane tab="公共属性" key="1">
 
-          <!-- S 公共配置模板 -->
-          <CommonTemplate />
-          <!-- E 公共配置模板 -->
+        <!-- S 公共配置模板 -->
+        <CommonTemplate />
+        <!-- E 公共配置模板 -->
 
-        </a-tab-pane>
+      </a-tab-pane>
 
-        <a-tab-pane tab="专有属性" key="2">
-          <div class="texts-config__template">
-            <a-collapse defaultActiveKey="1" :bordered="false">
+      <a-tab-pane tab="专有属性" key="2">
+        <div class="texts-config__template">
+          <a-collapse defaultActiveKey="1" :bordered="false">
 
-              <!-- S 文本样式 -->
-              <a-collapse-panel header="文本样式" key="1">
+            <!-- S 文本样式 -->
+            <a-collapse-panel header="文本样式" key="1">
 
-                <div class="comment-template__item">
-                  <p class="comment-template__leading">文本:</p>
-                  <div class="comment-template__inner">
-                    <a-input
-                      type="text"
-                      v-model.trim="config.proprietaryConfig.title.text"
-                      @change="change" />
-                  </div>
+              <div class="comment-template__item">
+                <p class="comment-template__leading">文本:</p>
+                <div class="comment-template__inner">
+                  <a-input
+                    type="text"
+                    v-model.trim="config.proprietaryConfig.title.text"
+                    @change="change" />
                 </div>
-                <!-- / 文本 -->
+              </div>
+              <!-- / 文本 -->
 
-                <div class="comment-template__item">
-                  <p class="comment-template__leading">链接:</p>
-                  <div class="comment-template__inner">
-                    <a-input
-                      type="text"
-                      v-model.trim="config.proprietaryConfig.title.link"
-                      @change="change" />
-                  </div>
+              <div class="comment-template__item">
+                <p class="comment-template__leading">链接:</p>
+                <div class="comment-template__inner">
+                  <a-input
+                    type="text"
+                    v-model.trim="config.proprietaryConfig.title.link"
+                    @change="change" />
                 </div>
-                <!-- / 链接 -->
+              </div>
+              <!-- / 链接 -->
 
-                <div class="comment-template__item">
-                  <p class="comment-template__leading">打开方式:</p>
-                  <div class="comment-template__inner">
-                    <a-select
-                      v-model="config.proprietaryConfig.title.target"
-                      @change="change">
-                      <a-select-option value="blank">新窗口打开</a-select-option>
-                      <a-select-option value="self">当前窗口打开</a-select-option>
-                    </a-select>
-                  </div>
+              <div class="comment-template__item">
+                <p class="comment-template__leading">打开方式:</p>
+                <div class="comment-template__inner">
+                  <a-select
+                    v-model="config.proprietaryConfig.title.target"
+                    @change="change">
+                    <a-select-option value="blank">新窗口打开</a-select-option>
+                    <a-select-option value="self">当前窗口打开</a-select-option>
+                  </a-select>
                 </div>
-                <!-- / 打开方式 -->
+              </div>
+              <!-- / 打开方式 -->
 
-                <div class="comment-template__item">
-                  <p class="comment-template__leading">颜色:</p>
-                  <div class="comment-template__inner">
-                    <ColorPicker
-                      v-model="config.proprietaryConfig.title.textStyle.color"
-                      @change="change()" />
-                  </div>
+              <div class="comment-template__item">
+                <p class="comment-template__leading">颜色:</p>
+                <div class="comment-template__inner">
+                  <ColorPicker
+                    v-model="config.proprietaryConfig.title.textStyle.color"
+                    @change="change()" />
                 </div>
-                <!-- / 颜色 -->
+              </div>
+              <!-- / 颜色 -->
 
-                <div class="comment-template__item">
-                  <p class="comment-template__leading">大小:</p>
-                  <div class="comment-template__inner">
-                    <a-input
-                      type="number"
-                      @change="change"
-                      v-model.number="config.proprietaryConfig.title.textStyle.fontSize" />
-                  </div>
+              <div class="comment-template__item">
+                <p class="comment-template__leading">大小:</p>
+                <div class="comment-template__inner">
+                  <a-input
+                    type="number"
+                    @change="change"
+                    v-model.number="config.proprietaryConfig.title.textStyle.fontSize" />
                 </div>
-                <!-- / 大小 -->
+              </div>
+              <!-- / 大小 -->
 
-                <div class="comment-template__item">
-                  <p class="comment-template__leading">粗细:</p>
-                  <div class="comment-template__inner comment-template__end">
-                    <a-select
-                      v-model="config.proprietaryConfig.title.textStyle.fontWeight"
-                      @change="change">
-                      <a-select-option value="normal">正常</a-select-option>
-                      <a-select-option value="lighter">细</a-select-option>
-                      <a-select-option value="bold">粗</a-select-option>
-                      <a-select-option value="bolder">更粗</a-select-option>
-                    </a-select>
-                  </div>
+              <div class="comment-template__item">
+                <p class="comment-template__leading">粗细:</p>
+                <div class="comment-template__inner comment-template__end">
+                  <a-select
+                    v-model="config.proprietaryConfig.title.textStyle.fontWeight"
+                    @change="change">
+                    <a-select-option value="normal">正常</a-select-option>
+                    <a-select-option value="lighter">细</a-select-option>
+                    <a-select-option value="bold">粗</a-select-option>
+                    <a-select-option value="bolder">更粗</a-select-option>
+                  </a-select>
                 </div>
-                <!-- / 粗细 -->
+              </div>
+              <!-- / 粗细 -->
 
-                <div class="comment-template__item">
-                  <p class="comment-template__leading">风格:</p>
-                  <div class="comment-template__inner comment-template__end">
-                    <a-select
-                      v-model="config.proprietaryConfig.title.textStyle.fontStyle"
-                      @change="change">
-                      <a-select-option value="normal">正常</a-select-option>
-                      <a-select-option value="italic">斜体</a-select-option>
-                    </a-select>
-                  </div>
+              <div class="comment-template__item">
+                <p class="comment-template__leading">风格:</p>
+                <div class="comment-template__inner comment-template__end">
+                  <a-select
+                    v-model="config.proprietaryConfig.title.textStyle.fontStyle"
+                    @change="change">
+                    <a-select-option value="normal">正常</a-select-option>
+                    <a-select-option value="italic">斜体</a-select-option>
+                  </a-select>
                 </div>
-                <!-- / 风格 -->
+              </div>
+              <!-- / 风格 -->
 
-                <div class="comment-template__item">
-                  <p class="comment-template__leading">位置:</p>
-                  <div class="comment-template__inner">
-                    <a-select
-                      v-model="config.proprietaryConfig.title.position.mode"
-                      @change="positionChange">
-                      <a-select-option value="center">水平垂直居中</a-select-option>
-                      <a-select-option value="center_left">垂直居中-居左</a-select-option>
-                      <a-select-option value="center_right">垂直居中-居右</a-select-option>
-                      <a-select-option value="top_center">居上-水平居中</a-select-option>
-                      <a-select-option value="bottom_center">居下-水平居中</a-select-option>
-                      <a-select-option value="custom">自定义</a-select-option>
-                    </a-select>
-                  </div>
+              <div class="comment-template__item">
+                <p class="comment-template__leading">位置:</p>
+                <div class="comment-template__inner">
+                  <a-select
+                    v-model="config.proprietaryConfig.title.position.mode"
+                    @change="positionChange">
+                    <a-select-option value="center">水平垂直居中</a-select-option>
+                    <a-select-option value="center_left">垂直居中-居左</a-select-option>
+                    <a-select-option value="center_right">垂直居中-居右</a-select-option>
+                    <a-select-option value="top_center">居上-水平居中</a-select-option>
+                    <a-select-option value="bottom_center">居下-水平居中</a-select-option>
+                    <a-select-option value="custom">自定义</a-select-option>
+                  </a-select>
                 </div>
-                <!-- / 位置 -->
+              </div>
+              <!-- / 位置 -->
 
-                <div
-                  class="comment-template__item"
-                  v-if="config.proprietaryConfig.title.position.editablePosition.includes('left')">
-                  <p class="comment-template__leading">居左:</p>
-                  <div class="comment-template__inner">
-                    <a-input
-                      type="number"
-                      @change="change"
-                      v-model.number="config.proprietaryConfig.title.position.left" />
-                  </div>
+              <div
+                class="comment-template__item"
+                v-if="config.proprietaryConfig.title.position.editablePosition.includes('left')">
+                <p class="comment-template__leading">居左:</p>
+                <div class="comment-template__inner">
+                  <a-input
+                    type="number"
+                    @change="change"
+                    v-model.number="config.proprietaryConfig.title.position.left" />
                 </div>
-                <!-- / 居左 -->
+              </div>
+              <!-- / 居左 -->
 
-                <div
-                  class="comment-template__item"
-                  v-if="config.proprietaryConfig.title.position.editablePosition.includes('right')">
-                  <p class="comment-template__leading">居右:</p>
-                  <div class="comment-template__inner">
-                    <a-input
-                      type="number"
-                      @change="change"
-                      v-model.number="config.proprietaryConfig.title.position.right" />
-                  </div>
+              <div
+                class="comment-template__item"
+                v-if="config.proprietaryConfig.title.position.editablePosition.includes('right')">
+                <p class="comment-template__leading">居右:</p>
+                <div class="comment-template__inner">
+                  <a-input
+                    type="number"
+                    @change="change"
+                    v-model.number="config.proprietaryConfig.title.position.right" />
                 </div>
-                <!-- / 居右 -->
+              </div>
+              <!-- / 居右 -->
 
-                <div
-                  class="comment-template__item"
-                  v-if="config.proprietaryConfig.title.position.editablePosition.includes('top')">
-                  <p class="comment-template__leading">居上:</p>
-                  <div class="comment-template__inner">
-                    <a-input
-                      type="number"
-                      @change="change"
-                      v-model.number="config.proprietaryConfig.title.position.top" />
-                  </div>
+              <div
+                class="comment-template__item"
+                v-if="config.proprietaryConfig.title.position.editablePosition.includes('top')">
+                <p class="comment-template__leading">居上:</p>
+                <div class="comment-template__inner">
+                  <a-input
+                    type="number"
+                    @change="change"
+                    v-model.number="config.proprietaryConfig.title.position.top" />
                 </div>
-                <!-- / 居上 -->
+              </div>
+              <!-- / 居上 -->
 
-                <div
-                  class="comment-template__item"
-                  v-if="config.proprietaryConfig.title.position.editablePosition.includes('bottom')">
-                  <p class="comment-template__leading">居下:</p>
-                  <div class="comment-template__inner">
-                    <a-input
-                      type="number"
-                      @change="change"
-                      v-model.number="config.proprietaryConfig.title.position.bottom" />
-                  </div>
+              <div
+                class="comment-template__item"
+                v-if="config.proprietaryConfig.title.position.editablePosition.includes('bottom')">
+                <p class="comment-template__leading">居下:</p>
+                <div class="comment-template__inner">
+                  <a-input
+                    type="number"
+                    @change="change"
+                    v-model.number="config.proprietaryConfig.title.position.bottom" />
                 </div>
-                <!-- / 居下 -->
+              </div>
+              <!-- / 居下 -->
 
-              </a-collapse-panel>
-              <!-- E 文本样式 -->
+            </a-collapse-panel>
+            <!-- E 文本样式 -->
 
-            </a-collapse>
-          </div>
-        </a-tab-pane>
+          </a-collapse>
+        </div>
+      </a-tab-pane>
 
-      </a-tabs>
-    </div>
+    </a-tabs>
   </div>
 </template>
 
 <script>
 import '@/assets/less/template.less'
-import _ from 'lodash'
-import { mapState, mapMutations } from 'vuex'
-import { ScreenMutations } from '@/store/modules/screen'
-import CommonTemplate from '../common/index'
+import CommonTemplate from '../common'
+import ProprietaryMixins from '../propietaryMixins'
 import ColorPicker from '@/components/colorPicker'
 
 export default {
   name: 'Texts',
+  mixins: [ProprietaryMixins],
   components: {
     CommonTemplate,
     ColorPicker
   },
-  computed: {
-    ...mapState('screen', ['activeWidget']),
-    config () {
-      return _.cloneDeep(this.activeWidget.config)
-    }
-  },
   methods: {
-    ...mapMutations('screen', {
-      activateWidget: ScreenMutations.ACTIVATE_WIDGET,
-      removeWidget: ScreenMutations.REMOVE_WIDGET
-    }),
     positionChange () {
       const { position } = this.config.proprietaryConfig.title
       switch (position.mode) {
@@ -263,27 +238,10 @@ export default {
           break
       }
       this.change()
-    },
-    change () {
-      const activeWidget = _.cloneDeep(this.activeWidget)
-      const { render } = this.activeWidget
-      Object.assign(activeWidget.config, this.config)
-      this.activateWidget({
-        widget: Object.assign(activeWidget, { render })
-      })
-      this.$nextTick(() => {
-        render.mergeOption(this.config)
-      })
     }
   }
 }
 </script>
 
 <style scoped lang="less">
-.texts-config {
-  &__template {
-    height: calc(100vh - 224px);
-    overflow: auto;
-  }
-}
 </style>

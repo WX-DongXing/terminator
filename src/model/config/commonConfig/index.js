@@ -36,6 +36,15 @@ export default class CommonConfig {
   }
 
   /**
+   * 获取配置的padding
+   * @returns {{top: number, left: number, bottom: number, right: number}}
+   */
+  getPadding () {
+    const [top, right, bottom, left] = this.padding
+    return { top, right, bottom, left }
+  }
+
+  /**
    * 获取布局配置
    */
   getOption () {

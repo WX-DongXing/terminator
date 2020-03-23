@@ -963,13 +963,12 @@
 
 <script>
 import '@/assets/less/template.less'
-import _ from 'lodash'
-import { mapState, mapMutations } from 'vuex'
-import { ScreenMutations } from '@/store/modules/screen'
-import ColorPicker from '@/components/colorPicker/index.vue'
+import ColorPicker from '@/components/colorPicker'
+import ProprietaryMixins from '../propietaryMixins'
 
 export default {
   name: 'ChartProprietaryTemplate',
+  mixins: [ProprietaryMixins],
   components: {
     ColorPicker
   },
@@ -981,30 +980,7 @@ export default {
       { name: '三角形', value: 'triangle' },
       { name: '菱形', value: 'diamond' }
     ]
-  }),
-  computed: {
-    ...mapState('screen', ['activeWidget']),
-    config () {
-      return _.cloneDeep(this.activeWidget.config)
-    }
-  },
-  methods: {
-    ...mapMutations('screen', {
-      activateWidget: ScreenMutations.ACTIVATE_WIDGET,
-      removeWidget: ScreenMutations.REMOVE_WIDGET
-    }),
-    change () {
-      const activeWidget = _.cloneDeep(this.activeWidget)
-      const { render } = this.activeWidget
-      Object.assign(activeWidget.config, this.config)
-      this.activateWidget({
-        widget: Object.assign(activeWidget, { render })
-      })
-      this.$nextTick(() => {
-        render.mergeOption(this.config)
-      })
-    }
-  }
+  })
 }
 </script>
 

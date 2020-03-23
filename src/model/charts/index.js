@@ -16,6 +16,7 @@ export default class Chart {
     this.setContainer(widget)
     this.init(widget)
     this.setStyle(widget.config)
+    this.config = widget.config
   }
 
   /**
@@ -47,7 +48,8 @@ export default class Chart {
       ...border.getOption(),
       background: colorMode === 'single' ? backgroundColor : `linear-gradient(${backgroundColor.angle}deg, ${backgroundColor.start}, ${backgroundColor.end})`
     })
-    this.resize()
+    // 在矩形等图形中，设置resize调用矩形类的resize方法，需要传入config配置
+    this.resize(config)
   }
 
   /**
