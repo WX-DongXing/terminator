@@ -55,7 +55,7 @@ import TEMPLATES from './templates'
 import NODES from './nodes'
 import Widget from '@/model/widget'
 import { Range } from '@/model/common'
-import WrapperService from '@/components/wrapper/WrapperService'
+import WrapperService from '@/components/Wrapper/WrapperService'
 import Factory from '@/model/factory/factory'
 
 export default {

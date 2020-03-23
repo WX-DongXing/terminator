@@ -270,9 +270,9 @@ import '@/assets/less/template.less'
 import _ from 'lodash'
 import { mapState, mapGetters, mapMutations } from 'vuex'
 import { ScreenMutations } from '@/store/modules/screen'
-import ColorPicker from '@/components/colorPicker'
-import LinearColorPicker from '@/components/linearColorPicker'
-import AdjustMixins from '@/components/wrapper/AdjustMixins'
+import ColorPicker from '@/components/ColorPicker'
+import LinearColorPicker from '@/components/LinearColorPicker'
+import AdjustMixins from '@/components/Wrapper/AdjustMixins'
 
 export default {
   name: 'CommonTemplate',

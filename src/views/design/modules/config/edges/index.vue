@@ -109,7 +109,7 @@ import _ from 'lodash'
 import { mapMutations, mapState } from 'vuex'
 import { ScreenMutations } from '@/store/modules/screen'
 import EdgeTemplate from './edge'
-import ColorPicker from '@/components/colorPicker'
+import ColorPicker from '@/components/ColorPicker'
 import Template from '../../template/index'
 
 export default {

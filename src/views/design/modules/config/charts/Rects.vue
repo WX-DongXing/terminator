@@ -129,7 +129,7 @@
 import '@/assets/less/template.less'
 import CommonTemplate from '../common'
 import ProprietaryMixins from '../propietaryMixins'
-import ColorPicker from '@/components/colorPicker'
+import ColorPicker from '@/components/ColorPicker'
 
 export default {
   name: 'Rects',

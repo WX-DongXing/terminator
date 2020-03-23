@@ -270,8 +270,8 @@
 import '@/assets/less/template.less'
 import CommonTemplate from '../common/index.vue'
 import ChartProprietaryTemplate from '../chartProprietary'
-import ColorPicker from '@/components/colorPicker'
-import LinearColorPicker from '@/components/linearColorPicker'
+import ColorPicker from '@/components/ColorPicker'
+import LinearColorPicker from '@/components/LinearColorPicker'
 import DataSourceTemplate from '../dataSource'
 import ProprietaryMixins from '../propietaryMixins'
 

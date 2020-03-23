@@ -14,7 +14,7 @@
 
 <script>
 import { mapState } from 'vuex'
-import Renderer from '@/components/renderer'
+import Renderer from '@/components/Renderer'
 export default {
   name: 'Preview',
   components: {

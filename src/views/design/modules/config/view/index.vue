@@ -180,8 +180,8 @@ import { takeWhile, map, filter, switchMap } from 'rxjs/operators'
 import { mapState, mapMutations } from 'vuex'
 import { ScreenMutations } from '@/store/modules/screen'
 import View from '@/model/view'
-import ColorPicker from '@/components/colorPicker'
-import LinearColorPicker from '@/components/linearColorPicker'
+import ColorPicker from '@/components/ColorPicker'
+import LinearColorPicker from '@/components/LinearColorPicker'
 import ViewService from './index'
 
 export default {

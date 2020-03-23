@@ -24,7 +24,7 @@
 </template>
 
 <script>
-import ColorPicker from '@/components/colorPicker'
+import ColorPicker from '@/components/ColorPicker'
 
 export default {
   name: 'LinearColorPicker',

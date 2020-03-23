@@ -307,9 +307,9 @@ import CommonTemplate from '../common/index.vue'
 import ChartProprietaryTemplate from '../chartProprietary'
 import DataSourceTemplate from '../dataSource'
 import ProprietaryMixins from '../propietaryMixins'
-import ColorPicker from '@/components/colorPicker'
-import SingleColorSelector from '@/components/singleColorSelector'
-import LinearColorSelector from '@/components/linearColorSelector'
+import ColorPicker from '@/components/ColorPicker'
+import SingleColorSelector from '@/components/SingleColorSelector'
+import LinearColorSelector from '@/components/LinearColorSelector'
 
 export default {
   name: 'Bar',

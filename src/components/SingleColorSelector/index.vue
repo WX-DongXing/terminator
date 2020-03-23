@@ -34,7 +34,7 @@
 
 <script>
 import '@/assets/less/template.less'
-import ColorPicker from '@/components/colorPicker/index.vue'
+import ColorPicker from '@/components/ColorPicker'
 
 export default {
   name: 'SingleColorSelector',

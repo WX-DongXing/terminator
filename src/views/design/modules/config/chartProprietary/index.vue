@@ -963,7 +963,7 @@
 
 <script>
 import '@/assets/less/template.less'
-import ColorPicker from '@/components/colorPicker'
+import ColorPicker from '@/components/ColorPicker'
 import ProprietaryMixins from '../propietaryMixins'
 
 export default {

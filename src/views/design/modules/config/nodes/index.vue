@@ -255,8 +255,8 @@ import '@/assets/less/template.less'
 import _ from 'lodash'
 import { mapMutations, mapState } from 'vuex'
 import { ScreenMutations } from '@/store/modules/screen'
-import IconPicker from '@/components/iconPicker'
-import ColorPicker from '@/components/colorPicker'
+import IconPicker from '@/components/IconPicker'
+import ColorPicker from '@/components/ColorPicker'
 
 export default {
   name: 'CommonNodeTemplate',

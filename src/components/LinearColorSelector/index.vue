@@ -32,7 +32,7 @@
 </template>
 
 <script>
-import ColorPicker from '@/components/colorPicker/index'
+import ColorPicker from '@/components/ColorPicker'
 
 export default {
   name: 'LinearColorSelector',
