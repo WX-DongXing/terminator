@@ -1,18 +1,18 @@
 /**
-* 矩形专有配置
+* 圆形专有配置
 * Author: dong xing
-* Date: 2020/3/19
-* Time: 16:50
+* Date: 2020/3/24
+* Time: 10:59
 * Email: dong.xing@outlook.com
 */
 
-import { RectGraphic } from './index'
+import { CircleGraphic } from './index'
 
-export default class RectProprietaryConfig {
+export default class CircleProprietaryConfig {
   constructor ({
     graphic = {}
   }) {
-    this.graphic = new RectGraphic(graphic)
+    this.graphic = new CircleGraphic(graphic)
   }
 
   getOption (chart, padding) {

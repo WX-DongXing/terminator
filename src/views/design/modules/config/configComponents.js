@@ -11,6 +11,7 @@ import Bar from './charts/Bar'
 import Texts from './charts/Texts'
 import Rects from './charts/Rects'
 import Topology from './charts/Topology'
+import CircleConfig from './charts/CircleConfig'
 
 // 图表模板配置
 const charts = {
@@ -18,7 +19,8 @@ const charts = {
   Lines,
   Texts,
   Rects,
-  Topology
+  Topology,
+  CircleConfig
 }
 
 // 元素模板配置

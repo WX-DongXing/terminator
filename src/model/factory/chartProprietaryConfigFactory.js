@@ -11,6 +11,7 @@ import TopologyProprietaryConfig from '../config/proprietaryConfigs/TopologyProp
 import TextsProprietaryConfig from '../config/proprietaryConfigs/TextsProprietaryConfig'
 import ViewProprietaryConfig from '../config/proprietaryConfigs/ViewProprietaryConfig'
 import RectProprietaryConfig from '../config/proprietaryConfigs/RectProprietaryConfig'
+import CircleProprietaryConfig from '../config/proprietaryConfigs/CircleProprietaryConfig'
 
 export default class ChartProprietaryConfigFactory {
   static create ({ type, proprietaryConfig = {} }) {
@@ -25,6 +26,8 @@ export default class ChartProprietaryConfigFactory {
         return new TextsProprietaryConfig(proprietaryConfig)
       case 'Rect':
         return new RectProprietaryConfig(proprietaryConfig)
+      case 'Circle':
+        return new CircleProprietaryConfig(proprietaryConfig)
       case 'ViewConfig':
         return new ViewProprietaryConfig(proprietaryConfig)
       default:

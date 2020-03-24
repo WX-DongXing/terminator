@@ -47,12 +47,13 @@ export default {
     ...CONFIGCOMPONENTS
   },
   data: () => ({
-    // todo 之后更改命名，使其更加语义化: ['line', 'LineConfigTemplate']
+    // todo 之后更改命名，使其更加语义化: ['line', 'LineConfig']
     templateMapping: new Map([
       ['Bar', 'Bar'],
       ['Lines', 'Lines'],
       ['Texts', 'Texts'],
       ['Rect', 'Rects'],
+      ['Circle', 'CircleConfig'],
       ['Topology', 'Topology'],
       ['ViewConfig', 'ViewConfig']
     ])
