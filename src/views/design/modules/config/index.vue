@@ -54,6 +54,7 @@ export default {
       ['Texts', 'Texts'],
       ['Rect', 'Rects'],
       ['Circle', 'CircleConfig'],
+      ['Triangle', 'TriangleConfig'],
       ['Topology', 'Topology'],
       ['ViewConfig', 'ViewConfig']
     ])

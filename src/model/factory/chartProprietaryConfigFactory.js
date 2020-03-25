@@ -12,6 +12,7 @@ import TextsProprietaryConfig from '../config/proprietaryConfigs/TextsProprietar
 import ViewProprietaryConfig from '../config/proprietaryConfigs/ViewProprietaryConfig'
 import RectProprietaryConfig from '../config/proprietaryConfigs/RectProprietaryConfig'
 import CircleProprietaryConfig from '../config/proprietaryConfigs/CircleProprietaryConfig'
+import TriangleChartProprietaryConfig from '../config/proprietaryConfigs/TriangleProprietaryConfig'
 
 export default class ChartProprietaryConfigFactory {
   static create ({ type, proprietaryConfig = {} }) {
@@ -28,6 +29,8 @@ export default class ChartProprietaryConfigFactory {
         return new RectProprietaryConfig(proprietaryConfig)
       case 'Circle':
         return new CircleProprietaryConfig(proprietaryConfig)
+      case 'Triangle':
+        return new TriangleChartProprietaryConfig(proprietaryConfig)
       case 'ViewConfig':
         return new ViewProprietaryConfig(proprietaryConfig)
       default:

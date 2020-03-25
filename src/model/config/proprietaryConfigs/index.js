@@ -615,7 +615,7 @@ class CircleShape {
 }
 
 /**
- * 矩形
+ * 圆形
  */
 class CircleGraphic extends Graphic {
   constructor ({
@@ -650,6 +650,69 @@ class CircleGraphic extends Graphic {
   }
 }
 
+/**
+ * 三角形形状
+ */
+class TriangleShape {
+  constructor ({
+    points = [],
+    smooth = 0
+  }) {
+    this.points = points
+    this.smooth = smooth
+  }
+
+  /**
+   * 映射配置
+   * @param chart
+   * @param lineWidth
+   * @param padding
+   */
+  getOption (chart, lineWidth, padding) {
+    const { top, left, right, bottom } = padding
+    const width = chart.getWidth() - lineWidth
+    const height = chart.getHeight() - lineWidth - bottom
+    const vertex = [width / 2, top]
+    const leftPoint = [left, height]
+    const rightPoint = [width - right, height]
+
+    return {
+      points: [vertex, leftPoint, rightPoint],
+      smooth: this.smooth
+    }
+  }
+}
+
+/**
+ * 三角形
+ */
+class TriangleGraphic extends Graphic {
+  constructor ({
+    shape = {},
+    ...graphicOption
+  }) {
+    super(graphicOption)
+    this.type = 'polygon'
+    this.shape = new TriangleShape(shape)
+  }
+
+  /**
+   * 映射配置
+   * @param chart
+   * @param padding
+   * @returns {any}
+   */
+  getOption (chart, padding) {
+    return Object.assign(_.cloneDeep(this),
+      {
+        shape: this.shape.getOption(chart, this.style.lineWidth, padding),
+        style: this.style.getOption()
+      },
+      padding
+    )
+  }
+}
+
 export {
   AreaStyle,
   BarItemStyle,
@@ -661,5 +724,6 @@ export {
   XAixs,
   YAixs,
   RectGraphic,
-  CircleGraphic
+  CircleGraphic,
+  TriangleGraphic
 }

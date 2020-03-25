@@ -12,6 +12,7 @@ import Texts from './charts/Texts'
 import Rects from './charts/Rects'
 import Topology from './charts/Topology'
 import CircleConfig from './charts/CircleConfig'
+import TriangleConfig from './charts/TriangleConfig'
 
 // 图表模板配置
 const charts = {
@@ -20,7 +21,8 @@ const charts = {
   Texts,
   Rects,
   Topology,
-  CircleConfig
+  CircleConfig,
+  TriangleConfig
 }
 
 // 元素模板配置

@@ -33,6 +33,9 @@ const charts = [
   },
   {
     category: 'CHART', type: 'Circle', name: '圆形', icon: 'loading-3-quarters', width: 300, height: 300
+  },
+  {
+    category: 'CHART', type: 'Triangle', name: '三角形', icon: 'heat-map', width: 300, height: 300
   }
 ]
 
