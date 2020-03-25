@@ -7,7 +7,7 @@
 */
 <template>
   <div class="view-config">
-    <a-collapse :activeKey="[1, 2, 3, 4]" :bordered="false">
+    <a-collapse :activeKey="activeKey" :bordered="false">
 
       <!-- S 尺寸 -->
       <a-collapse-panel header="尺寸" key="1">
@@ -198,9 +198,12 @@ export default {
       end: 'rgba(0, 0, 0, 1)',
       angle: 180
     },
+    activeKey: [1, 2, 3, 4],
     viewService: new ViewService()
   }),
   mounted () {
+    // Todo 之后连接数据库后，做成上传，暂时将以本地 base64 图片储存，图片质量太大但是会有很大的性能问题
+    // 监听粘贴时间，将粘贴板中的图片转成 base64
     fromEvent(this.$refs.screenshot.$el, 'paste')
       .pipe(
         takeWhile(() => this.isSubscribed),

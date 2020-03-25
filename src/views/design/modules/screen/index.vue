@@ -456,7 +456,6 @@ export default {
      */
     importConfig (file) {
       const reader = new FileReader()
-      reader.readAsText(file)
       reader.onload = () => {
         // 清空当前视图配置
         this.clear()
@@ -475,6 +474,7 @@ export default {
         // 设置视图样式
         this.setStyle({ type: 'input' })
       }
+      reader.readAsText(file)
       return false
     },
     /**

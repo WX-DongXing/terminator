@@ -713,6 +713,66 @@ class TriangleGraphic extends Graphic {
   }
 }
 
+/**
+ * 图片样式
+ */
+class ImageStyle {
+  constructor ({
+    x = 0,
+    y = 0,
+    width = 7127.6,
+    height = 2890,
+    image = 'https://www.echartsjs.com/zh/images/asf_logo.svg'
+  }) {
+    this.x = x
+    this.y = y
+    this.width = width
+    this.height = height
+    this.image = image
+  }
+}
+
+/**
+ * 图片
+ */
+class ImageGraphic extends Graphic {
+  constructor ({
+    imageSource = 'network',
+    ...graphicOption
+  }) {
+    super(graphicOption)
+    this.type = 'image'
+    this.imageSource = imageSource
+    this.style = new ImageStyle(this.style)
+  }
+
+  /**
+   * 映射配置
+   * @param chart
+   * @param padding
+   * @returns {any}
+   */
+  getOption (chart, padding) {
+    const { top, left, right, bottom } = padding
+    const width = chart.getWidth() - left - right
+    const height = chart.getHeight() - top - bottom
+    const imageRatio = this.style.width / this.style.height
+    const containerRatio = width / height
+    const limit = imageRatio >= containerRatio
+      ? { width, height: width / imageRatio }
+      : { height, width: height * imageRatio }
+    const center = { x: (width - limit.width) / 2, y: (height - limit.height) / 2 }
+
+    return Object.assign(_.cloneDeep(this),
+      {
+        style: { image: this.style.image, ...limit },
+        top: center.y + top,
+        left: center.x + left
+      }
+    )
+  }
+}
+
 export {
   AreaStyle,
   BarItemStyle,
@@ -725,5 +785,6 @@ export {
   YAixs,
   RectGraphic,
   CircleGraphic,
-  TriangleGraphic
+  TriangleGraphic,
+  ImageGraphic
 }

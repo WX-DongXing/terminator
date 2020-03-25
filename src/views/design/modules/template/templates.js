@@ -19,9 +19,6 @@ const charts = [
   // {
   //   category: 'CHART', type: 'Pie', name: '饼图', icon: 'pie-chart', width: 300, height: 300
   // },
-  // {
-  //   category: 'CHART', type: 'Area', name: '区域图', icon: 'area-chart', width: 300, height: 300
-  // },
   {
     category: 'CHART', type: 'Topology', name: '拓扑图', icon: 'branches', width: 800, height: 600
   },
@@ -36,6 +33,9 @@ const charts = [
   },
   {
     category: 'CHART', type: 'Triangle', name: '三角形', icon: 'heat-map', width: 300, height: 300
+  },
+  {
+    category: 'CHART', type: 'Image', name: '图片', icon: 'picture', width: 300, height: 300
   }
 ]
 

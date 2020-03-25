@@ -47,7 +47,7 @@ export default class View {
     this.scale = scale
     this.cover = cover
     this.config = new Config(Object.assign(config, {
-      type: 'ViewConfig'
+      type: 'View'
     }))
     // 视图有效区域
     this.area = {

@@ -12,7 +12,7 @@ import _ from 'lodash'
 export default class Chart {
   constructor ({ widget }) {
     this.container = document.getElementById(widget.widgetId)
-    this.chartConfig = {}
+    this.option = {}
     this.setContainer(widget)
     this.init(widget)
     this.setStyle(widget.config)
@@ -89,13 +89,13 @@ export default class Chart {
    */
   mergeOption (config) {
     // 向外暴露 echarts 配置
-    this.chartConfig = this.mappingOption(config)
+    this.option = this.mappingOption(config)
     // 如果数据为空则清空图表
-    if (_.isEmpty(this.chartConfig.series)) {
+    if (_.isEmpty(this.option.series)) {
       this.chart.clear()
     }
     // 重新配置图表
-    this.chart.setOption(this.chartConfig)
+    this.chart.setOption(this.option)
   }
 
   /**

@@ -56,7 +56,8 @@ export default {
       ['Circle', 'CircleConfig'],
       ['Triangle', 'TriangleConfig'],
       ['Topology', 'Topology'],
-      ['ViewConfig', 'ViewConfig']
+      ['Image', 'ImageConfig'],
+      ['View', 'ViewConfig']
     ])
   }),
   computed: {
