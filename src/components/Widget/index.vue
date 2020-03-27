@@ -70,7 +70,7 @@ export default {
     // 根据类型创建图表
     this.render = widgetFactory.create(type, {
       widget: this.widget,
-      element: this.$refs.element.$el
+      element: this.$refs.element && this.$refs.element.$el
     })
 
     // 如果在编辑状态，将渲染的元素更新至部件
