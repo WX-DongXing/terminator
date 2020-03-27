@@ -12,6 +12,11 @@
     :id="widget.widgetId"
     :ref="widget.widgetId"
     @click.stop="() => $emit('select', selectWidget)">
+
+    <!-- S 元素部件 -->
+    <component v-if="useComponent" :is="elementName" :option="option" ref="element" />
+    <!-- E 元素部件 -->
+
   </div>
 </template>
 
@@ -19,9 +24,13 @@
 import { mapMutations } from 'vuex'
 import { ScreenMutations } from '@/store/modules/screen'
 import Factory from '@/model/factory/factory'
+import { ELEMENTS, ELEMENTMAPPING } from '../Elements'
 
 export default {
   name: 'Widget',
+  components: {
+    ...ELEMENTS
+  },
   props: {
     widget: {
       type: Object,
@@ -36,8 +45,21 @@ export default {
     render: null
   }),
   computed: {
+    // 选择的部件
     selectWidget () {
       return Object.assign({}, this.widget, { render: this.render })
+    },
+    // 在类型为元素时使用组件进行渲染
+    useComponent () {
+      return this.widget.config.category === 'ELEMENT'
+    },
+    // 元素组件名
+    elementName () {
+      return ELEMENTMAPPING.get(this.widget.config.type)
+    },
+    // 元素配置
+    option () {
+      return this.widget.config.proprietaryConfig.option
     }
   },
   mounted () {
@@ -47,7 +69,8 @@ export default {
       : Factory.createElementFactory()
     // 根据类型创建图表
     this.render = widgetFactory.create(type, {
-      widget: this.widget
+      widget: this.widget,
+      element: this.$refs.element.$el
     })
 
     // 如果在编辑状态，将渲染的元素更新至部件

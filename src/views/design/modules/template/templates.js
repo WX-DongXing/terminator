@@ -20,7 +20,7 @@ const charts = [
   //   category: 'CHART', type: 'Pie', name: '饼图', icon: 'pie-chart', width: 300, height: 300
   // },
   {
-    category: 'CHART', type: 'Topology', name: '拓扑图', icon: 'branches', width: 800, height: 600
+    category: 'CHART', type: 'Topology', name: '拓扑图', icon: 'deployment-unit', width: 800, height: 600
   },
   {
     category: 'CHART', type: 'Texts', name: '文本', icon: 'font-colors', width: 350, height: 150
@@ -41,9 +41,9 @@ const charts = [
 
 // 元素模板
 const elements = [
-  // {
-  //   category: 'ELEMENT', type: 'text', name: '文本', icon: 'font-colors', width: 300, height: 200
-  // }
+  {
+    category: 'ELEMENT', type: 'Icon', name: '图标', icon: 'ant-design', width: 200, height: 200
+  }
 ]
 
 // 可拓展模板

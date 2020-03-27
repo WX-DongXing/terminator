@@ -21,7 +21,7 @@ export default class CommonConfig {
     zIndex = 0,
     padding = [0, 0, 0, 0],
     colorMode = 'single',
-    backgroundColor = 'rgba(255,255,255,1)',
+    backgroundColor = 'rgba(255,255,255,0)',
     border = {}
   }) {
     this.width = width

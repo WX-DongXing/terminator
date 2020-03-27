@@ -2,7 +2,7 @@ import Vue from 'vue'
 import {
   Button, Tooltip, Slider, Switch, Icon,
   Input, Tabs, Select, Popconfirm, Collapse,
-  Radio, Upload, message
+  Radio, Upload, Pagination, message
 } from 'ant-design-vue'
 import 'ant-design-vue/dist/antd.css'
 
@@ -18,5 +18,6 @@ Vue.use(Popconfirm)
 Vue.use(Collapse)
 Vue.use(Radio)
 Vue.use(Upload)
+Vue.use(Pagination)
 
 Vue.prototype.$message = message

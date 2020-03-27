@@ -773,6 +773,23 @@ class ImageGraphic extends Graphic {
   }
 }
 
+/**
+ * icon 元素配置
+ */
+class IconOption {
+  constructor ({
+    type = 'ant-design',
+    theme = 'outlined',
+    spin = false,
+    rotate = 0
+  }) {
+    this.type = type
+    this.theme = theme
+    this.spin = spin
+    this.rotate = rotate
+  }
+}
+
 export {
   AreaStyle,
   BarItemStyle,
@@ -786,5 +803,6 @@ export {
   RectGraphic,
   CircleGraphic,
   TriangleGraphic,
-  ImageGraphic
+  ImageGraphic,
+  IconOption
 }

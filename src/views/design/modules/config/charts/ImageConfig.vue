@@ -1,5 +1,5 @@
 /**
-* 图片配置模板
+* 图片配置
 * Author: dong xing
 * Date: 2020/3/25
 * Time: 10:08

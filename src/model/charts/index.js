@@ -20,7 +20,7 @@ export default class Chart {
   }
 
   /**
-   * 初始设置图表位置尺寸
+   * 初始设置容器位置尺寸
    * @param config
    */
   setContainer ({ config }) {
@@ -80,7 +80,6 @@ export default class Chart {
   /**
    * 映射成 echarts 配置项
    */
-  // eslint-disable-next-line class-methods-use-this
   mappingOption () {}
 
   /**

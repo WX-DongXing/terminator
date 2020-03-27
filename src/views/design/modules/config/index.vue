@@ -57,6 +57,7 @@ export default {
       ['Triangle', 'TriangleConfig'],
       ['Topology', 'Topology'],
       ['Image', 'ImageConfig'],
+      ['Icon', 'IconConfig'],
       ['View', 'ViewConfig']
     ])
   }),

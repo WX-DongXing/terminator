@@ -5,15 +5,13 @@
 * Time: 5:36 下午
 * Email: dong.xing@outlook.com
 */
-
-// import TextElement from '../element/TextElement';
+import IconElement from '../elements/IconElement'
 
 export default class ElementFactory {
   static create (type, widget) {
     switch (type) {
-      case 'text':
-        // return new TextElement()
-        return null
+      case 'Icon':
+        return new IconElement(widget)
       default:
         return null
     }

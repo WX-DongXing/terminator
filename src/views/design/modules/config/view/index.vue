@@ -210,9 +210,9 @@ export default {
         map(event => event.clipboardData && event.clipboardData.items),
         filter(items => items.length > 0 && items[0].type.indexOf('image') !== -1),
         switchMap(item => {
-          const fr = new FileReader()
-          fr.readAsDataURL(item[0].getAsFile())
-          return fromEvent(fr, 'load')
+          const reader = new FileReader()
+          reader.readAsDataURL(item[0].getAsFile())
+          return fromEvent(reader, 'load')
         })
       )
       .subscribe(({ currentTarget }) => {

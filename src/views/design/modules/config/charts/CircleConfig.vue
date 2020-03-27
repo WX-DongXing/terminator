@@ -1,3 +1,10 @@
+/**
+* 圆形配置
+* Author: dong xing
+* Date: 2020/3/26
+* Time: 14:24
+* Email: dong.xing@outlook.com
+*/
 <template>
   <div class="circle-config">
     <a-tabs
