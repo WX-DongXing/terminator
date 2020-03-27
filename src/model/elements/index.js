@@ -37,12 +37,13 @@ export default class Element {
       ...border.getOption(),
       background: colorMode === 'single' ? backgroundColor : `linear-gradient(${backgroundColor.angle}deg, ${backgroundColor.start}, ${backgroundColor.end})`
     })
+    this.mergeOption(config)
   }
 
   /**
-   * 设置专有属性样式，与图表对象使用同一方法
+   * 设置专有属性样式，与图表对象使用同一方法m名
    */
-  mergeOption () {}
+  mergeOption (config) {}
 
   resize () {}
 
