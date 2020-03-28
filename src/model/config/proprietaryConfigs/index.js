@@ -277,6 +277,7 @@ class Title {
     text = '文本',
     link = '',
     target = 'blank',
+    letterSpace = 0,
     textStyle = {
       fontSize: 24
     },
@@ -285,6 +286,7 @@ class Title {
     this.text = text
     this.link = link
     this.target = target
+    this.letterSpace = letterSpace
     this.textStyle = new TextStyle(textStyle)
     this.position = new Position(position)
   }
@@ -293,7 +295,10 @@ class Title {
    * 获取标题配置
    */
   getOption () {
-    return Object.assign(_.cloneDeep(this), this.position.getOption())
+    return Object.assign(_.cloneDeep(this),
+      this.position.getOption(), {
+        text: [...this.text].join(new Array(this.letterSpace).fill(' ').join(''))
+      })
   }
 }
 

@@ -40,6 +40,18 @@
               <!-- / 文本 -->
 
               <div class="comment-template__item">
+                <p class="comment-template__leading">间隔:</p>
+                <div class="comment-template__inner">
+                  <a-slider
+                    :min="0"
+                    :max="16"
+                    @change="change"
+                    v-model.number="config.proprietaryConfig.title.letterSpace" />
+                </div>
+              </div>
+              <!-- / 间隔 -->
+
+              <div class="comment-template__item">
                 <p class="comment-template__leading">链接:</p>
                 <div class="comment-template__inner">
                   <a-input
