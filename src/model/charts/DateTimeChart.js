@@ -10,13 +10,16 @@ import Chart from './index'
 export default class DateTimeChart extends Chart {
   constructor ({ widget }) {
     super({ widget })
-    this.getCurrentDate(widget)
+    this.startTimer()
   }
 
-  getCurrentDate (widget) {
-    this.mergeOption(widget.config)
+  /**
+   * 启动定时器
+   */
+  startTimer () {
+    this.mergeOption(this.config)
     this.timer = setInterval(() => {
-      this.mergeOption(widget.config)
+      this.mergeOption(this.config)
     }, 1000)
   }
 
@@ -30,6 +33,7 @@ export default class DateTimeChart extends Chart {
   }
 
   destroy () {
+    // 销毁时清除定时器
     clearInterval(this.timer)
   }
 }

@@ -20,7 +20,7 @@
 
       </a-tab-pane>
 
-      <a-tab-pane tab="专有属性" key="2">
+      <a-tab-pane tab="专有属性" key="2" class="visible-collapse-panel">
         <div class="icon-config__template">
           <a-collapse :defaultActiveKey="[1,2]" :bordered="false">
 

@@ -29,7 +29,7 @@
             <!-- S 折线图专有配置 -->
             <a-collapse defaultActiveKey="1" :bordered="false">
 
-              <a-collapse-panel header="折线" key="1">
+              <a-collapse-panel header="折线" key="1" class="visible-collapse-panel">
 
                 <div class="comment-template__item">
                   <p class="comment-template__leading">类型:</p>
@@ -82,7 +82,7 @@
               </a-collapse-panel>
               <!-- / 折线 -->
 
-              <a-collapse-panel header="拐点" key="2">
+              <a-collapse-panel header="拐点" key="2" class="visible-collapse-panel">
 
                 <div class="comment-template__item">
                   <p class="comment-template__leading">显示:</p>
@@ -193,7 +193,7 @@
               </a-collapse-panel>
               <!-- / 拐点标志 -->
 
-              <a-collapse-panel header="填充样式" key="3">
+              <a-collapse-panel header="填充样式" key="3" class="visible-collapse-panel">
 
                 <div class="comment-template__item">
                   <p class="comment-template__leading">显示:</p>

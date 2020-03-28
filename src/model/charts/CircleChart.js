@@ -13,11 +13,12 @@ export default class CircleChart extends Chart {
     super({ widget })
   }
 
-  resize (config) {
-    if (config) {
-      this.chart.resize()
-      this.mergeOption(config)
-    }
+  /**
+   * 尺寸
+   */
+  resize () {
+    this.chart.resize()
+    this.mergeOption(this.config)
   }
 
   /**

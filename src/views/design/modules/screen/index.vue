@@ -150,6 +150,7 @@ export default {
     height: 1080,
     leftPanelExpand: true,
     rightPanelExpand: true,
+    initConfig: {},
     backgroundColor: 'rgba(255,255,255,1)',
     scale: 1,
     isAutoResize: true,
@@ -185,6 +186,8 @@ export default {
         startWith({ type: 'init' })
       )
       .subscribe((event) => {
+        // 获取初始化配置
+        this.initConfig = this.getInitConfig(event)
         // 更新滚动条
         this.perfectScrollBar && this.perfectScrollBar.update()
 
@@ -197,7 +200,8 @@ export default {
               gauge: this.$refs.gauge,
               parent: this.$refs.page,
               scale: this.scale
-            }
+            },
+            { ...this.initConfig }
           ))
         })
 
@@ -284,7 +288,7 @@ export default {
         pluck('event', 'msg')
       )
       .subscribe((mutation) => {
-        const { widgetId, config, render } = this.activeWidget
+        const { widgetId, render } = this.activeWidget
         const [targetComponent] = this.$refs[widgetId]
         const { event } = mutation
         // 当鼠标抬起时更新部件位置状态
@@ -311,7 +315,7 @@ export default {
           target: targetComponent.$el,
           mutation
         })
-        this.activeWidget.render.resize(config)
+        this.activeWidget.render.resize()
       })
   },
   computed: {
@@ -323,6 +327,23 @@ export default {
       setView: ScreenMutations.SET_VIEW,
       activateWidget: ScreenMutations.ACTIVATE_WIDGET
     }),
+    /**
+     * 获取初始化配置
+     * @param event 事件
+     */
+    getInitConfig (event) {
+      if (event.type && event.type === 'init') {
+        return {
+          config: {
+            commonConfig: {
+              width: document.body.clientWidth,
+              height: document.body.clientHeight
+            }
+          }
+        }
+      }
+      return {}
+    },
     /**
      * 左右panel展开与否
      * @param type 左右panel
@@ -483,7 +504,7 @@ export default {
     clear () {
       // 清空部件列表
       this.setView({
-        view: new View({ ..._.pick(this.view, ['id', 'el', 'gauge', 'parent']) })
+        view: new View({ ..._.pick(this.view, ['id', 'el', 'gauge', 'parent']), ...this.initConfig })
       })
       // 设置当前激活为当前画板
       this.activateWidget({ widget: this.view })

@@ -25,7 +25,7 @@
           <a-collapse defaultActiveKey="1" :bordered="false">
 
             <!-- S 日期样式 -->
-            <a-collapse-panel header="日期时间" key="1">
+            <a-collapse-panel header="日期时间" key="1" class="visible-collapse-panel">
 
               <div class="comment-template__item">
                 <p class="comment-template__leading">语言:</p>

@@ -282,7 +282,7 @@ class Title {
     target = 'blank',
     letterSpace = 0,
     textStyle = {
-      fontSize: 24
+      fontSize: 18
     },
     position = {}
   }) {
@@ -311,7 +311,7 @@ class Title {
 class DateTimeTitle extends Title {
   constructor ({
     type = 'select',
-    format = 'YYYY MM DD h:mm:ss a',
+    format = 'YYYY MM DD dddd a h:mm:ss',
     language = 'zh-cn',
     ...props
   }) {

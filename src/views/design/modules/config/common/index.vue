@@ -11,7 +11,7 @@
     <a-collapse defaultActiveKey="1" :bordered="false">
 
       <!-- S 背景颜色 -->
-      <a-collapse-panel header="背景" key="1">
+      <a-collapse-panel header="背景" key="1" class="visible-collapse-panel">
 
         <div class="comment-template__item">
           <p class="comment-template__leading">颜色模式:</p>
@@ -50,7 +50,7 @@
       <!-- E 背景颜色 -->
 
       <!-- S 边框 -->
-      <a-collapse-panel header="边框" key="2">
+      <a-collapse-panel header="边框" key="2" class="visible-collapse-panel">
 
         <div class="comment-template__item">
           <p class="comment-template__leading">类型:</p>
@@ -399,7 +399,7 @@ export default {
 
       // 更新部件后，如果进行尺寸的修改则重新resize图表
       if (type === 'size') {
-        this.activeWidget.render.resize(this.activeWidget.config)
+        this.activeWidget.render.resize()
       }
     },
     /**

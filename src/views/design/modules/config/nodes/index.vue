@@ -15,7 +15,7 @@
     <a-collapse defaultActiveKey="1" :bordered="false">
 
       <!-- S 节点 -->
-      <a-collapse-panel header="节点" key="1">
+      <a-collapse-panel header="节点" key="1" class="visible-collapse-panel">
 
         <slot name="inside-header" :model="model" />
         <!-- / 节点通用配置内部顶部插槽 -->

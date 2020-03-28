@@ -11,7 +11,7 @@ import { IconOption } from './index'
 
 export default class IconProprietaryConfig {
   constructor ({
-    fontSize = 96,
+    fontSize = 48,
     color = 'rgba(64, 169, 255, 1)',
     option = {}
   }) {

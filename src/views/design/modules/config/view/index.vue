@@ -38,7 +38,7 @@
       <!-- E 尺寸 -->
 
       <!-- E 背景 -->
-      <a-collapse-panel header="背景" key="2">
+      <a-collapse-panel header="背景" key="2" class="visible-collapse-panel">
 
         <div class="comment-template__item">
           <p class="comment-template__leading">模式:</p>

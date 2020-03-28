@@ -48,8 +48,7 @@ export default class Chart {
       ...border.getOption(),
       background: colorMode === 'single' ? backgroundColor : `linear-gradient(${backgroundColor.angle}deg, ${backgroundColor.start}, ${backgroundColor.end})`
     })
-    // 在矩形等图形中，设置resize调用矩形类的resize方法，需要传入config配置
-    this.resize(config)
+    this.resize()
   }
 
   /**
@@ -87,6 +86,8 @@ export default class Chart {
    * @param config widget 配置项
    */
   mergeOption (config) {
+    // 更新配置项
+    this.config = config
     // 向外暴露 echarts 配置
     this.option = this.mappingOption(config)
     // 如果数据为空则清空图表

@@ -15,7 +15,7 @@
     <!-- E 折线图专有配置 -->
     <a-collapse :bordered="false">
 
-      <a-collapse-panel header="图例" key="1">
+      <a-collapse-panel header="图例" key="1" class="visible-collapse-panel">
 
         <div class="comment-template__item">
           <p class="comment-template__leading">显示:</p>
@@ -145,7 +145,7 @@
       </a-collapse-panel>
       <!-- / 图例 -->
 
-      <a-collapse-panel header="X坐标轴" key="2">
+      <a-collapse-panel header="X坐标轴" key="2" class="visible-collapse-panel">
 
         <div class="comment-template__item">
           <p class="comment-template__leading">显示:</p>

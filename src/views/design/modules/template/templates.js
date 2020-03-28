@@ -23,29 +23,29 @@ const charts = [
     category: 'CHART', type: 'Topology', name: '拓扑图', icon: 'deployment-unit', width: 800, height: 600
   },
   {
-    category: 'CHART', type: 'Texts', name: '文本', icon: 'font-colors', width: 350, height: 150
+    category: 'CHART', type: 'Texts', name: '文本', icon: 'font-colors', width: 350, height: 100
   },
   {
-    category: 'CHART', type: 'Rect', name: '矩形', icon: 'border', width: 300, height: 300
+    category: 'CHART', type: 'Rect', name: '矩形', icon: 'border', width: 200, height: 200
   },
   {
-    category: 'CHART', type: 'Circle', name: '圆形', icon: 'loading-3-quarters', width: 300, height: 300
+    category: 'CHART', type: 'Circle', name: '圆形', icon: 'loading-3-quarters', width: 200, height: 200
   },
   {
-    category: 'CHART', type: 'Triangle', name: '三角形', icon: 'heat-map', width: 300, height: 300
+    category: 'CHART', type: 'Triangle', name: '三角形', icon: 'heat-map', width: 200, height: 200
   },
   {
     category: 'CHART', type: 'Image', name: '图片', icon: 'picture', width: 300, height: 300
   },
   {
-    category: 'CHART', type: 'DateTime', name: '时间日期', icon: 'clock-circle', width: 300, height: 300
+    category: 'CHART', type: 'DateTime', name: '时间日期', icon: 'clock-circle', width: 350, height: 100
   }
 ]
 
 // 元素模板
 const elements = [
   {
-    category: 'ELEMENT', type: 'Icon', name: '图标', icon: 'ant-design', width: 200, height: 200
+    category: 'ELEMENT', type: 'Icon', name: '图标', icon: 'ant-design', width: 100, height: 100
   }
 ]
 

@@ -85,7 +85,7 @@
 
             <a-collapse :bordered="false">
 
-              <a-collapse-panel header="柱条颜色" key="1">
+              <a-collapse-panel header="柱条颜色" key="1" class="visible-collapse-panel">
 
                 <div class="comment-template__item">
                   <p class="comment-template__leading">颜色类型:</p>
