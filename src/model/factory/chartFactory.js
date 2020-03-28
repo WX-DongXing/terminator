@@ -13,6 +13,7 @@ import RectChart from '../charts/RectChart'
 import CircleChart from '../charts/CircleChart'
 import TriangleChart from '../charts/TriangleChart'
 import ImageChart from '../charts/ImageChart'
+import DateTimeChart from '../charts/DateTimeChart'
 
 export default class ChartFactory {
   static create (type, widget) {
@@ -33,6 +34,8 @@ export default class ChartFactory {
         return new TriangleChart(widget)
       case 'Image':
         return new ImageChart(widget)
+      case 'DateTime':
+        return new DateTimeChart(widget)
       default:
         return null
     }

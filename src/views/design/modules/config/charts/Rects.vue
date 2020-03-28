@@ -150,7 +150,7 @@
 <script>
 import '@/assets/less/template.less'
 import CommonTemplate from '../common'
-import ProprietaryMixins from '../propietaryMixins'
+import ProprietaryMixins from '../proprietaryMixins'
 import ColorPicker from '@/components/ColorPicker'
 import LinearColorPicker from '@/components/LinearColorPicker'
 

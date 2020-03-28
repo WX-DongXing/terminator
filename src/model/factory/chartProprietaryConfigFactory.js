@@ -14,6 +14,7 @@ import RectProprietaryConfig from '../config/proprietaryConfigs/RectProprietaryC
 import CircleProprietaryConfig from '../config/proprietaryConfigs/CircleProprietaryConfig'
 import TriangleChartProprietaryConfig from '../config/proprietaryConfigs/TriangleProprietaryConfig'
 import ImageProprietaryConfig from '../config/proprietaryConfigs/ImageProprietaryConfig'
+import DateTimeProprietaryConfig from '../config/proprietaryConfigs/DateTimeProprietaryConfig'
 
 export default class ChartProprietaryConfigFactory {
   static create ({ type, proprietaryConfig = {} }) {
@@ -34,6 +35,8 @@ export default class ChartProprietaryConfigFactory {
         return new TriangleChartProprietaryConfig(proprietaryConfig)
       case 'Image':
         return new ImageProprietaryConfig(proprietaryConfig)
+      case 'DateTime':
+        return new DateTimeProprietaryConfig(proprietaryConfig)
       case 'View':
         return new ViewProprietaryConfig(proprietaryConfig)
       default:

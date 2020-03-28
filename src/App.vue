@@ -11,7 +11,7 @@ export default {
 </script>
 
 <style lang="less">
-@import 'assets/less/common';
+@import 'assets/less/global';
 
 #app {
   display: flex;

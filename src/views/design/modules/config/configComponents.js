@@ -14,6 +14,7 @@ import Topology from './charts/Topology'
 import CircleConfig from './charts/CircleConfig'
 import TriangleConfig from './charts/TriangleConfig'
 import ImageConfig from './charts/ImageConfig'
+import DateTimeConfig from './charts/DateTimeConfig'
 import IconConfig from './elements/IconConfig'
 
 // 图表模板配置
@@ -26,7 +27,8 @@ const charts = {
   CircleConfig,
   TriangleConfig,
   ImageConfig,
-  IconConfig
+  IconConfig,
+  DateTimeConfig
 }
 
 // 元素模板配置

@@ -58,6 +58,7 @@ export default {
       ['Topology', 'Topology'],
       ['Image', 'ImageConfig'],
       ['Icon', 'IconConfig'],
+      ['DateTime', 'DateTimeConfig'],
       ['View', 'ViewConfig']
     ])
   }),

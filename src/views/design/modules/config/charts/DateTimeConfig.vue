@@ -1,13 +1,12 @@
 /**
-* 文本注解配置
+* 时间日期配置
 * Author: dong xing
-* Date: 2020/3/12
-* Time: 19:38
+* Date: 2020/3/28
+* Time: 17:16
 * Email: dong.xing@outlook.com
 */
-
 <template>
-  <div class="texts-config">
+  <div class="date-time-config">
     <a-tabs
       defaultActiveKey="1"
       tabPosition="top"
@@ -22,22 +21,80 @@
       </a-tab-pane>
 
       <a-tab-pane tab="专有属性" key="2">
-        <div class="texts-config__template">
+        <div class="date-time-config__template">
           <a-collapse defaultActiveKey="1" :bordered="false">
 
-            <!-- S 文本样式 -->
-            <a-collapse-panel header="文本样式" key="1">
+            <!-- S 日期样式 -->
+            <a-collapse-panel header="日期时间" key="1">
 
               <div class="comment-template__item">
-                <p class="comment-template__leading">文本:</p>
+                <p class="comment-template__leading">语言:</p>
+                <div class="comment-template__inner comment-template__end">
+                  <a-radio-group
+                    buttonStyle="solid"
+                    v-model="config.proprietaryConfig.title.language"
+                    @change="change">
+                    <a-radio-button value="zh-cn">汉语</a-radio-button>
+                    <a-radio-button value="en">英语</a-radio-button>
+                  </a-radio-group>
+                </div>
+              </div>
+              <!-- / 语言 -->
+
+              <div class="comment-template__item">
+                <p class="comment-template__leading">格式类型:</p>
+                <div class="comment-template__inner comment-template__end">
+                  <a-radio-group
+                    buttonStyle="solid"
+                    v-model="config.proprietaryConfig.title.type"
+                    @change="change">
+                    <a-radio-button value="select">选择</a-radio-button>
+                    <a-radio-button value="custom">定制</a-radio-button>
+                  </a-radio-group>
+                </div>
+              </div>
+              <!-- / 格式类型 -->
+
+              <div class="comment-template__item" v-if="config.proprietaryConfig.title.type === 'select'">
+                <p class="comment-template__leading">格式选择:</p>
+                <div class="comment-template__inner">
+                  <a-select
+                    v-model="config.proprietaryConfig.title.format"
+                    @change="change">
+                    <a-select-option value="YYYY-MM-DD">年-月-日</a-select-option>
+                    <a-select-option value="YYYY/MM/DD">年-月-日</a-select-option>
+                    <a-select-option value="h:MM:DD">时:分:秒</a-select-option>
+                    <a-select-option value="YYYY-MM-DD h:mm:ss">年-月-日 时:分:秒</a-select-option>
+                    <a-select-option value="YYYY MM DD a h:mm:ss">年 月 日 时段 时:分:秒</a-select-option>
+                    <a-select-option value="YYYY MM DD dddd a h:mm:ss">年 月 日 星期 时段 时:分:秒</a-select-option>
+                  </a-select>
+                </div>
+              </div>
+              <!-- / 格式选择 -->
+
+              <div class="comment-template__item" v-else>
+                <p class="comment-template__leading">定制格式:</p>
                 <div class="comment-template__inner">
                   <a-input
                     type="text"
-                    v-model.trim="config.proprietaryConfig.title.text"
+                    v-model="config.proprietaryConfig.title.format"
                     @change="change" />
                 </div>
               </div>
-              <!-- / 文本 -->
+              <!-- / 定制格式 -->
+
+              <div class="comment-template__item">
+                <p class="comment-template__leading">字体:</p>
+                <div class="comment-template__inner">
+                  <a-select
+                    v-model="config.proprietaryConfig.title.textStyle.fontFamily"
+                    @change="change">
+                    <a-select-option value="sans-serif">sans-serif</a-select-option>
+                    <a-select-option value="LED">LED</a-select-option>
+                  </a-select>
+                </div>
+              </div>
+              <!-- / 字体 -->
 
               <div class="comment-template__item">
                 <p class="comment-template__leading">间隔:</p>
@@ -62,30 +119,6 @@
                 </div>
               </div>
               <!-- / 大小 -->
-
-              <div class="comment-template__item">
-                <p class="comment-template__leading">链接:</p>
-                <div class="comment-template__inner">
-                  <a-input
-                    type="text"
-                    v-model.trim="config.proprietaryConfig.title.link"
-                    @change="change" />
-                </div>
-              </div>
-              <!-- / 链接 -->
-
-              <div class="comment-template__item">
-                <p class="comment-template__leading">打开方式:</p>
-                <div class="comment-template__inner">
-                  <a-select
-                    v-model="config.proprietaryConfig.title.target"
-                    @change="change">
-                    <a-select-option value="blank">新窗口打开</a-select-option>
-                    <a-select-option value="self">当前窗口打开</a-select-option>
-                  </a-select>
-                </div>
-              </div>
-              <!-- / 打开方式 -->
 
               <div class="comment-template__item">
                 <p class="comment-template__leading">颜色:</p>
@@ -212,7 +245,7 @@ import ProprietaryMixins from '../proprietaryMixins'
 import ColorPicker from '@/components/ColorPicker'
 
 export default {
-  name: 'Texts',
+  name: 'DateTimeConfig',
   mixins: [ProprietaryMixins],
   components: {
     CommonTemplate,
@@ -256,5 +289,6 @@ export default {
 }
 </script>
 
-<style scoped lang="less">
+<style scoped>
+
 </style>

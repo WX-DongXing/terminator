@@ -964,7 +964,7 @@
 <script>
 import '@/assets/less/template.less'
 import ColorPicker from '@/components/ColorPicker'
-import ProprietaryMixins from '../propietaryMixins'
+import ProprietaryMixins from '../proprietaryMixins'
 
 export default {
   name: 'ChartProprietaryTemplate',

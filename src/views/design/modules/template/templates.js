@@ -36,6 +36,9 @@ const charts = [
   },
   {
     category: 'CHART', type: 'Image', name: '图片', icon: 'picture', width: 300, height: 300
+  },
+  {
+    category: 'CHART', type: 'DateTime', name: '时间日期', icon: 'clock-circle', width: 300, height: 300
   }
 ]
 

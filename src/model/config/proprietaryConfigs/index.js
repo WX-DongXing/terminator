@@ -6,6 +6,7 @@
 * Email: dong.xing@outlook.com
 */
 import _ from 'lodash'
+import moment from 'moment'
 
 /**
  * 图例
@@ -192,12 +193,14 @@ class TextStyle {
     color = 'rgba(0, 0, 0, 1)',
     fontStyle = 'normal',
     fontSize = 12,
-    fontWeight = 'normal'
+    fontWeight = 'normal',
+    fontFamily = 'sans-serif'
   }) {
     this.color = color
     this.fontStyle = fontStyle
     this.fontSize = fontSize
     this.fontWeight = fontWeight
+    this.fontFamily = fontFamily
   }
 }
 
@@ -298,6 +301,31 @@ class Title {
     return Object.assign(_.cloneDeep(this),
       this.position.getOption(), {
         text: [...this.text].join(new Array(this.letterSpace).fill(' ').join(''))
+      })
+  }
+}
+
+/**
+ * 时间标题
+ */
+class DateTimeTitle extends Title {
+  constructor ({
+    type = 'select',
+    format = 'YYYY MM DD h:mm:ss a',
+    language = 'zh-cn',
+    ...props
+  }) {
+    super(props)
+    this.type = type
+    this.format = format
+    this.language = language
+  }
+
+  getOption () {
+    moment.locale(this.language)
+    return Object.assign(_.cloneDeep(this),
+      this.position.getOption(), {
+        text: [...moment().format(this.format)].join(new Array(this.letterSpace).fill(' ').join(''))
       })
   }
 }
@@ -803,6 +831,7 @@ export {
   LineStyle,
   Graphic,
   Title,
+  DateTimeTitle,
   XAixs,
   YAixs,
   RectGraphic,

@@ -273,7 +273,7 @@ import ChartProprietaryTemplate from '../chartProprietary'
 import ColorPicker from '@/components/ColorPicker'
 import LinearColorPicker from '@/components/LinearColorPicker'
 import DataSourceTemplate from '../dataSource'
-import ProprietaryMixins from '../propietaryMixins'
+import ProprietaryMixins from '../proprietaryMixins'
 
 export default {
   name: 'Lines',
