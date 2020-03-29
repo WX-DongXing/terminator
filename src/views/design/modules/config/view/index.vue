@@ -174,7 +174,6 @@
 
 <script>
 import '@/assets/less/template.less'
-import _ from 'lodash'
 import { fromEvent } from 'rxjs'
 import { takeWhile, map, filter, switchMap } from 'rxjs/operators'
 import { mapState, mapMutations } from 'vuex'
@@ -223,7 +222,8 @@ export default {
   computed: {
     ...mapState('screen', ['view', 'scale']),
     targetView () {
-      return _.cloneDeep(this.view)
+      // Todo 如果将此处换为 _.cloneDeep(this.view) 则会遇到频繁更新bug，怀疑之前有循环调用问题，有待处理
+      return new View(this.view)
     }
   },
   methods: {

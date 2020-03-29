@@ -47,7 +47,7 @@ export default {
   computed: {
     // 选择的部件
     selectWidget () {
-      return Object.assign({}, this.widget, { render: this.render })
+      return Object.assign(this.widget, { render: this.render })
     },
     // 在类型为元素时使用组件进行渲染
     useComponent () {
