@@ -63,7 +63,7 @@
                     @change="change">
                     <a-select-option value="YYYY-MM-DD">年-月-日</a-select-option>
                     <a-select-option value="YYYY/MM/DD">年-月-日</a-select-option>
-                    <a-select-option value="h:MM:DD">时:分:秒</a-select-option>
+                    <a-select-option value="h:mm:ss">时:分:秒</a-select-option>
                     <a-select-option value="YYYY-MM-DD h:mm:ss">年-月-日 时:分:秒</a-select-option>
                     <a-select-option value="YYYY MM DD a h:mm:ss">年 月 日 时段 时:分:秒</a-select-option>
                     <a-select-option value="YYYY MM DD dddd a h:mm:ss">年 月 日 星期 时段 时:分:秒</a-select-option>

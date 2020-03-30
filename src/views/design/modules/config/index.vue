@@ -64,13 +64,17 @@ export default {
   }),
   computed: {
     ...mapState('screen', ['activeWidget']),
+    // 配置面板名称
     templateName () {
-      const template = TEMPLATES.find(template => template.type === this.activeWidget.config.type)
-      return template ? template.name : '画板'
+      return TEMPLATES.find(template => template.type === this.activeWidget.config.type).name
     },
+    // 使用公共标题
     hasCommonTitle () {
-      return this.activeWidget.config.type !== 'Topology'
+      // 不使用公共标题的配置面板
+      const notUseTileList = ['View', 'Topology']
+      return !notUseTileList.includes(this.activeWidget.config.type)
     },
+    // 配置面板组件名
     templateComponentName () {
       return this.templateMapping.get(this.activeWidget.config.type)
     }

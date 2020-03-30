@@ -6,169 +6,176 @@
 * Email: dong.xing@outlook.com
 */
 <template>
-  <div class="view-config">
-    <a-collapse :activeKey="activeKey" :bordered="false">
+  <div class="comment-template">
+    <div class="comment-template__header">
+      <p class="comment-template__name">画板</p>
+    </div>
+    <div class="view-config">
 
-      <!-- S 尺寸 -->
-      <a-collapse-panel header="尺寸" key="1">
+      <a-collapse :activeKey="activeKey" :bordered="false">
 
-        <div class="comment-template__item">
-          <p class="comment-template__leading">宽:</p>
-          <div class="comment-template__inner">
-            <a-input
-              type="number"
-              v-model.number="targetView.config.commonConfig.width"
-              @change="change" />
-          </div>
-        </div>
-        <!-- / 宽 -->
+        <!-- S 尺寸 -->
+        <a-collapse-panel header="尺寸" key="1">
 
-        <div class="comment-template__item">
-          <p class="comment-template__leading">高:</p>
-          <div class="comment-template__inner">
-            <a-input
-              type="number"
-              v-model.number="targetView.config.commonConfig.height"
-              @change="change" />
-          </div>
-        </div>
-        <!-- / 高 -->
-
-      </a-collapse-panel>
-      <!-- E 尺寸 -->
-
-      <!-- E 背景 -->
-      <a-collapse-panel header="背景" key="2" class="visible-collapse-panel">
-
-        <div class="comment-template__item">
-          <p class="comment-template__leading">模式:</p>
-          <div class="comment-template__inner comment-template__end">
-            <a-radio-group
-              buttonStyle="solid"
-              v-model="targetView.config.proprietaryConfig.mode"
-              @change="modeChange">
-              <a-radio-button value="single">单一</a-radio-button>
-              <a-radio-button value="linear">渐变</a-radio-button>
-              <a-radio-button value="image">图片</a-radio-button>
-            </a-radio-group>
-          </div>
-        </div>
-        <!-- / 模式 -->
-
-        <div class="comment-template__item" v-if="targetView.config.proprietaryConfig.mode === 'single'">
-          <div class="comment-template__inner">
-            <ColorPicker
-              v-model="targetView.config.proprietaryConfig.backgroundColor"
-              @change="singleColorChange" />
-          </div>
-        </div>
-        <!-- / 单一颜色 -->
-
-        <div class="comment-template__item" v-if="targetView.config.proprietaryConfig.mode === 'linear'">
-          <div class="comment-template__inner">
-            <LinearColorPicker
-              show-angle
-              v-model="targetView.config.proprietaryConfig.backgroundColor"
-              @change="linearColorChange" />
-          </div>
-        </div>
-        <!-- / 渐变颜色 -->
-
-        <div v-if="targetView.config.proprietaryConfig.mode === 'image'">
           <div class="comment-template__item">
-            <p class="comment-template__leading">图片:</p>
+            <p class="comment-template__leading">宽:</p>
             <div class="comment-template__inner">
               <a-input
-                type="text"
-                v-model.trim="targetView.config.proprietaryConfig.backgroundImage"
+                type="number"
+                v-model.number="targetView.config.commonConfig.width"
                 @change="change" />
             </div>
           </div>
-          <!-- / 图片 -->
+          <!-- / 宽 -->
 
           <div class="comment-template__item">
-            <p class="comment-template__leading">重复:</p>
+            <p class="comment-template__leading">高:</p>
+            <div class="comment-template__inner">
+              <a-input
+                type="number"
+                v-model.number="targetView.config.commonConfig.height"
+                @change="change" />
+            </div>
+          </div>
+          <!-- / 高 -->
+
+        </a-collapse-panel>
+        <!-- E 尺寸 -->
+
+        <!-- E 背景 -->
+        <a-collapse-panel header="背景" key="2" class="visible-collapse-panel">
+
+          <div class="comment-template__item">
+            <p class="comment-template__leading">模式:</p>
+            <div class="comment-template__inner comment-template__end">
+              <a-radio-group
+                buttonStyle="solid"
+                v-model="targetView.config.proprietaryConfig.mode"
+                @change="modeChange">
+                <a-radio-button value="single">单一</a-radio-button>
+                <a-radio-button value="linear">渐变</a-radio-button>
+                <a-radio-button value="image">图片</a-radio-button>
+              </a-radio-group>
+            </div>
+          </div>
+          <!-- / 模式 -->
+
+          <div class="comment-template__item" v-if="targetView.config.proprietaryConfig.mode === 'single'">
+            <div class="comment-template__inner">
+              <ColorPicker
+                v-model="targetView.config.proprietaryConfig.backgroundColor"
+                @change="singleColorChange" />
+            </div>
+          </div>
+          <!-- / 单一颜色 -->
+
+          <div class="comment-template__item" v-if="targetView.config.proprietaryConfig.mode === 'linear'">
+            <div class="comment-template__inner">
+              <LinearColorPicker
+                show-angle
+                v-model="targetView.config.proprietaryConfig.backgroundColor"
+                @change="linearColorChange" />
+            </div>
+          </div>
+          <!-- / 渐变颜色 -->
+
+          <div v-if="targetView.config.proprietaryConfig.mode === 'image'">
+            <div class="comment-template__item">
+              <p class="comment-template__leading">图片:</p>
+              <div class="comment-template__inner">
+                <a-input
+                  type="text"
+                  v-model.trim="targetView.config.proprietaryConfig.backgroundImage"
+                  @change="change" />
+              </div>
+            </div>
+            <!-- / 图片 -->
+
+            <div class="comment-template__item">
+              <p class="comment-template__leading">重复:</p>
+              <div class="comment-template__inner">
+                <a-select
+                  v-model="targetView.config.proprietaryConfig.backgroundRepeat"
+                  @change="change">
+                  <a-select-option value="no-repeat">不重复</a-select-option>
+                  <a-select-option value="repeat">重复</a-select-option>
+                  <a-select-option value="repeat-x">水平重复</a-select-option>
+                  <a-select-option value="repeat-y">垂直重复</a-select-option>
+                </a-select>
+              </div>
+            </div>
+            <!-- / 尺寸 -->
+
+            <div class="comment-template__item">
+              <p class="comment-template__leading">尺寸:</p>
+              <div class="comment-template__inner">
+                <a-select
+                  v-model="targetView.config.proprietaryConfig.backgroundSize"
+                  @change="change">
+                  <a-select-option value="">默认大小</a-select-option>
+                  <a-select-option value="contain">伸展扩展以适配屏幕</a-select-option>
+                  <a-select-option value="cover">等比扩展以适配屏幕</a-select-option>
+                </a-select>
+              </div>
+            </div>
+            <!-- / 尺寸 -->
+
+          </div>
+
+        </a-collapse-panel>
+        <!-- E 背景 -->
+
+        <!-- S 显示 -->
+        <a-collapse-panel header="显示" key="3">
+
+          <div class="comment-template__item">
+            <p class="comment-template__leading">缩放模式:</p>
             <div class="comment-template__inner">
               <a-select
-                v-model="targetView.config.proprietaryConfig.backgroundRepeat"
+                v-model="targetView.config.proprietaryConfig.scaleMode"
                 @change="change">
-                <a-select-option value="no-repeat">不重复</a-select-option>
-                <a-select-option value="repeat">重复</a-select-option>
-                <a-select-option value="repeat-x">水平重复</a-select-option>
-                <a-select-option value="repeat-y">垂直重复</a-select-option>
+                <a-select-option value="auto">自适应</a-select-option>
+                <a-select-option value="primary">原始尺寸</a-select-option>
+                <a-select-option value="fullscreen">全屏显示</a-select-option>
+                <a-select-option value="fullWidth">等比宽度铺满</a-select-option>
+                <a-select-option value="fullHeight">等比高度铺满</a-select-option>
               </a-select>
             </div>
           </div>
-          <!-- / 尺寸 -->
+          <!-- / 缩放模式 -->
 
-          <div class="comment-template__item">
-            <p class="comment-template__leading">尺寸:</p>
-            <div class="comment-template__inner">
-              <a-select
-                v-model="targetView.config.proprietaryConfig.backgroundSize"
-                @change="change">
-                <a-select-option value="">默认大小</a-select-option>
-                <a-select-option value="contain">伸展扩展以适配屏幕</a-select-option>
-                <a-select-option value="cover">等比扩展以适配屏幕</a-select-option>
-              </a-select>
+        </a-collapse-panel>
+        <!-- E 显示 -->
+
+        <!-- S 屏幕截图 -->
+        <a-collapse-panel header="封面" key="4">
+
+          <div class="view-config__screen">
+            <div class="view-config__screenshot">
+              <img :src="targetView.cover" alt="" v-if="targetView.cover" />
+              <p v-else>视图封面</p>
             </div>
           </div>
-          <!-- / 尺寸 -->
 
-        </div>
-
-      </a-collapse-panel>
-      <!-- E 背景 -->
-
-      <!-- S 显示 -->
-      <a-collapse-panel header="显示" key="3">
-
-        <div class="comment-template__item">
-          <p class="comment-template__leading">缩放模式:</p>
-          <div class="comment-template__inner">
-            <a-select
-              v-model="targetView.config.proprietaryConfig.scaleMode"
-              @change="change">
-              <a-select-option value="auto">自适应</a-select-option>
-              <a-select-option value="primary">原始尺寸</a-select-option>
-              <a-select-option value="fullscreen">全屏显示</a-select-option>
-              <a-select-option value="fullWidth">等比宽度铺满</a-select-option>
-              <a-select-option value="fullHeight">等比高度铺满</a-select-option>
-            </a-select>
+          <div class="comment-template__item">
+            <p class="comment-template__leading">封面:</p>
+            <div class="comment-template__inner">
+              <a-textarea
+                ref="screenshot"
+                type="text"
+                v-model.trim="targetView.cover"
+                @change="change" />
+            </div>
           </div>
-        </div>
-        <!-- / 缩放模式 -->
+          <!-- / 封面 -->
 
-      </a-collapse-panel>
-      <!-- E 显示 -->
+        </a-collapse-panel>
+        <!-- E 屏幕截图 -->
 
-      <!-- S 屏幕截图 -->
-      <a-collapse-panel header="封面" key="4">
+      </a-collapse>
 
-        <div class="view-config__screen">
-          <div class="view-config__screenshot">
-            <img :src="targetView.cover" alt="" v-if="targetView.cover" />
-            <p v-else>视图封面</p>
-          </div>
-        </div>
-
-        <div class="comment-template__item">
-          <p class="comment-template__leading">封面:</p>
-          <div class="comment-template__inner">
-            <a-textarea
-              ref="screenshot"
-              type="text"
-              v-model.trim="targetView.cover"
-              @change="change" />
-          </div>
-        </div>
-        <!-- / 封面 -->
-
-      </a-collapse-panel>
-      <!-- E 屏幕截图 -->
-
-    </a-collapse>
-
+    </div>
+  </div>
   </div>
 </template>
 
