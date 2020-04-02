@@ -89,8 +89,8 @@
                   <a-select
                     v-model="config.proprietaryConfig.title.textStyle.fontFamily"
                     @change="change">
-                    <a-select-option value="sans-serif">sans-serif</a-select-option>
-                    <a-select-option value="LED">LED</a-select-option>
+                    <a-select-option value="sans-serif">默认</a-select-option>
+                    <a-select-option value="DS-DIGI">LED</a-select-option>
                   </a-select>
                 </div>
               </div>

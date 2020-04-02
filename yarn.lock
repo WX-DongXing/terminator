@@ -8612,6 +8612,11 @@ vm-browserify@^1.0.1:
   resolved "https://registry.yarnpkg.com/vm-browserify/-/vm-browserify-1.1.2.tgz#78641c488b8e6ca91a75f511e7a3b32a86e5dda0"
   integrity sha512-2ham8XPWTONajOR0ohOKOHXkm3+gaBmGut3SRuu75xLd/RRaY6vqgh8NBYYk7+RW3u5AtzPQZG8F10LHkl0lAQ==
 
+vue-ace-editor-valid@^0.1.2:
+  version "0.1.2"
+  resolved "https://registry.yarnpkg.com/vue-ace-editor-valid/-/vue-ace-editor-valid-0.1.2.tgz#ae064c158ece5ffe64b210d4d8a0dc1b367a446a"
+  integrity sha512-YgR6PT+WG/cDhOljhHC0OJgXuyi8TLsbvNY4M5tC/Nvmxi6ZpYLRkkkc6GqqBneOFHCXd5RWQXRRc8mwlXYLVw==
+
 vue-color@^2.7.0:
   version "2.7.0"
   resolved "https://registry.yarnpkg.com/vue-color/-/vue-color-2.7.0.tgz#31e898370a5786fd6c3007388cb7242db6ba6988"

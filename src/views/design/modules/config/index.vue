@@ -93,7 +93,7 @@ export default {
   flex-flow: column nowrap;
   justify-content: space-between;
   align-content: stretch;
-  width: 320px;
+  width: 100%;
   height: 100%;
 
   &__header {

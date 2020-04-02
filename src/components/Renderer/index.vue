@@ -41,7 +41,7 @@ export default {
   props: {
     view: {
       type: Object,
-      default: () => {}
+      default: () => ({})
     }
   },
   mounted () {

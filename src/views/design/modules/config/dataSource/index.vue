@@ -7,7 +7,7 @@
 */
 
 <template>
-  <div class="data-source common-template">
+  <div class="data-source comment-template">
 
     <a-collapse defaultActiveKey="1" :bordered="false">
 
@@ -18,7 +18,6 @@
           <p class="comment-template__leading">选择:</p>
           <div class="comment-template__inner">
             <a-select
-              class="data-source__select"
               v-model="config.dataConfig.sourceType"
               @change="change">
               <a-select-option value="null">空数据</a-select-option>
@@ -34,17 +33,40 @@
 
     </a-collapse>
 
+    <!-- S 数据编辑 -->
+    <div class="data-source__modify" v-if="config.dataConfig.sourceType === 'static'">
+      <div class="data-source__control">
+        <p>数据编辑</p>
+        <a-button type="primary" shape="circle" :icon="isFullscreen ? 'fullscreen' : 'fullscreen-exit'" @click="switchMode" />
+      </div>
+      <div class="data-source__wrap">
+        <AceEditor class="data-source__editor" v-model="code" />
+      </div>
+    </div>
+    <!-- E 数据编辑 -->
+
   </div>
 </template>
 
 <script>
 import '@/assets/less/template.less'
 import _ from 'lodash'
+import AceEditor from 'vue-ace-editor-valid'
 import { mapState, mapMutations } from 'vuex'
 import { ScreenMutations } from '@/store/modules/screen'
 
 export default {
   name: 'DataSourceTemplate',
+  components: {
+    AceEditor
+  },
+  data: () => ({
+    isFullscreen: false,
+    code: ''
+  }),
+  created () {
+    this.code = JSON.stringify(this.config.dataConfig.staticData, null, '\t')
+  },
   computed: {
     ...mapState('screen', ['activeWidget']),
     config () {
@@ -55,6 +77,10 @@ export default {
     ...mapMutations('screen', {
       activateWidget: ScreenMutations.ACTIVATE_WIDGET
     }),
+    switchMode () {
+      this.isFullscreen = !this.isFullscreen
+    },
+    codeChange () {},
     change () {
       const activeWidget = _.cloneDeep(this.activeWidget)
       const { render } = this.activeWidget
@@ -71,8 +97,41 @@ export default {
 <style scoped lang="less">
 .data-source {
 
-  &__select {
-    width: 100%;
+  &__modify {
+    display: flex;
+    flex-flow: column nowrap;
+    justify-content: flex-start;
+    align-items: stretch;
+    height: 500px;
+  }
+
+  &__control {
+    flex: none;
+    display: flex;
+    flex-flow: row nowrap;
+    justify-content: space-between;
+    align-items: center;
+    height: 46px;
+    padding: 0 16px;
+    border-bottom: 1px solid #d9d9d9;
+
+    p {
+      margin: 0;
+      color: rgba(0, 0, 0, 0.85);
+    }
+  }
+
+  &__wrap {
+    height: calc(100vh - 366px);
+    box-sizing: border-box;
+    padding: 16px 16px;
+  }
+
+  &__editor {
+    border-radius: 4px;
+    background: #f1f1f1;
+    font-size: 14px;
+    font-family: Source Code Pro;
   }
 }
 </style>
