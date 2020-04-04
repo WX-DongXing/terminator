@@ -7,16 +7,17 @@
 */
 import Factory from '@/model/factory/factory'
 
-const StaticDataFactory = Factory.createStaticDataFactory()
+const StaticDataConfigFactory = Factory.createStaticDataConfigFactory()
 
 export default class DataConfig {
   constructor ({
     sourceType = 'null',
     widgetType,
-    dbDataConfig
+    staticDataConfig = {},
+    dynamicDataConfig
   }) {
     this.sourceType = sourceType
-    this.staticData = StaticDataFactory.create(widgetType)
-    this.dbDataConfig = dbDataConfig
+    this.staticDataConfig = StaticDataConfigFactory.create(widgetType, staticDataConfig)
+    this.dynamicDataConfig = dynamicDataConfig
   }
 }

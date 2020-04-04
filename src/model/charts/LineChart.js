@@ -22,7 +22,7 @@ export default class LineChart extends Chart {
   mappingOption ({ commonConfig, proprietaryConfig, dataConfig }) {
     const { grid } = commonConfig.getOption()
     const { legend, xAxis, yAxis, ...options } = proprietaryConfig.getOption()
-    const { sourceType, staticData } = dataConfig
+    const { sourceType, staticDataConfig: { staticData } } = dataConfig
     const line = {
       type: 'line',
       ...options

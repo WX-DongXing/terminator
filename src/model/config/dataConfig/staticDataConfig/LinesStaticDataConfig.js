@@ -5,7 +5,7 @@
 * Time: 4:48 下午
 * Email: dong.xing@outlook.com
 */
-const LinesStaticData = {
+const defaultLinesStaticData = {
   legend: {
     data: ['折线图示例']
   },
@@ -21,4 +21,18 @@ const LinesStaticData = {
   ]
 }
 
-export default LinesStaticData
+export default class LinesStaticDataConfig {
+  constructor ({
+    staticData = defaultLinesStaticData
+  }) {
+    this.staticData = staticData
+  }
+
+  /**
+   * 获取折线图静态数据代码
+   * @returns {string}
+   */
+  getCode () {
+    return JSON.stringify(this.staticData, null, '\t')
+  }
+}

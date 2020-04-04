@@ -8,7 +8,6 @@
 
 <template>
   <div class="data-source comment-template">
-
     <a-collapse defaultActiveKey="1" :bordered="false">
 
       <!-- S 数据源 -->
@@ -31,19 +30,22 @@
       </a-collapse-panel>
       <!-- E 数据源 -->
 
-    </a-collapse>
+      <!-- S 静态数据编辑 -->
+      <a-collapse-panel header="静态数据编辑" key="2" v-show="config.dataConfig.sourceType === 'static'">
+        <a-icon slot="extra" class="data-source__fullscreen" :type="isFullscreen ? 'setting' : 'fullscreen-exit'" @click="switchMode" />
 
-    <!-- S 数据编辑 -->
-    <div class="data-source__modify" v-if="config.dataConfig.sourceType === 'static'">
-      <div class="data-source__control">
-        <p>数据编辑</p>
-        <a-button type="primary" shape="circle" :icon="isFullscreen ? 'fullscreen' : 'fullscreen-exit'" @click="switchMode" />
-      </div>
-      <div class="data-source__wrap">
-        <AceEditor class="data-source__editor" v-model="code" />
-      </div>
-    </div>
-    <!-- E 数据编辑 -->
+        <div class="data-source__wrap">
+          <AceEditor
+            class="data-source__editor"
+            language="json"
+            :code="code"
+            @change="staticSourceChange" />
+        </div>
+
+      </a-collapse-panel>
+      <!-- E 静态数据编辑 -->
+
+    </a-collapse>
 
   </div>
 </template>
@@ -60,17 +62,20 @@ export default {
   components: {
     AceEditor
   },
-  data: () => ({
-    isFullscreen: false,
-    code: ''
-  }),
-  created () {
-    this.code = JSON.stringify(this.config.dataConfig.staticData, null, '\t')
+  data: function () {
+    return {
+      isFullscreen: false
+    }
   },
   computed: {
     ...mapState('screen', ['activeWidget']),
     config () {
       return _.cloneDeep(this.activeWidget.config)
+    },
+    code () {
+      // 柱形图根据类型调整样式
+      const { barType } = this.config.proprietaryConfig
+      return this.activeWidget.config.dataConfig.staticDataConfig.getCode(barType)
     }
   },
   methods: {
@@ -80,7 +85,39 @@ export default {
     switchMode () {
       this.isFullscreen = !this.isFullscreen
     },
-    codeChange () {},
+    /**
+     * 静态资源修改
+     * @param code 静态资源代码
+     */
+    staticSourceChange (code) {
+      if (code !== '') {
+        switch (this.config.type) {
+          case 'Lines':
+            Object.assign(
+              this.config.dataConfig.staticDataConfig,
+              { staticData: JSON.parse(code) }
+            )
+            break
+          case 'Bar':
+            const { barType } = this.config.proprietaryConfig
+            const typeMapping = new Map([
+              ['single', 'singleSeries'],
+              ['multiple', 'multipleSeries']
+            ])
+            Object.assign(
+              this.config.dataConfig.staticDataConfig.staticData,
+              Object.assign(_.omit(JSON.parse(code), ['series'])),
+              {
+                [typeMapping.get(barType)]: JSON.parse(code).series
+              }
+            )
+            break
+          default:
+            break
+        }
+        this.change()
+      }
+    },
     change () {
       const activeWidget = _.cloneDeep(this.activeWidget)
       const { render } = this.activeWidget
@@ -97,41 +134,18 @@ export default {
 <style scoped lang="less">
 .data-source {
 
-  &__modify {
-    display: flex;
-    flex-flow: column nowrap;
-    justify-content: flex-start;
-    align-items: stretch;
-    height: 500px;
-  }
-
-  &__control {
-    flex: none;
-    display: flex;
-    flex-flow: row nowrap;
-    justify-content: space-between;
-    align-items: center;
-    height: 46px;
-    padding: 0 16px;
-    border-bottom: 1px solid #d9d9d9;
-
-    p {
-      margin: 0;
-      color: rgba(0, 0, 0, 0.85);
-    }
+  &__fullscreen {
+    color: #1890ff;
   }
 
   &__wrap {
-    height: calc(100vh - 366px);
-    box-sizing: border-box;
-    padding: 16px 16px;
+    height: calc(100vh - 388px);
   }
 
   &__editor {
     border-radius: 4px;
     background: #f1f1f1;
     font-size: 14px;
-    font-family: Source Code Pro;
   }
 }
 </style>

@@ -2556,6 +2556,11 @@ core-js@^3.3.2, core-js@^3.4.4:
   resolved "https://registry.yarnpkg.com/core-js/-/core-js-3.6.3.tgz#cebda69dd069bf90066414d2b2425ffd1f3dcd79"
   integrity sha512-DOO9b18YHR+Wk5kJ/c5YFbXuUETreD4TrvXb6edzqZE3aAEd0eJIAWghZ9HttMuiON8SVCnU3fqA4rPxRDD1HQ==
 
+core-js@^3.6.4:
+  version "3.6.4"
+  resolved "https://registry.yarnpkg.com/core-js/-/core-js-3.6.4.tgz#440a83536b458114b9cb2ac1580ba377dc470647"
+  integrity sha512-4paDGScNgZP2IXXilaffL9X7968RuvwlkK3xWtZRVqgd8SYNiVKRJvkFd1aqqEuPfN7E68ZHEp9hDj6lHj4Hyw==
+
 core-util-is@1.0.2, core-util-is@~1.0.0:
   version "1.0.2"
   resolved "https://registry.yarnpkg.com/core-util-is/-/core-util-is-1.0.2.tgz#b5fd54220aa2bc5ab57aab7140c940754503c1a7"
@@ -8612,10 +8617,13 @@ vm-browserify@^1.0.1:
   resolved "https://registry.yarnpkg.com/vm-browserify/-/vm-browserify-1.1.2.tgz#78641c488b8e6ca91a75f511e7a3b32a86e5dda0"
   integrity sha512-2ham8XPWTONajOR0ohOKOHXkm3+gaBmGut3SRuu75xLd/RRaY6vqgh8NBYYk7+RW3u5AtzPQZG8F10LHkl0lAQ==
 
-vue-ace-editor-valid@^0.1.2:
-  version "0.1.2"
-  resolved "https://registry.yarnpkg.com/vue-ace-editor-valid/-/vue-ace-editor-valid-0.1.2.tgz#ae064c158ece5ffe64b210d4d8a0dc1b367a446a"
-  integrity sha512-YgR6PT+WG/cDhOljhHC0OJgXuyi8TLsbvNY4M5tC/Nvmxi6ZpYLRkkkc6GqqBneOFHCXd5RWQXRRc8mwlXYLVw==
+vue-ace-editor-valid@^0.1.5:
+  version "0.1.5"
+  resolved "https://registry.yarnpkg.com/vue-ace-editor-valid/-/vue-ace-editor-valid-0.1.5.tgz#481d66aac9b22559507245880f642611a30ff6e5"
+  integrity sha512-AbBwMUTG3ngEFeT3QkkPLYeFWSClwH3dmeJmHunVSywIjzMeNkNj7vtkSZjgu91K2FK8IHkQfOGeobNmwsYHkw==
+  dependencies:
+    core-js "^3.6.4"
+    vue "^2.6.11"
 
 vue-color@^2.7.0:
   version "2.7.0"
@@ -8691,7 +8699,7 @@ vue-template-es2015-compiler@^1.9.0:
   resolved "https://registry.yarnpkg.com/vue-template-es2015-compiler/-/vue-template-es2015-compiler-1.9.1.tgz#1ee3bc9a16ecbf5118be334bb15f9c46f82f5825"
   integrity sha512-4gDntzrifFnCEvyoO8PqyJDmguXgVPxKiIxrBKjIowvL9l+N66196+72XVYR8BBf1Uv1Fgt3bGevJ+sEmxfZzw==
 
-vue@^2.6.10:
+vue@^2.6.10, vue@^2.6.11:
   version "2.6.11"
   resolved "https://registry.yarnpkg.com/vue/-/vue-2.6.11.tgz#76594d877d4b12234406e84e35275c6d514125c5"
   integrity sha512-VfPwgcGABbGAue9+sfrD4PuwFar7gPb1yl1UK1MwXoQPAw0BKSqWfoYCT/ThFrdEVWoI51dBuyCoiNU9bZDZxQ==

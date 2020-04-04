@@ -54,7 +54,7 @@
     <div
       ref="page"
       class="page"
-      @click.self="() => select$.next({ el: 'page' })">
+      @click.self="() => select$.next({ el: 'view' })">
 
       <div class="gauge" ref="gauge"></div>
       <!-- / 标尺 -->
@@ -238,10 +238,6 @@ export default {
         switch (el) {
           case 'view':
             activeWidget = this.view
-            styles = { display: 'none' }
-            break
-          case 'page':
-            activeWidget = null
             styles = { display: 'none' }
             break
           case 'widget':
@@ -506,8 +502,8 @@ export default {
       this.setView({
         view: new View({ ..._.pick(this.view, ['id', 'el', 'gauge', 'parent']), ...this.initConfig })
       })
-      // 设置当前激活为当前画板
-      this.activateWidget({ widget: this.view })
+      // 置空激活部件
+      this.activateWidget({ widget: null })
       // 初始化样式
       this.setStyle({ type: 'reset' })
       // 移除部件选择器

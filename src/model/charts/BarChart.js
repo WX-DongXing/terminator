@@ -21,7 +21,7 @@ export default class BarChart extends Chart {
       barType, legend, barWidth, xAxis, yAxis,
       itemStyle: { color, ...otherItemStyle }
     } = proprietaryConfig.getOption()
-    const { sourceType, staticData } = dataConfig
+    const { sourceType, staticDataConfig: { staticData } } = dataConfig
     let series = []
 
     // 总体配置
