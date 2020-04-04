@@ -80,7 +80,7 @@ export default {
   box-sizing: border-box;
   padding: 0 16px;
   background: white;
-  box-shadow: 0 2px 8px #f0f1f2;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.23);
   z-index: 5;
 
   p {

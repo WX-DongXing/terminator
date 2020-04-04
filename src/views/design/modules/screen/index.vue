@@ -16,30 +16,63 @@
       </div>
       <div class="screen__bar">
         <div class="screen__front">
+        </div>
+        <div class="screen__back">
+
           <a-button-group>
-            <a-button type="primary" icon="save" @click="save">保存</a-button>
-            <a-button type="primary" icon="export" @click="exportFile">导出</a-button>
+            <a-popconfirm
+              title="确定清空画板？"
+              @confirm="clear"
+              okText="确定"
+              cancelText="取消">
+
+              <a-tooltip>
+                <template slot="title">
+                  清空
+                </template>
+                <a-button type="link" class="screen__clear" icon="delete" />
+              </a-tooltip>
+
+            </a-popconfirm>
+
             <a-upload
               name="file"
               :before-upload="importConfig"
               :show-upload-list="false"
               :multiple="false"
             >
-              <a-button type="primary" icon="upload">导入</a-button>
+              <a-tooltip>
+                <template slot="title">
+                  导入
+                </template>
+                <a-button type="link" icon="upload" />
+              </a-tooltip>
             </a-upload>
-            <a-popconfirm
-              title="确定清空画板？"
-              @confirm="clear"
-              okText="确定"
-              cancelText="取消">
-              <a-button type="danger" icon="delete">清空</a-button>
-            </a-popconfirm>
+
+            <a-tooltip>
+              <template slot="title">
+                导出
+              </template>
+              <a-button type="link" icon="export" @click="exportFile" />
+            </a-tooltip>
+
+            <a-tooltip>
+              <template slot="title">
+                保存
+              </template>
+              <a-button type="link" icon="save" @click="save" />
+            </a-tooltip>
+
+            <router-link to="/preview">
+              <a-tooltip>
+                <template slot="title">
+                  预览
+                </template>
+                <a-button type="link" icon="eye" />
+              </a-tooltip>
+            </router-link>
+
           </a-button-group>
-        </div>
-        <div class="screen__back">
-          <router-link to="/preview">
-            <a-button type="primary" icon="eye">预览</a-button>
-          </router-link>
         </div>
       </div>
       <div class="screen__control" @click="panelControl('right')">
@@ -585,6 +618,14 @@ export default {
     .ant-input-group-wrapper {
       width: 120px;
       margin-left: 16px;
+    }
+  }
+
+  &__clear {
+    color: #ff4d4f;
+
+    &:hover {
+      color: #ff4d4f;
     }
   }
 }

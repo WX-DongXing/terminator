@@ -303,13 +303,14 @@ export default {
     justify-content: flex-start;
     align-items: center;
     height: 48px;
-    box-shadow: 0 2px 8px #f0f1f2;
+    /*border-bottom: 1px solid rgba(0, 0, 0, 0.12);*/
     z-index: 3;
 
     p {
       flex: none;
       margin: 0;
       padding: 0 16px;
+      font-weight: bold;
     }
   }
 

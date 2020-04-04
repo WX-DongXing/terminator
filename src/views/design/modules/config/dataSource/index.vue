@@ -32,7 +32,7 @@
 
       <!-- S 静态数据编辑 -->
       <a-collapse-panel header="静态数据编辑" key="2" v-show="config.dataConfig.sourceType === 'static'">
-        <a-icon slot="extra" class="data-source__fullscreen" :type="isFullscreen ? 'setting' : 'fullscreen-exit'" @click="switchMode" />
+        <a-icon slot="extra" class="data-source__fullscreen" :type="isFullscreen ? 'fullscreen' : 'fullscreen-exit'" @click="switchMode" />
 
         <div class="data-source__wrap">
           <AceEditor

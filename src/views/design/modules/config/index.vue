@@ -105,12 +105,13 @@ export default {
     height: 48px;
     box-sizing: border-box;
     padding: 0 16px;
-    box-shadow: 0 2px 8px #f0f1f2;
+    /*border-bottom: 1px solid rgba(0, 0, 0, 0.12);*/
     z-index: 3;
 
     p {
       flex: none;
       margin: 0;
+      font-weight: bold;
     }
   }
 
