@@ -74,7 +74,7 @@ module.exports = {
   },
   // 打包部署
   publicPath: process.env.NODE_ENV === 'production'
-    ? '/'
+    ? '/terminator/'
     : '/',
   chainWebpack: config => {
     config.plugin('html').tap(args => {
