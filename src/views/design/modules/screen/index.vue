@@ -183,7 +183,6 @@ export default {
     height: 1080,
     leftPanelExpand: true,
     rightPanelExpand: true,
-    initConfig: {},
     backgroundColor: 'rgba(255,255,255,1)',
     scale: 1,
     isAutoResize: true,
@@ -219,28 +218,11 @@ export default {
         startWith({ type: 'init' })
       )
       .subscribe((event) => {
-        // 获取初始化配置
-        this.initConfig = this.getInitConfig(event)
         // 更新滚动条
         this.perfectScrollBar && this.perfectScrollBar.update()
-
-        // 设置屏幕对象
-        this.setView({
-          view: new View(Object.assign(
-            _.cloneDeep(this.view),
-            {
-              el: this.$refs.view,
-              gauge: this.$refs.gauge,
-              parent: this.$refs.page,
-              scale: this.scale
-            },
-            { ...this.initConfig }
-          ))
-        })
-
         // 初始化场景进行样式设置
         if (event.type === 'init' && !this.view.config) {
-          this.setInitStyle()
+          this.initStyle(event)
         } else {
           // 其他场景中，设置画板样式
           this.setStyle(event)
@@ -357,23 +339,6 @@ export default {
       activateWidget: ScreenMutations.ACTIVATE_WIDGET
     }),
     /**
-     * 获取初始化配置
-     * @param event 事件
-     */
-    getInitConfig (event) {
-      if (event.type && event.type === 'init') {
-        return {
-          config: {
-            commonConfig: {
-              width: document.body.clientWidth,
-              height: document.body.clientHeight
-            }
-          }
-        }
-      }
-      return {}
-    },
-    /**
      * 左右panel展开与否
      * @param type 左右panel
      */
@@ -389,37 +354,56 @@ export default {
       }, 400)
     },
     /**
-     * 设置初始化样式
+     * 初始化视图样式
+     * @param event
      */
-    setInitStyle () {
+    initStyle (event) {
+      // 初始化获取设备宽高
+      const clientWidth = document.body.clientWidth
+      const clientHeight = document.body.clientHeight
       const { width, height } = this.$refs.page.getBoundingClientRect()
-      const xScale = ((width - 32) / this.width)
-      const yScale = ((height - 32) / this.height)
+      const xScale = ((width - 32) / clientWidth)
+      const yScale = ((height - 32) / clientHeight)
       this.scale = Math.min(xScale, yScale)
+
+      // 设置视图宽高及比例
       anime({
         targets: this.$refs.view,
+        width: clientWidth,
+        height: clientHeight,
         scale: this.scale,
         duration: 150,
         easing: 'linear'
       })
+
+      // 预留标尺真实宽高
       anime({
         targets: this.$refs.gauge,
-        width: this.width * this.scale + 32,
-        height: this.height * this.scale + 32,
+        width: clientWidth * this.scale + 32,
+        height: clientHeight * this.scale + 32,
         duration: 150,
         easing: 'linear'
       })
 
-      // 更新视图缩放
+      // 初始化视图
       this.setView({
-        view: Object.assign(new View({
+        view: new View({
+          el: this.$refs.view,
+          gauge: this.$refs.gauge,
+          parent: this.$refs.page,
+          scale: this.scale,
           ...this.view,
-          scale: this.scale
-        }))
+          config: {
+            commonConfig: {
+              width: clientWidth,
+              height: clientHeight
+            }
+          }
+        })
       })
     },
     /**
-     * 设置视图样式
+     * 配置视图样式
      * @param event
      */
     setStyle (event) {
@@ -531,9 +515,17 @@ export default {
      * 清空画板
      */
     clear () {
+      const { config: { commonConfig: { width, height } } } = this.view
+      const preSize = { commonConfig: { width, height } }
       // 清空部件列表
       this.setView({
-        view: new View({ ..._.pick(this.view, ['id', 'el', 'gauge', 'parent']), ...this.initConfig })
+        view: new View({
+          el: this.$refs.view,
+          gauge: this.$refs.gauge,
+          parent: this.$refs.page,
+          scale: this.scale,
+          config: preSize
+        })
       })
       // 置空激活部件
       this.activateWidget({ widget: null })
