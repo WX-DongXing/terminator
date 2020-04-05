@@ -6,14 +6,27 @@
     <meta name="viewport" content="width=device-width,initial-scale=1.0">
     <link rel="icon" href="<%= BASE_URL %>favicon.ico">
     <title>Terminator - 数据可视化设计器</title>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.4.9/ace.js" integrity="sha256-CvwZRDTGSAw2IQybkwEsxuHuo7SaVRIX+fofIG6G4Pk=" crossorigin="anonymous"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.4.9/mode-json.min.js" integrity="sha256-oMH6MIx8AGl0OseaL8vGcdSb9ons1Jprkf4xXAyzvNc=" crossorigin="anonymous"></script>
+
+    <!-- S 引入 CDN css 资源 -->
+    <% for (var i in htmlWebpackPlugin.options.cdn && htmlWebpackPlugin.options.cdn.css) { %>
+    <link rel="stylesheet" href="<%= htmlWebpackPlugin.options.cdn.css[i] %>" />
+    <% } %>
+    <!-- E 引入 CDN css 资源 -->
+
   </head>
   <body>
     <noscript>
       <strong>We're sorry but terminator doesn't work properly without JavaScript enabled. Please enable it to continue.</strong>
     </noscript>
     <div id="app"></div>
+
+    <!-- S 引入 CDN js 资源 -->
+    <% for (var i in htmlWebpackPlugin.options.cdn && htmlWebpackPlugin.options.cdn.js) { %>
+    <script type="text/javascript" src="<%= htmlWebpackPlugin.options.cdn.js[i].url %>" integrity="<%= htmlWebpackPlugin.options.cdn.js[i].sri %>" crossorigin="anonymous"></script>
+    <% } %>
+    <!-- E 引入 CDN js 资源 -->
+
     <!-- built files will be auto injected -->
   </body>
+
 </html>
