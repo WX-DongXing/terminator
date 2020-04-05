@@ -25,24 +25,21 @@ const defaultConfig = {
  */
 export default class View {
   constructor ({
-    el,
     gauge,
     parent,
     id = 'view-' + uuid(),
     name = '',
-    views = [],
     widgets = [],
     scale = 1,
     cover = '',
     config = defaultConfig
   }) {
-    this.el = el
+    this.el = document.getElementsByClassName('view')[0]
     this.gauge = gauge
     this.parent = parent
     this.id = id
-    this.rect = el.getBoundingClientRect()
+    this.rect = this.el.getBoundingClientRect()
     this.name = name
-    this.views = views
     this.widgets = widgets
     this.scale = scale
     this.cover = cover
@@ -61,12 +58,11 @@ export default class View {
    * @returns {{widgets: *[], config: Config}}
    */
   getOption () {
-    const { id, name, config, views, widgets } = this
+    const { id, name, config, widgets } = this
     return {
       id,
       name,
       config,
-      views,
       widgets: widgets.map(item => {
         // 删除部件渲染对象，以持久化数据
         Reflect.deleteProperty(item, 'render')

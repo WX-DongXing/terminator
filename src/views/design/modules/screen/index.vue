@@ -179,8 +179,6 @@ export default {
     }
   },
   data: () => ({
-    width: 1920,
-    height: 1080,
     leftPanelExpand: true,
     rightPanelExpand: true,
     backgroundColor: 'rgba(255,255,255,1)',
@@ -388,7 +386,6 @@ export default {
       // 初始化视图
       this.setView({
         view: new View({
-          el: this.$refs.view,
           gauge: this.$refs.gauge,
           parent: this.$refs.page,
           scale: this.scale,
@@ -520,7 +517,6 @@ export default {
       // 清空部件列表
       this.setView({
         view: new View({
-          el: this.$refs.view,
           gauge: this.$refs.gauge,
           parent: this.$refs.page,
           scale: this.scale,
