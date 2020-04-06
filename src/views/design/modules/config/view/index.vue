@@ -22,7 +22,7 @@
             <div class="comment-template__inner">
               <a-input
                 type="number"
-                v-model.number="targetView.config.commonConfig.width"
+                v-model.number="config.commonConfig.width"
                 @change="change" />
             </div>
           </div>
@@ -33,7 +33,7 @@
             <div class="comment-template__inner">
               <a-input
                 type="number"
-                v-model.number="targetView.config.commonConfig.height"
+                v-model.number="config.commonConfig.height"
                 @change="change" />
             </div>
           </div>
@@ -50,7 +50,7 @@
             <div class="comment-template__inner comment-template__end">
               <a-radio-group
                 buttonStyle="solid"
-                v-model="targetView.config.proprietaryConfig.mode"
+                v-model="config.proprietaryConfig.mode"
                 @change="modeChange">
                 <a-radio-button value="single">单一</a-radio-button>
                 <a-radio-button value="linear">渐变</a-radio-button>
@@ -60,32 +60,32 @@
           </div>
           <!-- / 模式 -->
 
-          <div class="comment-template__item" v-if="targetView.config.proprietaryConfig.mode === 'single'">
+          <div class="comment-template__item" v-if="config.proprietaryConfig.mode === 'single'">
             <div class="comment-template__inner">
               <ColorPicker
-                v-model="targetView.config.proprietaryConfig.backgroundColor"
+                v-model="config.proprietaryConfig.backgroundColor"
                 @change="singleColorChange" />
             </div>
           </div>
           <!-- / 单一颜色 -->
 
-          <div class="comment-template__item" v-if="targetView.config.proprietaryConfig.mode === 'linear'">
+          <div class="comment-template__item" v-if="config.proprietaryConfig.mode === 'linear'">
             <div class="comment-template__inner">
               <LinearColorPicker
                 show-angle
-                v-model="targetView.config.proprietaryConfig.backgroundColor"
+                v-model="config.proprietaryConfig.backgroundColor"
                 @change="linearColorChange" />
             </div>
           </div>
           <!-- / 渐变颜色 -->
 
-          <div v-if="targetView.config.proprietaryConfig.mode === 'image'">
+          <div v-if="config.proprietaryConfig.mode === 'image'">
             <div class="comment-template__item">
               <p class="comment-template__leading">图片:</p>
               <div class="comment-template__inner">
                 <a-input
                   type="text"
-                  v-model.trim="targetView.config.proprietaryConfig.backgroundImage"
+                  v-model.trim="config.proprietaryConfig.backgroundImage"
                   @change="change" />
               </div>
             </div>
@@ -95,7 +95,7 @@
               <p class="comment-template__leading">重复:</p>
               <div class="comment-template__inner">
                 <a-select
-                  v-model="targetView.config.proprietaryConfig.backgroundRepeat"
+                  v-model="config.proprietaryConfig.backgroundRepeat"
                   @change="change">
                   <a-select-option value="no-repeat">不重复</a-select-option>
                   <a-select-option value="repeat">重复</a-select-option>
@@ -110,7 +110,7 @@
               <p class="comment-template__leading">尺寸:</p>
               <div class="comment-template__inner">
                 <a-select
-                  v-model="targetView.config.proprietaryConfig.backgroundSize"
+                  v-model="config.proprietaryConfig.backgroundSize"
                   @change="change">
                   <a-select-option value="">默认大小</a-select-option>
                   <a-select-option value="contain">伸展扩展以适配屏幕</a-select-option>
@@ -132,7 +132,7 @@
             <p class="comment-template__leading">缩放模式:</p>
             <div class="comment-template__inner">
               <a-select
-                v-model="targetView.config.proprietaryConfig.scaleMode"
+                v-model="config.proprietaryConfig.scaleMode"
                 @change="change">
                 <a-select-option value="auto">自适应</a-select-option>
                 <a-select-option value="primary">原始尺寸</a-select-option>
@@ -152,7 +152,7 @@
 
           <div class="view-config__screen">
             <div class="view-config__screenshot">
-              <img :src="targetView.cover" alt="" v-if="targetView.cover" />
+              <img :src="config.proprietaryConfig.cover" alt="" v-if="config.proprietaryConfig.cover" />
               <p v-else>视图封面</p>
             </div>
           </div>
@@ -163,7 +163,7 @@
               <a-textarea
                 ref="screenshot"
                 type="text"
-                v-model.trim="targetView.cover"
+                v-model.trim="config.proprietaryConfig.cover"
                 @change="change" />
             </div>
           </div>
@@ -176,16 +176,16 @@
 
     </div>
   </div>
-  </div>
 </template>
 
 <script>
 import '@/assets/less/template.less'
+import _ from 'lodash'
 import { fromEvent } from 'rxjs'
 import { takeWhile, map, filter, switchMap } from 'rxjs/operators'
 import { mapState, mapMutations } from 'vuex'
 import { ScreenMutations } from '@/store/modules/screen'
-import View from '@/model/view'
+// import View from '@/model/view'
 import ColorPicker from '@/components/ColorPicker'
 import LinearColorPicker from '@/components/LinearColorPicker'
 import ViewService from './index'
@@ -222,15 +222,14 @@ export default {
         })
       )
       .subscribe(({ currentTarget }) => {
-        this.targetView.cover = currentTarget.result || ''
+        this.config.proprietaryConfig.cover = currentTarget.result || ''
         this.change()
       })
   },
   computed: {
     ...mapState('screen', ['view', 'scale']),
-    targetView () {
-      // Todo 如果将此处换为 _.cloneDeep(this.view) 则会遇到频繁更新bug，怀疑之前有循环调用问题，有待处理
-      return new View(this.view)
+    config () {
+      return _.cloneDeep(this.view.config)
     }
   },
   methods: {
@@ -241,31 +240,31 @@ export default {
      * 单一颜色更改
      */
     singleColorChange () {
-      this.singleColor = this.targetView.config.proprietaryConfig.backgroundColor
+      this.singleColor = this.config.proprietaryConfig.backgroundColor
       this.change()
     },
     /**
      * 渐变颜色更改
      */
     linearColorChange () {
-      this.linearColor = this.targetView.config.proprietaryConfig.backgroundColor
+      this.linearColor = this.config.proprietaryConfig.backgroundColor
       this.change()
     },
     /**
      * 模式更改
      */
     modeChange () {
-      if (this.targetView.config.proprietaryConfig.mode !== 'image') {
-        const backgroundColor = this.targetView.config.proprietaryConfig.mode === 'single'
+      if (this.config.proprietaryConfig.mode !== 'image') {
+        const backgroundColor = this.config.proprietaryConfig.mode === 'single'
           ? this.singleColor
           : this.linearColor
-        Object.assign(this.targetView.config.proprietaryConfig, { backgroundColor })
+        Object.assign(this.config.proprietaryConfig, { backgroundColor })
       }
       this.change()
     },
     change () {
       this.setView({
-        view: new View(this.targetView)
+        view: Object.assign(this.view, { config: this.config })
       })
       this.viewService.next('adjust')
     }

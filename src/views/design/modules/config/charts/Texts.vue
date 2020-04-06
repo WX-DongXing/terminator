@@ -33,7 +33,7 @@
                 <div class="comment-template__inner">
                   <a-input
                     type="text"
-                    v-model.trim="config.proprietaryConfig.title.text"
+                    v-model="config.proprietaryConfig.title.text"
                     @change="change" />
                 </div>
               </div>

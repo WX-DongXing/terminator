@@ -31,6 +31,8 @@
  *  fullscreen: 全屏显示
  *  fullWidth: 等比宽度铺满
  *  fullHeight: 等比高度铺满
+ *
+ * @param cover 视图封面
  */
 export default class ViewProprietaryConfig {
   constructor ({
@@ -39,7 +41,8 @@ export default class ViewProprietaryConfig {
     backgroundImage = '',
     backgroundRepeat = 'no-repeat',
     backgroundSize = '',
-    scaleMode = 'auto'
+    scaleMode = 'auto',
+    cover = ''
   }) {
     this.mode = mode
     this.backgroundColor = backgroundColor
@@ -47,5 +50,6 @@ export default class ViewProprietaryConfig {
     this.backgroundRepeat = backgroundRepeat
     this.backgroundSize = backgroundSize
     this.scaleMode = scaleMode
+    this.cover = cover
   }
 }

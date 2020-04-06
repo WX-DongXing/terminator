@@ -38,11 +38,10 @@ export default class View {
     this.gauge = gauge
     this.parent = parent
     this.id = id
-    this.rect = this.el.getBoundingClientRect()
+    this.rect = this.el ? this.el.getBoundingClientRect() : { x: 0, y: 0 }
     this.name = name
     this.widgets = widgets
     this.scale = scale
-    this.cover = cover
     this.config = new Config(Object.assign(config, {
       type: 'View'
     }))
