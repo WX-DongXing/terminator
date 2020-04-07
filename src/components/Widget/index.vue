@@ -14,7 +14,7 @@
     @click.stop="() => $emit('select', selectWidget)">
 
     <!-- S 元素部件 -->
-    <component v-if="useComponent" :is="elementName" :option="option" ref="element" />
+    <component v-if="useComponent" :is="elementName" :elementProps="elementProps" ref="element" />
     <!-- E 元素部件 -->
 
   </div>
@@ -59,8 +59,8 @@ export default {
       return ELEMENTMAPPING.get(this.widget.config.type)
     },
     // 元素配置
-    option () {
-      return this.widget.config.proprietaryConfig.option
+    elementProps () {
+      return this.widget.config.proprietaryConfig.props
     }
   },
   mounted () {

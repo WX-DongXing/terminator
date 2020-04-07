@@ -6,12 +6,12 @@
 * Email: dong.xing@outlook.com
 */
 <template>
-  <div class="icon-element" v-if="hasOption">
+  <div class="icon-element" v-if="hasElementProps">
     <a-icon
-      :spin="option.spin"
-      :rotate="option.rotate"
-      :theme="option.theme"
-      :type="option.type" />
+      :spin="elementProps.spin"
+      :rotate="elementProps.rotate"
+      :theme="elementProps.theme"
+      :type="elementProps.type" />
   </div>
 </template>
 
@@ -20,14 +20,14 @@ import _ from 'lodash'
 export default {
   name: 'IconElement',
   props: {
-    option: {
+    elementProps: {
       type: Object,
       default: () => ({})
     }
   },
   computed: {
-    hasOption () {
-      return !_.isEmpty(this.option)
+    hasElementProps () {
+      return !_.isEmpty(this.elementProps)
     }
   }
 }

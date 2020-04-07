@@ -75,7 +75,7 @@ export default {
     code () {
       // 柱形图根据类型调整样式
       const { barType } = this.config.proprietaryConfig
-      return this.activeWidget.config.dataConfig.staticDataConfig.getCode(barType)
+      return this.config.dataConfig.staticDataConfig.getCode(barType)
     }
   },
   methods: {
@@ -91,30 +91,8 @@ export default {
      */
     staticSourceChange (code) {
       if (code !== '') {
-        switch (this.config.type) {
-          case 'Lines':
-            Object.assign(
-              this.config.dataConfig.staticDataConfig,
-              { staticData: JSON.parse(code) }
-            )
-            break
-          case 'Bar':
-            const { barType } = this.config.proprietaryConfig
-            const typeMapping = new Map([
-              ['single', 'singleSeries'],
-              ['multiple', 'multipleSeries']
-            ])
-            Object.assign(
-              this.config.dataConfig.staticDataConfig.staticData,
-              Object.assign(_.omit(JSON.parse(code), ['series'])),
-              {
-                [typeMapping.get(barType)]: JSON.parse(code).series
-              }
-            )
-            break
-          default:
-            break
-        }
+        // 在不同类型的静态数据配置类中配置自己的更新方法
+        this.config.dataConfig.staticDataConfig.updateStaticData(this.config, code)
         this.change()
       }
     },

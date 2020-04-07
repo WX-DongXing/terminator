@@ -87,4 +87,24 @@ export default class BarStaticDataConfig {
     Object.assign(originalSource, { series })
     return JSON.stringify(originalSource, null, '\t')
   }
+
+  /**
+   * 更新静态数据
+   * @param config
+   * @param code
+   */
+  updateStaticData (config, code) {
+    const { barType } = config.proprietaryConfig
+    const typeMapping = new Map([
+      ['single', 'singleSeries'],
+      ['multiple', 'multipleSeries']
+    ])
+    Object.assign(
+      config.dataConfig.staticDataConfig.staticData,
+      Object.assign(_.omit(JSON.parse(code), ['series'])),
+      {
+        [typeMapping.get(barType)]: JSON.parse(code).series
+      }
+    )
+  }
 }

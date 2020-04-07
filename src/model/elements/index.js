@@ -41,7 +41,7 @@ export default class Element {
   }
 
   /**
-   * 设置专有属性样式，与图表对象使用同一方法m名
+   * 设置专有属性样式，与图表对象使用同一方法命名
    */
   mergeOption (config) {}
 

@@ -809,7 +809,7 @@ class ImageGraphic extends Graphic {
 /**
  * icon 元素配置
  */
-class IconOption {
+class IconProps {
   constructor ({
     type = 'ant-design',
     theme = 'outlined',
@@ -838,5 +838,5 @@ export {
   CircleGraphic,
   TriangleGraphic,
   ImageGraphic,
-  IconOption
+  IconProps
 }

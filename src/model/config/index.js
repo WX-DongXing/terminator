@@ -22,9 +22,8 @@ export default class Config {
   }) {
     this.category = category
     this.type = type
-    this.proprietaryConfigFactory = category === 'ELEMENT' ? elementProprietaryConfigFactory : chartProprietaryConfigFactory
     this.commonConfig = new CommonConfig(commonConfig || {})
-    this.proprietaryConfig = this.proprietaryConfigFactory.create({
+    this.proprietaryConfig = this.getProprietaryConfigFactory(category).create({
       type,
       proprietaryConfig
     })
@@ -32,5 +31,14 @@ export default class Config {
       widgetType: type,
       ...dataConfig
     })
+  }
+
+  /**
+   * 根据分类获取其特配置工厂函数
+   * @param category
+   * @returns {*}
+   */
+  getProprietaryConfigFactory (category) {
+    return category === 'ELEMENT' ? elementProprietaryConfigFactory : chartProprietaryConfigFactory
   }
 }

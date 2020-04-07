@@ -35,4 +35,16 @@ export default class LinesStaticDataConfig {
   getCode () {
     return JSON.stringify(this.staticData, null, '\t')
   }
+
+  /**
+   * 更新静态数据
+   * @param config
+   * @param code
+   */
+  updateStaticData (config, code) {
+    Object.assign(
+      config.dataConfig.staticDataConfig,
+      { staticData: JSON.parse(code) }
+    )
+  }
 }
