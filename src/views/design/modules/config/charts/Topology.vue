@@ -92,7 +92,7 @@
                         buttonStyle="solid"
                         v-model="mode"
                         @change="modeChange">
-                        <a-radio-button value="default">默认</a-radio-button>
+                        <a-radio-button value="edit">默认</a-radio-button>
                         <a-radio-button value="addEdge">连线</a-radio-button>
                       </a-radio-group>
                     </div>
@@ -120,6 +120,19 @@
                     @change="edgeConfigChange" />
                   <!-- / 通用边编辑模板 -->
 
+                  <!--                  <div class="comment-template__item">-->
+                  <!--                    <p class="comment-template__leading">缩放:</p>-->
+                  <!--                    <div class="comment-template__inner">-->
+                  <!--                      <a-slider-->
+                  <!--                        v-model="config.proprietaryConfig.zoom"-->
+                  <!--                        @change="change"-->
+                  <!--                        :step="0.1"-->
+                  <!--                        :min="0"-->
+                  <!--                        :max="10" />-->
+                  <!--                    </div>-->
+                  <!--                  </div>-->
+                  <!--                  &lt;!&ndash; / 缩放 &ndash;&gt;-->
+
                 </div>
 
               </a-collapse-panel>
@@ -127,27 +140,16 @@
 
             </a-collapse>
 
-            <!-- S 节点通用配置 -->
-            <CommonNodeTemplate v-if="topologyEditable && activeNode && mode === 'default'" ref="commonNodeTemplate">
+            <CommonNodeTemplate v-if="topologyEditable && activeNode" ref="commonNodeTemplate" />
+            <!-- / 节点通用配置 -->
 
-            </CommonNodeTemplate>
-            <!-- S 节点通用配置 -->
-
-            <!-- E 节点通用配置 -->
             <CommonEdgeTemplate v-if="topologyEditable && activeEdge" ref="commonEdgeTemplate" />
-            <!-- E 节点通用配置 -->
+            <!-- / 边通用配置 -->
 
           </div>
 
         </a-tab-pane>
 
-        <a-tab-pane tab="数据配置" key="3">
-
-          <!-- S 数据配置模板 -->
-          <DataSourceTemplate />
-          <!-- E 数据配置模板 -->
-
-        </a-tab-pane>
       </a-tabs>
     </div>
   </div>
@@ -185,7 +187,7 @@ export default {
     // 拓扑尺寸编辑
     topologyResizable: true,
     // 拓扑模式
-    mode: 'default',
+    mode: 'edit',
     // 是否显示拓扑网格
     isDisplayGrid: false,
     // 选择器服务
@@ -199,6 +201,9 @@ export default {
     // 通用边配置
     edge () {
       return _.cloneDeep(this.edgeConfig)
+    },
+    graph () {
+      return this.activeWidget.render.chart
     }
   },
   created () {
@@ -226,6 +231,9 @@ export default {
       this.modifyTopologyEditable({
         editable: !this.topologyEditable
       })
+
+      // 设置拓扑图模式
+      this.graph.setMode(this.topologyEditable ? 'edit' : 'default')
 
       // 对当前已激活可编辑的拓扑部件添加样式，以标注状态
       const { render: { container } } = this.activeWidget

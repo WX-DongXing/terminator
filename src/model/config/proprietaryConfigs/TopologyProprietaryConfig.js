@@ -8,10 +8,12 @@
 
 export default class TopologyProprietaryConfig {
   constructor ({
+    zoom = 1,
     nodes = [],
     edges = [],
     groups = []
   }) {
+    this.zoom = zoom
     this.nodes = nodes
     this.edges = edges
     this.groups = groups

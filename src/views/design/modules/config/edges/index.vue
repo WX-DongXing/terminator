@@ -12,6 +12,7 @@
 
       <!-- S 节点 -->
       <a-collapse-panel header="边" key="1">
+        <a-icon slot="extra" class="icon-danger" type="delete" @click="deleteItem" />
 
         <EdgeTemplate :model="model" @change="change" ref="edgeTemplate">
 
@@ -121,13 +122,17 @@ export default {
   },
   computed: {
     ...mapState('screen', ['activeWidget', 'activeEdge']),
+    graph () {
+      return this.activeWidget.render.chart
+    },
     model () {
       return _.cloneDeep(this.activeEdge.getModel())
     }
   },
   methods: {
     ...mapMutations('screen', {
-      updateTopologyConfig: ScreenMutations.UPDATE_TOPOLOGY_CONFIG
+      updateTopologyConfig: ScreenMutations.UPDATE_TOPOLOGY_CONFIG,
+      updateEdge: ScreenMutations.ACTIVATE_EDGE
     }),
     change () {
       const { render: { chart } } = this.activeWidget
@@ -150,11 +155,29 @@ export default {
     displayChange () {
       this.model.display ? this.activeEdge.show() : this.activeEdge.hide()
       this.change()
+    },
+    /**
+     * 删除边
+     * @param event
+     */
+    deleteItem (event) {
+      const item = this.graph.findById(this.model.id)
+      // 清除激活的节点
+      this.updateEdge({
+        activeEdge: null
+      })
+      // 从当前拓扑图中删除该节点
+      this.graph.removeItem(item)
+      // 更新配置
+      this.updateTopologyConfig()
+      event.stopPropagation()
     }
   }
 }
 </script>
 
 <style scoped>
-
+.icon-danger {
+  color: #ff4d4f;
+}
 </style>

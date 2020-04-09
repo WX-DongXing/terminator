@@ -17,6 +17,8 @@
       <!-- S 节点 -->
       <a-collapse-panel header="节点" key="1" class="visible-collapse-panel">
 
+        <a-icon slot="extra" class="icon-danger" type="delete" @click="deleteItem" />
+
         <slot name="inside-header" :model="model" />
         <!-- / 节点通用配置内部顶部插槽 -->
 
@@ -271,6 +273,9 @@ export default {
   }),
   computed: {
     ...mapState('screen', ['activeWidget', 'activeNode']),
+    graph () {
+      return this.activeWidget.render.chart
+    },
     model () {
       return Object.assign(
         _.cloneDeep(this.activeNode.getModel()),
@@ -288,7 +293,8 @@ export default {
      */
     change (type) {
       const { render, config: { proprietaryConfig } } = this.activeWidget
-      // 根据配置更新视图，由于 updateItem 方法只能更新节点配置无法更新视图icon
+
+      // 根据配置更新视图，由于 updateItem 方法只能更新节点配置无法更新视图icon,需要重新读取新的配置
       render.chart.updateItem(this.model.id, this.model)
 
       // 更新配置
@@ -299,7 +305,7 @@ export default {
         render.read(proprietaryConfig)
       }
 
-      // 更新当前节点
+      //  重新读取节点后，重新赋值激活节点
       this.updateNode({
         activeNode: render.chart.find('node', node => node.getModel().id === this.model.id)
       })
@@ -328,11 +334,29 @@ export default {
     displayChange () {
       this.model.display ? this.activeNode.show() : this.activeNode.hide()
       this.change()
+    },
+    /**
+     * 删除节点
+     * @param event
+     */
+    deleteItem (event) {
+      const item = this.graph.findById(this.model.id)
+      // 清除激活的节点
+      this.updateNode({
+        activeNode: null
+      })
+      // 从当前拓扑图中删除该节点
+      this.graph.removeItem(item)
+      // 更新配置
+      this.updateTopologyConfig()
+      event.stopPropagation()
     }
   }
 }
 </script>
 
 <style scoped>
-
+.icon-danger {
+  color: #ff4d4f;
+}
 </style>

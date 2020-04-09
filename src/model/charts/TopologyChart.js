@@ -6,8 +6,10 @@
 * Email: dong.xing@outlook.com
 */
 
-import G6 from '@antv/g6'
 import _ from 'lodash'
+import G6 from '@antv/g6'
+import anime from 'animejs'
+import ContentMenu from '@antv/g6/build/menu'
 import Chart from './index'
 import store from '@/store'
 import { ScreenMutations } from '@/store/modules/screen'
@@ -15,6 +17,7 @@ import { ScreenMutations } from '@/store/modules/screen'
 export default class TopologyChart extends Chart {
   constructor ({ widget }) {
     super({ widget })
+    this.menuItem = null
   }
 
   /**
@@ -31,29 +34,39 @@ export default class TopologyChart extends Chart {
       plugins: [],
       modes: {
         default: [
+          // 'zoom-canvas',
+          // 'drag-canvas',
+          // 'drag-node',
+          // 'select-node',
+          // {
+          //   type: 'brush-select',
+          //   trigger: 'ctrl',
+          //   includeEdges: true
+          // },
+          // {
+          //   type: 'tooltip', // 节点提示框
+          //   formatText (model) {
+          //     // 提示框文本内容
+          //     return 'label: ' + model.label + '<br/>'
+          //   }
+          // },
+          // {
+          //   type: 'edge-tooltip', // 边提示框
+          //   formatText (model) { // 边提示框文本内容
+          //     return 'label: ' + model.label +
+          //       '<br/> source: ' + model.source +
+          //       '<br/> target: ' + model.target
+          //   }
+          // }
+        ],
+        edit: [
           'zoom-canvas',
           'drag-canvas',
           'drag-node',
-          'select-node',
           {
             type: 'brush-select',
             trigger: 'ctrl',
             includeEdges: true
-          },
-          {
-            type: 'tooltip', // 节点提示框
-            formatText (model) {
-              // 提示框文本内容
-              return 'label: ' + model.label + '<br/>'
-            }
-          },
-          {
-            type: 'edge-tooltip', // 边提示框
-            formatText (model) { // 边提示框文本内容
-              return 'label: ' + model.label +
-                '<br/> source: ' + model.source +
-                '<br/> target: ' + model.target
-            }
           }
         ],
         addEdge: [
@@ -96,12 +109,46 @@ export default class TopologyChart extends Chart {
         }
       }
     })
-
+    this.initContentMenu()
     this.read(proprietaryConfig)
 
     // 对于缩放事件的监听
-    this.chart.on('wheelzoom', e => {
-      console.log(this.chart.getNodes())
+    this.chart.on('wheelzoom', () => {
+      console.log(this.chart.getZoom())
+    })
+
+    // 对于节点右键触发上下文菜单
+    this.chart.on('node:contextmenu', e => {
+      const menuDom = this.contentMenu.get('menu')
+      anime.set(menuDom, {
+        display: 'block',
+        top: e.y,
+        left: e.x
+      })
+      this.menuItem = e.item
+    })
+
+    // 对于节点离开事件
+    this.chart.on('node:mouseleave', () => {
+      // 隐藏右键菜单
+      this.hideContentMenu()
+    })
+
+    // 对于边点右键触发上下文菜单
+    this.chart.on('edge:contextmenu', e => {
+      const menuDom = this.contentMenu.get('menu')
+      anime.set(menuDom, {
+        display: 'block',
+        top: e.y,
+        left: e.x
+      })
+      this.menuItem = e.item
+    })
+
+    // 对于边离开事件
+    this.chart.on('edge:mouseleave', () => {
+      // 隐藏右键菜单
+      this.hideContentMenu()
     })
 
     // 节点点击事件
@@ -139,7 +186,7 @@ export default class TopologyChart extends Chart {
     })
 
     // 画布点击事件
-    this.chart.on('canvas:click', e => {
+    this.chart.on('canvas:click', () => {
       // 清空激活的节点
       store.commit('screen/' + ScreenMutations.ACTIVATE_NODE, {
         activeNode: null
@@ -148,6 +195,73 @@ export default class TopologyChart extends Chart {
       store.commit('screen/' + ScreenMutations.ACTIVATE_EDGE, {
         activeEdge: null
       })
+    })
+  }
+
+  /**
+   * 添加右键菜单
+   */
+  initContentMenu () {
+    this.contentMenu = new ContentMenu()
+    this.chart.addPlugin(this.contentMenu)
+    const menuDom = this.contentMenu.get('menu')
+    const p = document.createElement('p')
+    p.innerText = '删除'
+    p.onclick = () => {
+      const type = this.menuItem.get('type')
+      if (type === 'node') {
+        // 如果当前激活节点和删除节点一致，则置空激活节点
+        if (store.state.screen.activeNode === this.menuItem) {
+          // 清空激活的节点
+          store.commit('screen/' + ScreenMutations.ACTIVATE_NODE, {
+            activeNode: null
+          })
+        }
+      } else if (type === 'edge') {
+        // 如果当前激活边和删除边一致，则置空激活边
+        if (store.state.screen.activeEdge === this.menuItem) {
+          // 清空激活的节点
+          store.commit('screen/' + ScreenMutations.ACTIVATE_EDGE, {
+            activeEdge: null
+          })
+        }
+      }
+      // 隐藏右键菜单
+      this.hideContentMenu()
+      // 从拓扑图中删除该节点
+      this.chart.removeItem(this.menuItem)
+      // 更新拓扑图配置
+      store.commit('screen/' + ScreenMutations.UPDATE_TOPOLOGY_CONFIG)
+    }
+    anime.set(p, {
+      width: '100px',
+      height: '40px',
+      lineHeight: '40px',
+      textAlign: 'center',
+      color: '#ff4d4f',
+      cursor: 'pointer',
+      fontSize: '14px',
+      margin: 0
+    })
+    menuDom.appendChild(p)
+    anime.set(menuDom, {
+      position: 'absolute',
+      width: 100,
+      height: 40,
+      borderRadius: 5,
+      background: 'white',
+      border: '1px solid #d9d9d9',
+      boxShadow: '0 2px 0 rgba(0,0,0,.015)'
+    })
+  }
+
+  /**
+   * 隐藏右键菜单
+   */
+  hideContentMenu () {
+    const menuDom = this.contentMenu.get('menu')
+    anime.set(menuDom, {
+      display: 'none'
     })
   }
 
@@ -196,7 +310,13 @@ export default class TopologyChart extends Chart {
     }
   }
 
+  mergeOption (config) {
+    this.config = config
+    this.chart.zoomTo(config.proprietaryConfig.zoom)
+  }
+
   destroy () {
+    this.chart.off()
     this.chart.destroy()
   }
 }

@@ -82,8 +82,9 @@ export default {
     ...mapMutations('screen', {
       activateWidget: ScreenMutations.ACTIVATE_WIDGET
     }),
-    switchMode () {
+    switchMode (event) {
       this.isFullscreen = !this.isFullscreen
+      event.stopPropagation()
     },
     /**
      * 静态资源修改
