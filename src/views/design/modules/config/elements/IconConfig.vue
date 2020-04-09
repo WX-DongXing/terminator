@@ -60,7 +60,7 @@
                 <div class="comment-template__inner comment-template__end">
                   <a-radio-group
                     buttonStyle="solid"
-                    v-model="config.proprietaryConfig.option.theme"
+                    v-model="config.proprietaryConfig.props.theme"
                     @change="change">
                     <a-radio-button value="outlined">描线</a-radio-button>
                     <a-radio-button value="filled">实心</a-radio-button>
@@ -76,17 +76,17 @@
                   <a-switch
                     checkedChildren="开启"
                     unCheckedChildren="关闭"
-                    v-model="config.proprietaryConfig.option.spin"
+                    v-model="config.proprietaryConfig.props.spin"
                     @change="animationChange" />
                 </div>
               </div>
               <!-- / 动画 -->
 
-              <div class="comment-template__item" v-if="!config.proprietaryConfig.option.spin">
+              <div class="comment-template__item" v-if="!config.proprietaryConfig.props.spin">
                 <p class="comment-template__leading">旋转:</p>
                 <div class="comment-template__inner">
                   <a-slider
-                    v-model="config.proprietaryConfig.option.rotate"
+                    v-model="config.proprietaryConfig.props.rotate"
                     :min="0"
                     :max="360"
                     @change="rotateChange"/>
@@ -109,7 +109,7 @@
                     v-for="(icon, index) of currentIcons"
                     :key="index"
                     @click="iconPicker(icon)"
-                    :class="[config.proprietaryConfig.option.type === icon
+                    :class="[config.proprietaryConfig.props.type === icon
                       ? 'icon-config__picker icon-config__picker--active'
                       : 'icon-config__picker']">
                     <a-icon :type="icon" />
@@ -158,12 +158,12 @@ export default {
   methods: {
     rotateChange () {
       // 记录更改后的角度
-      this.rotate = this.config.proprietaryConfig.option.rotate
+      this.rotate = this.config.proprietaryConfig.props.rotate
       this.change()
     },
     animationChange () {
-      Object.assign(this.config.proprietaryConfig.option, {
-        rotate: this.config.proprietaryConfig.option.spin ? 0 : this.rotate
+      Object.assign(this.config.proprietaryConfig.props, {
+        rotate: this.config.proprietaryConfig.props.spin ? 0 : this.rotate
       })
       this.change()
     },
@@ -172,7 +172,7 @@ export default {
      * @param type
      */
     iconPicker (type) {
-      Object.assign(this.config.proprietaryConfig.option, { type })
+      Object.assign(this.config.proprietaryConfig.props, { type })
       this.change()
     }
   }
