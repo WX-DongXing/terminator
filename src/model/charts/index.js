@@ -101,5 +101,7 @@ export default class Chart {
   /**
    * 销毁事件
    */
-  destroy () {}
+  destroy () {
+    this.chart.dispose()
+  }
 }

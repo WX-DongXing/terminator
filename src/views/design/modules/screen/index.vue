@@ -299,9 +299,9 @@ export default {
       .subscribe((mutation) => {
         const { widgetId, render } = this.activeWidget
         const [targetComponent] = this.$refs[widgetId]
-        const { event } = mutation
+        const { event: { mouseType, eventType } } = mutation
         // 当鼠标抬起时更新部件位置状态
-        if (event.mouseType === 'mouseup') {
+        if (mouseType === 'mouseup') {
           const {
             top, left, width, height
           } = window.getComputedStyle(targetComponent.$el, null)
@@ -324,7 +324,10 @@ export default {
           target: targetComponent.$el,
           mutation
         })
-        this.activeWidget.render.resize()
+        // 在非移动情况触发时，调整图表尺寸
+        if (eventType !== 'MOVE') {
+          this.activeWidget.render.resize()
+        }
       })
   },
   computed: {
