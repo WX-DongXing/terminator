@@ -771,12 +771,13 @@ class ImageStyle {
 class ImageGraphic extends Graphic {
   constructor ({
     imageSource = 'network',
+    style = {},
     ...graphicOption
   }) {
     super(graphicOption)
     this.type = 'image'
     this.imageSource = imageSource
-    this.style = new ImageStyle(this.style)
+    this.style = new ImageStyle(style)
   }
 
   /**
