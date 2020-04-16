@@ -33,9 +33,8 @@ export default {
     change () {
       const activeWidget = _.cloneDeep(this.activeWidget)
       const { render } = this.activeWidget
-      Object.assign(activeWidget.config, this.config)
       this.activateWidget({
-        widget: Object.assign(activeWidget, { render })
+        widget: Object.assign(activeWidget, { config: this.config })
       })
       this.$nextTick(() => {
         render.mergeOption(this.config)

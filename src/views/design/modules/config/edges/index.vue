@@ -131,13 +131,17 @@ export default {
   },
   methods: {
     ...mapMutations('screen', {
-      updateTopologyConfig: ScreenMutations.UPDATE_TOPOLOGY_CONFIG,
-      updateEdge: ScreenMutations.ACTIVATE_EDGE
+      updateEdge: ScreenMutations.ACTIVATE_EDGE,
+      updateTopologyConfig: ScreenMutations.UPDATE_TOPOLOGY_CONFIG
     }),
     change () {
-      const { render: { chart } } = this.activeWidget
+      const { render } = this.activeWidget
       // 根据配置更新视图
-      chart.updateItem(this.model.id, this.model)
+      render.chart.updateItem(this.model.id, this.model)
+      // 更新边配置
+      this.updateEdge({
+        activeEdge: render.chart.find('edge', edge => edge.getModel().id === this.model.id)
+      })
       // 更新配置
       this.updateTopologyConfig()
     },
@@ -163,9 +167,7 @@ export default {
     deleteItem (event) {
       const item = this.graph.findById(this.model.id)
       // 清除激活的节点
-      this.updateEdge({
-        activeEdge: null
-      })
+      this.updateEdge({ activeEdge: null })
       // 从当前拓扑图中删除该节点
       this.graph.removeItem(item)
       // 更新配置

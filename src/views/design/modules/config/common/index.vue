@@ -408,10 +408,7 @@ export default {
     updateActiveWidget () {
       const activeWidget = _.cloneDeep(this.activeWidget)
       this.activateWidget({
-        widget: Object.assign(activeWidget, {
-          config: this.config,
-          render: this.activeWidget.render
-        })
+        widget: Object.assign(activeWidget, { config: this.config })
       })
     }
   }

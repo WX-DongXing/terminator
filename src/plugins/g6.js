@@ -92,9 +92,8 @@ G6.registerBehavior('add-edge', {
       controlPoints = []
       this.edge = null
       this.addingEdge = false
-      // 联系完毕后更新配置
-      const { render, config } = store.state.screen.activeWidget
-      render.save(config)
+      // 连线完毕后更新配置
+      store.commit('screen/' + ScreenMutations.UPDATE_TOPOLOGY_CONFIG)
     } else {
       this.edge = graph.addItem('edge', new Edge({
         source: model.id,
@@ -371,7 +370,7 @@ G6.registerEdge('line', {
       if (value) {
         const length = shape.getTotalLength()
         let totalArray = []
-        for (var i = 0; i < length; i += interval) {
+        for (let i = 0; i < length; i += interval) {
           totalArray = totalArray.concat(
             store.state.screen.activeEdge ? (store.state.screen.activeEdge.getModel().style.lineDash[0] < 4 ? [4] : store.state.screen.activeEdge.getModel().style.lineDash) : [4]
           )
@@ -410,7 +409,7 @@ G6.registerEdge('cubic', {
       if (value) {
         const length = shape.getTotalLength()
         let totalArray = []
-        for (var i = 0; i < length; i += interval) {
+        for (let i = 0; i < length; i += interval) {
           totalArray = totalArray.concat(
             store.state.screen.activeEdge ? (store.state.screen.activeEdge.getModel().style.lineDash[0] < 4 ? [4] : store.state.screen.activeEdge.getModel().style.lineDash) : [4]
           )
@@ -449,7 +448,7 @@ G6.registerEdge('polyline', {
       if (value) {
         const length = shape.getTotalLength()
         let totalArray = []
-        for (var i = 0; i < length; i += interval) {
+        for (let i = 0; i < length; i += interval) {
           totalArray = totalArray.concat(
             store.state.screen.activeEdge ? (store.state.screen.activeEdge.getModel().style.lineDash[0] < 4 ? [4] : store.state.screen.activeEdge.getModel().style.lineDash) : [4]
           )

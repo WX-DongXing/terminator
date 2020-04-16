@@ -151,20 +151,21 @@ export default class TopologyChart extends Chart {
       this.hideContentMenu()
     })
 
-    // 节点点击事件
-    this.chart.on('node:click', ({ item }) => {
+    // 节点鼠标按下事件，设置当前节点为激活节点
+    this.chart.on('node:mousedown', ({ item }) => {
       store.commit('screen/' + ScreenMutations.ACTIVATE_NODE, {
-        activeNode: item
+        activeNode: _.cloneDeep(item)
       })
     })
 
-    // 节点拖动事件
-    this.chart.on('node:drag', ({ item }) => {
+    // 节点拖动结束事件，更新当前激活节点配置，更新配置
+    this.chart.on('node:dragend', ({ item }) => {
       const activeNode = store.state.screen.activeNode
       if (activeNode) {
         store.commit('screen/' + ScreenMutations.ACTIVATE_NODE, {
-          activeNode: item
+          activeNode: _.cloneDeep(item)
         })
+        store.commit('screen/' + ScreenMutations.UPDATE_TOPOLOGY_CONFIG)
       }
     })
 
@@ -176,7 +177,7 @@ export default class TopologyChart extends Chart {
     // 边点击事件
     this.chart.on('edge:click', ({ item }) => {
       store.commit('screen/' + ScreenMutations.ACTIVATE_EDGE, {
-        activeEdge: item
+        activeEdge: _.cloneDeep(item)
       })
     })
 
@@ -288,14 +289,6 @@ export default class TopologyChart extends Chart {
         model.display ? edge.show() : edge.hide()
       })
     }
-  }
-
-  /**
-   * 保存配置
-   * @param widget
-   */
-  save ({ proprietaryConfig }) {
-    Object.assign(proprietaryConfig, _.cloneDeep(this.chart.save()))
   }
 
   /**

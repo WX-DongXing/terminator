@@ -297,7 +297,7 @@ export default {
         pluck('event', 'msg')
       )
       .subscribe((mutation) => {
-        const { widgetId, render } = this.activeWidget
+        const { widgetId } = this.activeWidget
         const [targetComponent] = this.$refs[widgetId]
         const { event: { mouseType, eventType } } = mutation
         // 当鼠标抬起时更新部件位置状态
@@ -314,9 +314,7 @@ export default {
           // 更新部件位置信息
           const widget = _.cloneDeep(this.activeWidget)
           Object.assign(widget.config.commonConfig, widgetPositionState)
-          this.activateWidget({
-            widget: Object.assign(widget, { render })
-          })
+          this.activateWidget({ widget })
           return
         }
         // 调整部件大小
@@ -482,6 +480,8 @@ export default {
      * @returns {boolean}
      */
     importConfig (file) {
+      // 清空画布
+      this.clear()
       const reader = new FileReader()
       reader.onload = () => {
         // 清空当前视图配置
