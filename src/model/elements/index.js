@@ -5,7 +5,7 @@ export default class Element {
     this.container = document.getElementById(widget.widgetId)
     this.element = element
     this.setContainer(widget)
-    this.setStyle(widget.config)
+    this.setConfig(widget.config)
   }
 
   /**
@@ -37,13 +37,21 @@ export default class Element {
       ...border.getOption(),
       background: colorMode === 'single' ? backgroundColor : `linear-gradient(${backgroundColor.angle}deg, ${backgroundColor.start}, ${backgroundColor.end})`
     })
-    this.mergeOption(config)
   }
 
   /**
    * 设置专有属性样式，与图表对象使用同一方法命名
    */
   mergeOption (config) {}
+
+  /**
+   * 完整配置设置
+   * @param config
+   */
+  setConfig (config) {
+    this.setStyle(config)
+    this.mergeOption(config)
+  }
 
   resize () {}
 

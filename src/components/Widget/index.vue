@@ -6,7 +6,7 @@
 * Email: dong.xing@outlook.com
 */
 <template>
-  <div
+  <figure
     class="widget"
     :class="[onlyShow ? 'widget' : 'widget widget--hover']"
     :id="widget.widgetId"
@@ -17,7 +17,7 @@
     <component v-if="useComponent" :is="elementName" :elementProps="elementProps" ref="element" />
     <!-- E 元素部件 -->
 
-  </div>
+  </figure>
 </template>
 
 <script>
@@ -98,6 +98,7 @@ export default {
 .widget {
   position: absolute !important;
   overflow: hidden;
+  margin: 0;
 
   &--hover:hover {
     box-shadow: 0 0 4px 2px rgba(24, 144, 255, .8) !important;

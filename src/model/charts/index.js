@@ -99,6 +99,15 @@ export default class Chart {
   }
 
   /**
+   * 完整配置设置
+   * @param config
+   */
+  setConfig (config) {
+    this.setStyle(config)
+    this.mergeOption(config)
+  }
+
+  /**
    * 销毁事件
    */
   destroy () {

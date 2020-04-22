@@ -7,7 +7,8 @@
 */
 <script>
 import anime from 'animejs'
-import { mapState } from 'vuex'
+import { mapState, mapMutations } from 'vuex'
+import { ScreenMutations } from '@/store/modules/screen'
 
 export default {
   name: 'AdjustMixins',
@@ -18,9 +19,14 @@ export default {
     height: 0
   }),
   computed: {
-    ...mapState('screen', ['view'])
+    ...mapState('screen', ['view', 'activeWidget'])
   },
   methods: {
+    ...mapMutations('screen', {
+      addWidget: ScreenMutations.ADD_WIDGET,
+      activateWidget: ScreenMutations.ACTIVATE_WIDGET,
+      removeWidget: ScreenMutations.REMOVE_WIDGET
+    }),
     /**
      * 通用dom元素调整方法，以方便部件使用
      * @param target dom元素

@@ -30,18 +30,6 @@
         </div>
         <!-- / 形状 -->
 
-        <div class="comment-template__item">
-          <p class="comment-template__leading">显示:</p>
-          <div class="comment-template__inner comment-template__end">
-            <a-switch
-              checkedChildren="显示"
-              unCheckedChildren="隐藏"
-              v-model="model.display"
-              @change="displayChange" />
-          </div>
-        </div>
-        <!-- / 显示 -->
-
         <div class="comment-template__item" v-if="model.icon">
           <p class="comment-template__leading">图标:</p>
           <div class="comment-template__inner">
@@ -326,13 +314,6 @@ export default {
       chart.clearItemStates(this.activeNode)
       chart.setItemState(id, animateType, true)
       // 更新配置
-      this.change()
-    },
-    /**
-     * 节点显示更新
-     */
-    displayChange () {
-      this.model.display ? this.activeNode.show() : this.activeNode.hide()
       this.change()
     },
     /**
