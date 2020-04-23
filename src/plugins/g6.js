@@ -42,23 +42,33 @@ G6.G.Canvas.prototype.getPointByClient = function (clientX, clientY) {
 G6.registerBehavior('select-node', {
   getEvents () {
     return {
-      'node:click': 'onNodeClick',
+      'node:mousedown': 'onNodeMousedown',
       'canvas:click': 'onCanvasClick'
     }
   },
-  onNodeClick (e) {
+  onNodeMousedown (e) {
     const graph = this.graph
     const item = e.item
     const nodes = graph.findAll('node', () => true)
-    nodes.forEach(node => graph.setItemState(node, 'active', false))
-    graph.setItemState(item, 'active', true)
+    nodes.forEach(node => {
+      const states = node.getStates()
+      if (!states.includes('selected')) {
+        graph.setItemState(node, 'active', false)
+        graph.setItemState(node, 'inactive', true)
+      }
+    })
+    if (!item.getStates().includes('selected')) {
+      graph.setItemState(item, 'active', true)
+    }
   },
   onCanvasClick (e) {
     // shouldUpdate 返回 true 时取消所有节点的 'active' 状态，即将 'active' 状态置为 false
     if (this.shouldUpdate(e)) {
       const graph = this.graph
-      graph.findAllByState('node', 'active').forEach(node => {
+      const nodes = graph.findAll('node', () => true)
+      nodes.forEach(node => {
         graph.setItemState(node, 'active', false)
+        graph.setItemState(node, 'inactive', false)
       })
     }
   }
@@ -155,28 +165,15 @@ G6.registerNode('circle', {
         const cfg = {
           r: (model.size[0] + 16) / 2
         }
-        const [state] = item.getStates()
-        if (state) {
-          switch (state) {
-            case 'default':
-              cfg.stroke = `rgba(24,144,255,${ratio})`
-              break
-            case 'warning':
-              cfg.stroke = `rgba(255,173,18,${ratio})`
-              break
-            case 'danger':
-              cfg.stroke = `rgba(255,77,79,${ratio})`
-              break
-            case 'success':
-              cfg.stroke = `rgba(81,196,26,${ratio})`
-              break
-            default:
-              cfg.stroke = `rgba(24,144,255,0)`
-              break
-          }
-        } else {
-          cfg.stroke = `rgba(24,144,255,0)`
-        }
+        const typeMapping = new Map([
+          ['none', `rgba(24,144,255,0)`],
+          ['default', `rgba(24,144,255,${ratio})`],
+          ['warning', `rgba(255,173,18,${ratio})`],
+          ['danger', `rgba(255,77,79,${ratio})`],
+          ['success', `rgba(81,196,26,${ratio})`]
+        ])
+        const [stroke] = item.getStates().filter(state => typeMapping.has(state))
+        cfg.stroke = stroke ? typeMapping.get(stroke) : `rgba(24,144,255,0)`
         return cfg
       },
       repeat: true
@@ -207,28 +204,15 @@ G6.registerNode('ellipse', {
           rx: (model.size[0] + 16) / 2,
           ry: (model.size[1] + 16) / 2
         }
-        const [state] = item.getStates()
-        if (state) {
-          switch (state) {
-            case 'default':
-              cfg.stroke = `rgba(24,144,255,${ratio})`
-              break
-            case 'warning':
-              cfg.stroke = `rgba(255,173,18,${ratio})`
-              break
-            case 'danger':
-              cfg.stroke = `rgba(255,77,79,${ratio})`
-              break
-            case 'success':
-              cfg.stroke = `rgba(81,196,26,${ratio})`
-              break
-            default:
-              cfg.stroke = `rgba(24,144,255,0)`
-              break
-          }
-        } else {
-          cfg.stroke = `rgba(24,144,255,0)`
-        }
+        const typeMapping = new Map([
+          ['none', `rgba(24,144,255,0)`],
+          ['default', `rgba(24,144,255,${ratio})`],
+          ['warning', `rgba(255,173,18,${ratio})`],
+          ['danger', `rgba(255,77,79,${ratio})`],
+          ['success', `rgba(81,196,26,${ratio})`]
+        ])
+        const [stroke] = item.getStates().filter(state => typeMapping.has(state))
+        cfg.stroke = stroke ? typeMapping.get(stroke) : `rgba(24,144,255,0)`
         return cfg
       },
       repeat: true
@@ -261,28 +245,15 @@ G6.registerNode('rect', {
           width: model.size[0] + 16,
           height: model.size[1] + 16
         }
-        const [state] = item.getStates()
-        if (state) {
-          switch (state) {
-            case 'default':
-              cfg.stroke = `rgba(24,144,255,${ratio})`
-              break
-            case 'warning':
-              cfg.stroke = `rgba(255,173,18,${ratio})`
-              break
-            case 'danger':
-              cfg.stroke = `rgba(255,77,79,${ratio})`
-              break
-            case 'success':
-              cfg.stroke = `rgba(81,196,26,${ratio})`
-              break
-            default:
-              cfg.stroke = `rgba(24,144,255,0)`
-              break
-          }
-        } else {
-          cfg.stroke = `rgba(24,144,255,0)`
-        }
+        const typeMapping = new Map([
+          ['none', `rgba(24,144,255,0)`],
+          ['default', `rgba(24,144,255,${ratio})`],
+          ['warning', `rgba(255,173,18,${ratio})`],
+          ['danger', `rgba(255,77,79,${ratio})`],
+          ['success', `rgba(81,196,26,${ratio})`]
+        ])
+        const [stroke] = item.getStates().filter(state => typeMapping.has(state))
+        cfg.stroke = stroke ? typeMapping.get(stroke) : `rgba(24,144,255,0)`
         return cfg
       },
       repeat: true
@@ -315,28 +286,15 @@ G6.registerNode('image', {
           width: model.size[0] + 16,
           height: model.size[1] + 16
         }
-        const [state] = item.getStates()
-        if (state) {
-          switch (state) {
-            case 'default':
-              cfg.stroke = `rgba(24,144,255,${ratio})`
-              break
-            case 'warning':
-              cfg.stroke = `rgba(255,173,18,${ratio})`
-              break
-            case 'danger':
-              cfg.stroke = `rgba(255,77,79,${ratio})`
-              break
-            case 'success':
-              cfg.stroke = `rgba(81,196,26,${ratio})`
-              break
-            default:
-              cfg.stroke = `rgba(24,144,255,0)`
-              break
-          }
-        } else {
-          cfg.stroke = `rgba(24,144,255,0)`
-        }
+        const typeMapping = new Map([
+          ['none', `rgba(24,144,255,0)`],
+          ['default', `rgba(24,144,255,${ratio})`],
+          ['warning', `rgba(255,173,18,${ratio})`],
+          ['danger', `rgba(255,77,79,${ratio})`],
+          ['success', `rgba(81,196,26,${ratio})`]
+        ])
+        const [stroke] = item.getStates().filter(state => typeMapping.has(state))
+        cfg.stroke = stroke ? typeMapping.get(stroke) : `rgba(24,144,255,0)`
         return cfg
       },
       repeat: true

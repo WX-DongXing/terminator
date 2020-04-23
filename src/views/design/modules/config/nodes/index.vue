@@ -281,7 +281,6 @@ export default {
      */
     change (type) {
       const { render, config: { proprietaryConfig } } = this.activeWidget
-
       // 根据配置更新视图，由于 updateItem 方法只能更新节点配置无法更新视图icon,需要重新读取新的配置
       render.chart.updateItem(this.model.id, this.model)
 
@@ -311,7 +310,7 @@ export default {
     animateTypeChange () {
       const { render: { chart } } = this.activeWidget
       const { id, animateType } = this.model
-      chart.clearItemStates(this.activeNode)
+      chart.clearItemStates(id)
       chart.setItemState(id, animateType, true)
       // 更新配置
       this.change()

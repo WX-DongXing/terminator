@@ -72,9 +72,9 @@ module.exports = {
   configureWebpack: {
     externals: isProd ? prodCDN.externals : devCDN.externals
   },
-  // 打包部署
+  // 打包部署至github
   publicPath: process.env.NODE_ENV === 'production'
-    ? '/terminator/'
+    ? '/'
     : '/',
   chainWebpack: config => {
     config.plugin('html').tap(args => {
