@@ -9,6 +9,7 @@
 import _ from 'lodash'
 import G6 from '@antv/g6'
 import anime from 'animejs'
+import uuid from 'uuid/v4'
 import ContentMenu from '@antv/g6/build/menu'
 import Chart from './index'
 import store from '@/store'
@@ -274,6 +275,7 @@ export default class TopologyChart extends Chart {
     copyDom.onclick = () => {
       const nodes = this.chart.findAllByState('node', 'selected')
       const edges = this.chart.findAllByState('edge', 'selected')
+      const cloneEdgeModels = _.cloneDeep(edges.map(edge => edge.getModel()))
       const selectedItemStates = this.selectedItem.getStates()
       const nodeFactory = Factory.createNodeFactory()
 
@@ -282,29 +284,37 @@ export default class TopologyChart extends Chart {
         // 遍历节点元素添加节点元素，由于存在边的关系，故此不能删除id，对id添加 '_copy' 印记
         nodes.forEach(node => {
           const copyNodeModel = _.cloneDeep(node.getModel())
+          const sourceNode = cloneEdgeModels.find(edge => edge.source === copyNodeModel.id)
+          const targetNode = cloneEdgeModels.find(edge => edge.target === copyNodeModel.id)
           Object.assign(copyNodeModel, {
             x: copyNodeModel.x + 48,
-            y: copyNodeModel.y + 48,
-            id: copyNodeModel.id + '_copy'
+            y: copyNodeModel.y + 48
           })
+          Reflect.deleteProperty(copyNodeModel, 'id')
           const copyNode = nodeFactory.create(copyNodeModel)
+          if (sourceNode) {
+            sourceNode.source = copyNode.id
+          }
+          if (targetNode) {
+            targetNode.target = copyNode.id
+          }
           this.chart.addItem('node', copyNode)
           this.chart.setItemState(copyNode.id, copyNode.animateType, true)
         })
-        edges.forEach(edge => {
-          const copyEdgeModel = _.cloneDeep(edge.getModel())
-          copyEdgeModel.controlPoints = copyEdgeModel.controlPoints.map(point => {
+        // 边遍历添加入拓扑图
+        cloneEdgeModels.forEach(edge => {
+          edge.controlPoints = edge.controlPoints.map(point => {
             point.x += 48
             point.y += 48
             return point
           })
-          Object.assign(copyEdgeModel, {
-            id: copyEdgeModel.id + '_copy',
-            source: copyEdgeModel.source + '_copy',
-            target: copyEdgeModel.target + '_copy'
+          Object.assign(edge, {
+            id: `edge-${uuid()}`
           })
-          this.chart.addItem('edge', copyEdgeModel)
-          this.chart.setItemState(copyEdgeModel.id, 'active', copyEdgeModel.animate)
+          Reflect.deleteProperty(edge, 'sourceNode')
+          Reflect.deleteProperty(edge, 'targetNode')
+          this.chart.addItem('edge', edge)
+          this.chart.setItemState(edge.id, 'active', edge.animate)
         })
       } else {
         // 复制单一节点元素，此元素域其他元素别无二致，故此删除原先的id，重新创建
