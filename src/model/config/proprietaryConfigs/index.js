@@ -123,7 +123,7 @@ class AreaStyle {
 }
 
 /**
- * 图形样式
+ * 柱形图形样式
  * @param type 类型 'single' | 'combination' | 'linear'
  * @param colorType 颜色类型 'default' | 'custom'
  */
@@ -142,6 +142,10 @@ class BarItemStyle {
     this.barBorderRadius = barBorderRadius
   }
 
+  /**
+   * 映射为 echarts 柱形图 itemStyle 样式
+   * @returns {{color: (string|*[]), barBorderRadius: number[]}}
+   */
   getOption () {
     let color
     switch (this.type) {
@@ -177,6 +181,73 @@ class BarItemStyle {
     return {
       color,
       barBorderRadius: this.barBorderRadius
+    }
+  }
+}
+
+/**
+ * 饼图图形样式
+ * @param type 类型 'combination' | 'linear'
+ */
+class PieItemStyle extends ItemStyle {
+  constructor ({
+    type = 'combination',
+    colorType = 'default',
+    colorScheme = 'default',
+    borderWidth = 0,
+    color = [
+      '#c23531', '#2f4554', '#61a0a8', '#d48265',
+      '#91c7ae', '#749f83', '#ca8622', '#bda29a',
+      '#6e7074', '#546570', '#c4ccd3'
+    ],
+    ...otherOptions
+  }) {
+    super({
+      color,
+      borderWidth,
+      ...otherOptions
+    })
+    this.type = type
+    this.colorType = colorType
+    this.colorScheme = colorScheme
+  }
+
+  /**
+   * 映射为 echarts 饼图 itemStyle 样式
+   * @returns {{color: (*[]|string), barBorderRadius: (number[]|number)}}
+   */
+  getOption () {
+    let color
+    switch (this.type) {
+      case 'combination':
+        color = [...this.color]
+        break
+      case 'linear':
+        color = [...this.color].map(({ start, end }) => ({
+          type: 'linear',
+          x: 1,
+          y: 0,
+          x2: 1,
+          y2: 1,
+          colorStops: [
+            {
+              offset: 0,
+              color: start
+            },
+            {
+              offset: 1,
+              color: end
+            }
+          ]
+        }))
+        break
+      default:
+        color = 'rgba(7,171,253,1)'
+        break
+    }
+    return {
+      ..._.omit(_.cloneDeep(this), ['color', 'type', 'colorType', 'colorScheme']),
+      color
     }
   }
 }
@@ -827,6 +898,7 @@ class IconProps {
 export {
   AreaStyle,
   BarItemStyle,
+  PieItemStyle,
   ItemStyle,
   Legend,
   LineStyle,

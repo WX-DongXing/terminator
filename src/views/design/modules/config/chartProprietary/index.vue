@@ -145,7 +145,7 @@
       </a-collapse-panel>
       <!-- / 图例 -->
 
-      <a-collapse-panel header="X坐标轴" key="2" class="visible-collapse-panel">
+      <a-collapse-panel v-if="showXAxis" header="X坐标轴" key="2" class="visible-collapse-panel">
 
         <div class="comment-template__item">
           <p class="comment-template__leading">显示:</p>
@@ -562,7 +562,7 @@
       </a-collapse-panel>
       <!-- / X坐标轴 -->
 
-      <a-collapse-panel header="Y坐标轴" key="3">
+      <a-collapse-panel v-if="showYAxis" header="Y坐标轴" key="3">
 
         <div class="comment-template__item">
           <p class="comment-template__leading">显示:</p>
@@ -969,6 +969,16 @@ import ProprietaryMixins from '../proprietaryMixins'
 export default {
   name: 'ChartProprietaryTemplate',
   mixins: [ProprietaryMixins],
+  props: {
+    showXAxis: {
+      type: Boolean,
+      default: false
+    },
+    showYAxis: {
+      type: Boolean,
+      default: false
+    }
+  },
   components: {
     ColorPicker
   },

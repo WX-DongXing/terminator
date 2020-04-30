@@ -16,6 +16,7 @@ import TriangleConfig from './charts/TriangleConfig'
 import ImageConfig from './charts/ImageConfig'
 import DateTimeConfig from './charts/DateTimeConfig'
 import IconConfig from './elements/IconConfig'
+import PieConfig from './charts/PieConfig'
 
 // 图表模板配置
 const charts = {
@@ -28,7 +29,8 @@ const charts = {
   TriangleConfig,
   ImageConfig,
   IconConfig,
-  DateTimeConfig
+  DateTimeConfig,
+  PieConfig
 }
 
 // 元素模板配置

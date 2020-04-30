@@ -62,11 +62,7 @@ export default class View {
       id,
       name,
       config,
-      widgets: widgets.map(item => {
-        // 删除部件渲染对象，以持久化数据
-        Reflect.deleteProperty(item, 'render')
-        return item
-      })
+      widgets: widgets.map(widget => widget.getOption())
     }
   }
 }

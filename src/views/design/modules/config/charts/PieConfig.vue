@@ -1,13 +1,10 @@
 /**
-* 柱形图配置
-* Author: dong xing
-* Date: 2019/11/13
-* Time: 2:59 下午
-* Email: dong.xing@outlook.com
+* 饼图配置
+* Date: 2020/4/27
+* Time: 5:30 下午
 */
-
 <template>
-  <div class="bar-config">
+  <div class="pie-config">
     <a-tabs
       defaultActiveKey="1"
       tabPosition="top"
@@ -24,125 +21,83 @@
       <a-tab-pane tab="专有属性" key="2">
 
         <!-- S 专有配置模板 -->
-        <ChartProprietaryTemplate show-x-axis show-y-axis>
+        <ChartProprietaryTemplate>
 
           <template v-slot:header>
 
-            <a-collapse defaultActiveKey="1" :bordered="false">
-
-              <a-collapse-panel header="图形" key="1">
+            <a-collapse :bordered="false" defaultActiveKey="1">
+              <a-collapse-panel header="玫瑰图" key="1">
 
                 <div class="comment-template__item">
-                  <p class="comment-template__leading">显示类型:</p>
+                  <p class="comment-template__leading">玫瑰图:</p>
                   <div class="comment-template__inner">
                     <a-select
-                      v-model="config.proprietaryConfig.barType"
+                      v-model="config.proprietaryConfig.roseType"
                       @change="change">
-                      <a-select-option value="single">单列</a-select-option>
-                      <a-select-option value="multiple">多列</a-select-option>
+                      <a-select-option value="none">无</a-select-option>
+                      <a-select-option value="area">圆心角 - 半径</a-select-option>
+                      <a-select-option value="radius">半径</a-select-option>
                     </a-select>
                   </div>
                 </div>
-                <!-- / 数据类型 -->
-
-                <div class="comment-template__item">
-                  <p class="comment-template__leading">柱条宽度:</p>
-                  <div class="comment-template__inner">
-                    <a-select
-                      v-model="config.proprietaryConfig.barWidthType"
-                      @change="barWidthTypeChange(config)">
-                      <a-select-option value="auto">自适应</a-select-option>
-                      <a-select-option value="custom">自定义</a-select-option>
-                    </a-select>
-                  </div>
-                </div>
-                <!-- / 柱条宽度 -->
-
-                <div
-                  class="comment-template__item"
-                  v-if="config.proprietaryConfig.barWidthType === 'custom'"
-                >
-                  <p class="comment-template__leading">自定宽度:</p>
-                  <div class="comment-template__inner">
-                    <a-input
-                      type="number"
-                      min="12"
-                      max="100"
-                      @change="change"
-                      v-model.number="config.proprietaryConfig.barWidth" />
-                  </div>
-                </div>
-                <!-- / 柱条宽度 -->
+              <!-- / 南丁格尔 -->
 
               </a-collapse-panel>
-              <!-- / 图形 -->
-
             </a-collapse>
-
           </template>
 
           <template>
 
             <a-collapse :bordered="false">
 
-              <a-collapse-panel header="柱条颜色" key="1" class="visible-collapse-panel">
+              <a-collapse-panel header="颜色" key="1" class="visible-collapse-panel">
 
                 <div class="comment-template__item">
                   <p class="comment-template__leading">颜色类型:</p>
-                  <div class="comment-template__inner">
-                    <a-select
-                      v-model="config.proprietaryConfig.barItemStyle.type"
+                  <div class="comment-template__inner comment-template__end">
+                    <a-radio-group
+                      buttonStyle="solid"
+                      v-model="config.proprietaryConfig.pieItemStyle.type"
                       @change="colorGroupChange(config)">
-                      <a-select-option value="single">单一</a-select-option>
-                      <a-select-option value="combination">组合</a-select-option>
-                      <a-select-option value="linear">渐变</a-select-option>
-                    </a-select>
+                      <a-radio-button value="combination">组合</a-radio-button>
+                      <a-radio-button value="linear">渐变</a-radio-button>
+                    </a-radio-group>
                   </div>
                 </div>
                 <!-- / 颜色类型 -->
 
-                <div
-                  class="comment-template__item"
-                  v-if="config.proprietaryConfig.barItemStyle.type === 'single'">
-                  <p class="comment-template__leading">单一颜色:</p>
-                  <div class="comment-template__inner">
-                    <ColorPicker
-                      v-model="config.proprietaryConfig.barItemStyle.color"
-                      @change="singleColorChange(config)"/>
-                  </div>
-                </div>
-                <!-- / 单一颜色 -->
-
-                <div v-if="config.proprietaryConfig.barItemStyle.type === 'combination'">
+                <div v-if="config.proprietaryConfig.pieItemStyle.type === 'combination'">
                   <div class="comment-template__item">
                     <p class="comment-template__leading">组合类型:</p>
-                    <div class="comment-template__inner">
-                      <a-select
-                        v-model="config.proprietaryConfig.barItemStyle.colorType"
+                    <div class="comment-template__inner comment-template__end">
+                      <a-radio-group
+                        buttonStyle="solid"
+                        v-model="config.proprietaryConfig.pieItemStyle.colorType"
                         @change="colorGroupChange(config)">
-                        <a-select-option value="default">默认</a-select-option>
-                        <a-select-option value="custom">自定义</a-select-option>
-                      </a-select>
+                        <a-radio-button value="default">默认</a-radio-button>
+                        <a-radio-button value="custom">自定义</a-radio-button>
+                      </a-radio-group>
                     </div>
                   </div>
                   <!-- / 组合类型 -->
 
-                  <div v-if="config.proprietaryConfig.barItemStyle.colorType === 'default'">
+                  <div v-if="config.proprietaryConfig.pieItemStyle.colorType === 'default'">
                     <div class="comment-template__item">
                       <p class="comment-template__leading">配色方案:</p>
-                      <div class="comment-template__inner">
-                        <a-select
-                          v-model="config.proprietaryConfig.barItemStyle.colorScheme"
+                      <div class="comment-template__inner comment-template__end">
+                        <a-radio-group
+                          buttonStyle="solid"
+                          v-model="config.proprietaryConfig.pieItemStyle.colorScheme"
                           @change="colorGroupChange(config)">
-                          <a-select-option value="default">默认</a-select-option>
-                          <a-select-option value="light">亮</a-select-option>
-                          <a-select-option value="dark">暗</a-select-option>
-                        </a-select>
+                          <a-radio-button value="default">默认</a-radio-button>
+                          <a-radio-button value="light">亮</a-radio-button>
+                          <a-radio-button value="dark">暗</a-radio-button>
+                        </a-radio-group>
                       </div>
                     </div>
                     <!-- / 组合类型 -->
 
-                    <div class="comment-template__item bar-config__colors">
+                    <div class="comment-template__item pie-config__colors">
                       <span
                         v-for="(color, index)
                           in getColors(config)"
@@ -153,10 +108,10 @@
                   </div>
                   <!-- / 配色方案 -->
 
-                  <div v-if="config.proprietaryConfig.barItemStyle.colorType === 'custom'">
+                  <div v-if="config.proprietaryConfig.pieItemStyle.colorType === 'custom'">
 
                     <SingleColorSelector
-                      v-model="config.proprietaryConfig.barItemStyle.color"
+                      v-model="config.proprietaryConfig.pieItemStyle.color"
                       @change="combinationColorChange(config)" />
                     <!-- / 颜色选择 -->
 
@@ -166,36 +121,38 @@
                 </div>
                 <!-- / 组合颜色 -->
 
-                <div v-if="config.proprietaryConfig.barItemStyle.type === 'linear'">
+                <div v-if="config.proprietaryConfig.pieItemStyle.type === 'linear'">
                   <div class="comment-template__item">
                     <p class="comment-template__leading">渐变类型:</p>
-                    <div class="comment-template__inner">
-                      <a-select
-                        v-model="config.proprietaryConfig.barItemStyle.colorType"
+                    <div class="comment-template__inner comment-template__end">
+                      <a-radio-group
+                        buttonStyle="solid"
+                        v-model="config.proprietaryConfig.pieItemStyle.colorType"
                         @change="colorGroupChange(config)">
-                        <a-select-option value="default">默认</a-select-option>
-                        <a-select-option value="custom">自定义</a-select-option>
-                      </a-select>
+                        <a-radio-button value="default">默认</a-radio-button>
+                        <a-radio-button value="custom">自定义</a-radio-button>
+                      </a-radio-group>
                     </div>
                   </div>
                   <!-- / 渐变类型 -->
 
-                  <div v-if="config.proprietaryConfig.barItemStyle.colorType === 'default'">
+                  <div v-if="config.proprietaryConfig.pieItemStyle.colorType === 'default'">
                     <div class="comment-template__item">
                       <p class="comment-template__leading">配色方案:</p>
-                      <div class="comment-template__inner">
-                        <a-select
-                          v-model="config.proprietaryConfig.barItemStyle.colorScheme"
+                      <div class="comment-template__inner comment-template__end">
+                        <a-radio-group
+                          buttonStyle="solid"
+                          v-model="config.proprietaryConfig.pieItemStyle.colorScheme"
                           @change="colorGroupChange(config)">
-                          <a-select-option value="default">默认</a-select-option>
-                          <a-select-option value="light">亮</a-select-option>
-                          <a-select-option value="dark">暗</a-select-option>
-                        </a-select>
+                          <a-radio-button value="default">默认</a-radio-button>
+                          <a-radio-button value="light">亮</a-radio-button>
+                          <a-radio-button value="dark">暗</a-radio-button>
+                        </a-radio-group>
                       </div>
                     </div>
                     <!-- / 组合类型 -->
 
-                    <div class="comment-template__item bar-config__linear">
+                    <div class="comment-template__item pie-config__linear">
                       <span
                         v-for="(color, index)
                           in getColors(config)"
@@ -209,10 +166,10 @@
                   </div>
                   <!-- / 配色方案 -->
 
-                  <div v-if="config.proprietaryConfig.barItemStyle.colorType === 'custom'">
+                  <div v-if="config.proprietaryConfig.pieItemStyle.colorType === 'custom'">
 
                     <LinearColorSelector
-                      v-model="config.proprietaryConfig.barItemStyle.color"
+                      v-model="config.proprietaryConfig.pieItemStyle.color"
                       @change="linearColorChange(config)" />
                     <!-- / 颜色选择 -->
 
@@ -225,62 +182,31 @@
               </a-collapse-panel>
               <!-- / 颜色 -->
 
-              <a-collapse-panel header="柱条圆角" key="2">
+              <a-collapse-panel header="半径" key="2">
 
                 <div class="comment-template__item">
-                  <p class="comment-template__leading">左上:</p>
+                  <p class="comment-template__leading">内半径:</p>
                   <div class="comment-template__inner">
                     <a-input
-                      type="number"
-                      min="0"
-                      max="100"
+                      type="text"
                       @change="change"
-                      v-model.number="config.proprietaryConfig.barItemStyle.barBorderRadius[0]" />
+                      v-model="config.proprietaryConfig.radius.inside" />
                   </div>
                 </div>
-                <!-- / 左上圆角 -->
+                <!-- / 内半径 -->
 
                 <div class="comment-template__item">
-                  <p class="comment-template__leading">右上:</p>
+                  <p class="comment-template__leading">外半径:</p>
                   <div class="comment-template__inner">
                     <a-input
-                      type="number"
-                      min="0"
-                      max="100"
+                      type="text"
                       @change="change"
-                      v-model.number="config.proprietaryConfig.barItemStyle.barBorderRadius[1]" />
+                      v-model="config.proprietaryConfig.radius.outside" />
                   </div>
                 </div>
-                <!-- / 左上圆角 -->
-
-                <div class="comment-template__item">
-                  <p class="comment-template__leading">右下:</p>
-                  <div class="comment-template__inner">
-                    <a-input
-                      type="number"
-                      min="0"
-                      max="100"
-                      @change="change"
-                      v-model.number="config.proprietaryConfig.barItemStyle.barBorderRadius[2]" />
-                  </div>
-                </div>
-                <!-- / 左上圆角 -->
-
-                <div class="comment-template__item">
-                  <p class="comment-template__leading">左下:</p>
-                  <div class="comment-template__inner">
-                    <a-input
-                      type="number"
-                      min="0"
-                      max="100"
-                      @change="change"
-                      v-model.number="config.proprietaryConfig.barItemStyle.barBorderRadius[3]" />
-                  </div>
-                </div>
-                <!-- / 左上圆角 -->
+                <!-- / 外半径 -->
 
               </a-collapse-panel>
-              <!-- / 圆角 -->
 
             </a-collapse>
 
@@ -307,23 +233,20 @@ import CommonTemplate from '../common/index.vue'
 import ChartProprietaryTemplate from '../chartProprietary'
 import DataSourceTemplate from '../dataSource'
 import ProprietaryMixins from '../proprietaryMixins'
-import ColorPicker from '@/components/ColorPicker'
 import SingleColorSelector from '@/components/SingleColorSelector'
 import LinearColorSelector from '@/components/LinearColorSelector'
 
 export default {
-  name: 'Bar',
+  name: 'PieConfig',
   mixins: [ProprietaryMixins],
   components: {
     CommonTemplate,
     ChartProprietaryTemplate,
-    ColorPicker,
     DataSourceTemplate,
     SingleColorSelector,
     LinearColorSelector
   },
   data: () => ({
-    singleColor: 'rgba(7,171,253,1)',
     combinationColors: [
       {
         type: 'default',
@@ -419,35 +342,27 @@ export default {
      */
     getColors (config) {
       const { typeMapping, customMapping } = this
-      if (config.proprietaryConfig.barItemStyle.type === 'single') {
+      if (config.proprietaryConfig.pieItemStyle.type === 'single') {
         return this.singleColor
       }
 
       let color
-      if (config.proprietaryConfig.barItemStyle.colorType === 'custom') {
-        color = [...this[customMapping.get(config.proprietaryConfig.barItemStyle.type)]]
+      if (config.proprietaryConfig.pieItemStyle.colorType === 'custom') {
+        color = [...this[customMapping.get(config.proprietaryConfig.pieItemStyle.type)]]
       } else {
-        const { colors } = this[typeMapping.get(config.proprietaryConfig.barItemStyle.type)].find(
-          item => item.type === config.proprietaryConfig.barItemStyle.colorScheme
+        const { colors } = this[typeMapping.get(config.proprietaryConfig.pieItemStyle.type)].find(
+          item => item.type === config.proprietaryConfig.pieItemStyle.colorScheme
         )
         color = [...colors]
       }
       return color
     },
     /**
-     * 单一颜色选择
-     * @param config 配置
-     */
-    singleColorChange (config) {
-      this.singleColor = config.proprietaryConfig.barItemStyle.color
-      this.change()
-    },
-    /**
      * 组合颜色选择
      * @param config 配置
      */
     combinationColorChange (config) {
-      this.combinationCustomColors = config.proprietaryConfig.barItemStyle.color
+      this.combinationCustomColors = config.proprietaryConfig.pieItemStyle.color
       this.change()
     },
     /**
@@ -455,7 +370,7 @@ export default {
      * @param config 配置
      */
     linearColorChange (config) {
-      this.linearCustomColors = config.proprietaryConfig.barItemStyle.color
+      this.linearCustomColors = config.proprietaryConfig.pieItemStyle.color
       this.change()
     },
     /**
@@ -463,7 +378,7 @@ export default {
      * @param config
      */
     colorChange (config) {
-      Object.assign(config.proprietaryConfig.barItemStyle, {
+      Object.assign(config.proprietaryConfig.pieItemStyle, {
         color: this.getColors(config)
       })
     },
@@ -474,25 +389,13 @@ export default {
     colorGroupChange (config) {
       this.colorChange(config)
       this.change()
-    },
-    /**
-     * 柱条宽度类型更改
-     * @param config 配置
-     */
-    barWidthTypeChange (config) {
-      Object.assign(config.proprietaryConfig, {
-        barWidth: config.proprietaryConfig.barWidthType === 'custom'
-          ? 12
-          : 'auto'
-      })
-      this.change(config)
     }
   }
 }
 </script>
 
 <style scoped lang="less">
-.bar-config {
+.pie-config {
   &__colors {
     display: flex;
     flex-flow: row wrap;

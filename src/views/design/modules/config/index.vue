@@ -59,7 +59,8 @@ export default {
       ['Image', 'ImageConfig'],
       ['Icon', 'IconConfig'],
       ['DateTime', 'DateTimeConfig'],
-      ['View', 'ViewConfig']
+      ['View', 'ViewConfig'],
+      ['Pie', 'PieConfig']
     ])
   }),
   computed: {

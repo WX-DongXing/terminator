@@ -7,6 +7,7 @@
 */
 import LinesStaticDataConfig from '../config/dataConfig/staticDataConfig/LinesStaticDataConfig'
 import BarStaticDataConfig from '../config/dataConfig/staticDataConfig/BarStaticDataConfig'
+import PieStaticDataConfig from '../config/dataConfig/staticDataConfig/PieStaticDataConfig'
 
 export default class StaticDataConfigFactory {
   static create (type, staticDataConfig = {}) {
@@ -15,6 +16,8 @@ export default class StaticDataConfigFactory {
         return new LinesStaticDataConfig(staticDataConfig)
       case 'Bar':
         return new BarStaticDataConfig(staticDataConfig)
+      case 'Pie':
+        return new PieStaticDataConfig(staticDataConfig)
       default:
         return null
     }

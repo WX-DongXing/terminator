@@ -7,6 +7,7 @@
 */
 import LineChart from '../charts/LineChart'
 import BarChart from '../charts/BarChart'
+import PieChart from '../charts/PieChart'
 import TopologyChart from '../charts/TopologyChart'
 import TextsChart from '../charts/TextsChart'
 import RectChart from '../charts/RectChart'
@@ -22,6 +23,8 @@ export default class ChartFactory {
         return new LineChart(widget)
       case 'Bar':
         return new BarChart(widget)
+      case 'Pie':
+        return new PieChart(widget)
       case 'Topology':
         return new TopologyChart(widget)
       case 'Texts':
