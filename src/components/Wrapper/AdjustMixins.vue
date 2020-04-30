@@ -71,7 +71,7 @@ export default {
             case 'cl':
               anime.set(target, {
                 left: left - distance / scale,
-                width: height + distance / scale
+                width: width + distance / scale
               })
               break
             default:
@@ -79,7 +79,6 @@ export default {
           }
           break
         case 'SCALE':
-          // eslint-disable-next-line no-case-declarations
           const absDistance = direction === 'EXPAND'
             ? Math.abs(distance) : -Math.abs(distance)
           switch (type) {
