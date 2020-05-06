@@ -8,8 +8,7 @@ export default class PieChart extends Chart {
   mappingOption ({ commonConfig, proprietaryConfig, dataConfig }) {
     const { grid } = commonConfig.getOption()
     const {
-      legend, radius, roseType,
-      itemStyle: { color, ...otherItemStyle }
+      legend, itemStyle: { color, ...otherItemStyle }, ...otherConfig
     } = proprietaryConfig.getOption()
     const { sourceType, staticDataConfig: { staticData } } = dataConfig
     let series = []
@@ -19,9 +18,8 @@ export default class PieChart extends Chart {
 
     const pie = {
       type: 'pie',
-      radius,
-      roseType,
-      itemStyle: otherItemStyle
+      itemStyle: otherItemStyle,
+      ...otherConfig
     }
 
     if (sourceType === 'static') {
@@ -35,7 +33,6 @@ export default class PieChart extends Chart {
         series
       })
     }
-    console.log(option)
     return option
   }
 }

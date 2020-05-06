@@ -186,6 +186,29 @@ class BarItemStyle {
 }
 
 /**
+ * 通用文本样式配置
+ * @param color 文本颜色
+ * @param fontStyle 文本风格 'normal' | 'italic'
+ * @param fontSize 文本大小 12
+ * @param fontWeight 文本粗细 'normal' | 'lighter' | 'bold' | 'bolder'
+ */
+class TextStyle {
+  constructor ({
+    color = 'rgba(0, 0, 0, 1)',
+    fontStyle = 'normal',
+    fontSize = 12,
+    fontWeight = 'normal',
+    fontFamily = 'sans-serif'
+  }) {
+    this.color = color
+    this.fontStyle = fontStyle
+    this.fontSize = fontSize
+    this.fontWeight = fontWeight
+    this.fontFamily = fontFamily
+  }
+}
+
+/**
  * 饼图图形样式
  * @param type 类型 'combination' | 'linear'
  */
@@ -253,25 +276,27 @@ class PieItemStyle extends ItemStyle {
 }
 
 /**
- * 通用文本样式配置
- * @param color 文本颜色
- * @param fontStyle 文本风格 'normal' | 'italic'
- * @param fontSize 文本大小 12
- * @param fontWeight 文本粗细 'normal' | 'lighter' | 'bold' | 'bolder'
+ * 饼图标签配置
  */
-class TextStyle {
+class PieLabel extends TextStyle {
   constructor ({
-    color = 'rgba(0, 0, 0, 1)',
-    fontStyle = 'normal',
-    fontSize = 12,
-    fontWeight = 'normal',
-    fontFamily = 'sans-serif'
+    show = true,
+    position = 'outside',
+    alignTo = 'none',
+    ...props
   }) {
-    this.color = color
-    this.fontStyle = fontStyle
-    this.fontSize = fontSize
-    this.fontWeight = fontWeight
-    this.fontFamily = fontFamily
+    super(props)
+    this.show = show
+    this.position = position
+    this.alignTo = alignTo
+  }
+
+  /**
+   * 映射饼图文本标签配置
+   * @returns {*}
+   */
+  getOption () {
+    return _.cloneDeep(this)
   }
 }
 
@@ -899,6 +924,7 @@ export {
   AreaStyle,
   BarItemStyle,
   PieItemStyle,
+  PieLabel,
   ItemStyle,
   Legend,
   LineStyle,

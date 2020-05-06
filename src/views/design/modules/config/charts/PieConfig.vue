@@ -207,6 +207,48 @@
                 <!-- / 外半径 -->
 
               </a-collapse-panel>
+              <!-- / 半径 -->
+
+              <a-collapse-panel header="其他" key="3">
+
+                <div class="comment-template__item">
+                  <p class="comment-template__leading">悬浮动画:</p>
+                  <div class="comment-template__inner comment-template__end">
+                    <a-switch
+                      checkedChildren="开"
+                      unCheckedChildren="关"
+                      v-model="config.proprietaryConfig.hoverAnimation"
+                      @change="change" />
+                  </div>
+                </div>
+                <!-- / 悬浮动画 -->
+
+                <div class="comment-template__item" v-if="config.proprietaryConfig.hoverAnimation">
+                  <p class="comment-template__leading">悬浮偏移:</p>
+                  <div class="comment-template__inner">
+                    <a-slider
+                      :min="0"
+                      :max="32"
+                      @change="change"
+                      v-model.number="config.proprietaryConfig.hoverOffset" />
+                  </div>
+                </div>
+                <!-- / 悬浮偏移 -->
+
+                <div class="comment-template__item">
+                  <p class="comment-template__leading">起始角度:</p>
+                  <div class="comment-template__inner">
+                    <a-slider
+                      :min="0"
+                      :max="360"
+                      @change="change"
+                      v-model.number="config.proprietaryConfig.startAngle" />
+                  </div>
+                </div>
+                <!-- / 起始角度 -->
+
+              </a-collapse-panel>
+              <!-- / 其他 -->
 
             </a-collapse>
 

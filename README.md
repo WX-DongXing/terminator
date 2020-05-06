@@ -1,28 +1,34 @@
 # Terminator
-基于vue的数据可视化设计器（未完善）
+基于vue的数据可视化设计器 [Live Demo](http://www.linmo.site)
 
-## 文档
+![](./docs/dashboard-dark.jpg)
+Inspire by [++hellohello](https://dribbble.com/shots/6292538-Dashboard-Dark)
+，示例视图 [配置下载](./docs/dashboard.json)
 
-#### 依赖
-* vue, vuex, vue-router
-* rxjs, vue-rx
-* lodash
-* echarts
-* antv/g6
-* ant-design-vue
+## 特性
+* 以拖拽的方式绘制视图
+* 丰富的部件属性配置
+* 支持折线图、柱形图、饼图、文本、矩形、圆形、三角形、图片、事件日期、图标以及拓扑图
+
+## 依赖
+* [echarts](https://echarts.apache.org/zh/index.html)
+* [G6](https://g6.antv.vision/zh)
+* [rxjs](https://rxjs.dev/)
+* [ant-design-vue](https://www.antdv.com/docs/vue/introduce-cn/)
 * ...
 
-#### 实现功能
-- [x] 视图设计
-- [x] 视图预览
-- [x] 折线图
-- [x] 柱形图
-- [x] 拓扑图
-- [x] 文本
-- [x] 矩形
-- [x] 圆形
-- [x] 图标
-- [x] 图片
-- [x] 时间
-- [ ] 饼图
-- [ ] 地图
+## 使用
+```
+$ git clone https://github.com/WX-DongXing/terminator.git
+
+$ cd terminator && yarn install
+
+$ yarn serve
+```
+
+## 规划
+* 饼图专有配置完善
+* 折线图以及柱形图静态数据修复配置
+* 图标打包大小优化
+* 地图部件支持
+* 动态数据支持

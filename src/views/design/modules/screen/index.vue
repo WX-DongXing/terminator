@@ -128,10 +128,10 @@
         @change="() => change$.next({ type: 'scale', value: scale })"
         :disabled="isAutoResize"
         :min="0"
-        :max="1"
+        :max="2"
         :step="0.01"
         v-model="scale" />
-      <p class="scale-bar__number">缩放比：{{ this.scale.toFixed(2) }}</p>
+      <p class="scale-bar__number">缩放比：{{ scale.toFixed(2) }}</p>
     </div>
     <!-- E 比例条 -->
 
