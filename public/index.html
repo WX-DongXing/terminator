@@ -3,10 +3,17 @@
   <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta http-equiv="x-dns-prefetch-control" content="on">
     <meta name="viewport" content="width=device-width,initial-scale=1.0">
     <link rel="icon" href="<%= BASE_URL %>favicon.ico">
     <title>Terminator - 数据可视化设计器</title>
     <style>html,body{margin:0;padding:0}.loading{display:flex;flex-flow:row;justify-content:center;align-items:center;width:100vw;height:100vh;background:#fff}.loading__wrap{width:60px;height:60px;position:relative}.loading__item{position:absolute;height:12px;width:12px;background:#1890ff;border-radius:6px}.loading__item--top{top:0;left:24px;animation:top 1.75s ease-in-out infinite}.loading__item--left{top:48px;left:0;animation:left 1.75s ease-in-out infinite}.loading__item--right{top:48px;left:48px;animation:right 1.75s ease-in-out infinite}@keyframes top{0%{top:0;left:24px}33.33%{top:48px;left:0}66.66%{top:48px;left:48px}to{top:0;left:24px}}@keyframes left{0%{top:48px;left:0}33.33%{top:48px;left:48px}66.66%{top:0;left:24px}to{top:48px;left:0}}@keyframes right{0%{top:48px;left:48px}33.33%{top:0;left:24px}66.66%{top:48px;left:0}to{top:48px;left:48px}}</style>
+
+    <!-- S 添加 CDN prefetch -->
+    <% for (var i in htmlWebpackPlugin.options.cdn && htmlWebpackPlugin.options.cdn.prefetch) { %>
+    <link rel="dns-prefetch" href="<%= htmlWebpackPlugin.options.cdn.prefetch[i] %>" />
+    <% } %>
+    <!-- E 添加 CDN prefetch -->
 
     <!-- S 引入 CDN css 资源 -->
     <% for (var i in htmlWebpackPlugin.options.cdn && htmlWebpackPlugin.options.cdn.css) { %>

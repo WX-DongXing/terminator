@@ -1,3 +1,4 @@
+const LodashModuleReplacementPlugin = require('lodash-webpack-plugin')
 const isProd = process.env.NODE_ENV === 'production'
 
 // 开发环境CDN
@@ -25,10 +26,14 @@ const prodCDN = {
     vuex: 'Vuex',
     echarts: 'echarts',
     moment: 'moment',
-    lodash: '_',
     '@antv/g6': 'G6',
     ace: 'ace'
   },
+  prefetch: [
+    'https://cdn.jsdelivr.net',
+    'https://cdnjs.cloudflare.com',
+    'https://gw.alipayobjects.com'
+  ],
   css: [],
   js: [
     {
@@ -59,10 +64,6 @@ const prodCDN = {
       url: 'https://cdn.jsdelivr.net/npm/moment@2.24.0/moment.min.js'
     },
     {
-      url: 'https://cdn.jsdelivr.net/npm/lodash@4.17.15/lodash.min.js',
-      sri: 'sha256-VeNaFBVDhoX3H+gJ37DpT/nTuZTdjYro9yBruHjVmoQ='
-    },
-    {
       url: 'https://gw.alipayobjects.com/os/antv/pkg/_antv.g6-3.2.8/build/g6.js'
     }
   ]
@@ -70,7 +71,10 @@ const prodCDN = {
 
 module.exports = {
   configureWebpack: {
-    externals: isProd ? prodCDN.externals : devCDN.externals
+    externals: isProd ? prodCDN.externals : devCDN.externals,
+    plugins: [
+      new LodashModuleReplacementPlugin()
+    ]
   },
   // 打包部署至github
   publicPath: process.env.NODE_ENV === 'production'
