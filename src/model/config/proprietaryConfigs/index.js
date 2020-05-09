@@ -277,6 +277,9 @@ class PieItemStyle extends ItemStyle {
 
 /**
  * 饼图标签配置
+ * @param show 显示
+ * @param position 标签的位置 'outside' | 'inside'
+ * @param alignTo 标签对齐方式 'none' | 'labelLine' | 'edge'
  */
 class PieLabel extends TextStyle {
   constructor ({
@@ -296,7 +299,9 @@ class PieLabel extends TextStyle {
    * @returns {*}
    */
   getOption () {
-    return _.cloneDeep(this)
+    return Object.assign(
+      _.cloneDeep(_.omit(this, ['color']))
+    )
   }
 }
 

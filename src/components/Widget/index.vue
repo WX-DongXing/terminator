@@ -97,8 +97,9 @@ export default {
 <style scoped lang="less">
 .widget {
   position: absolute !important;
-  overflow: hidden;
   margin: 0;
+  overflow: hidden;
+  transform: translate3d(0);
 
   &--hover:hover {
     box-shadow: 0 0 4px 2px rgba(24, 144, 255, .8) !important;

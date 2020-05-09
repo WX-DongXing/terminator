@@ -467,10 +467,11 @@
             <div class="comment-template__item">
               <p class="comment-template__leading">标签大小:</p>
               <div class="comment-template__inner">
-                <a-input
-                  type="number"
+                <a-slider
+                  :min="6"
+                  :max="32"
                   @change="change"
-                  v-model.number="config.proprietaryConfig.xAxis.axisLabel.fontSize" />
+                  v-model="config.proprietaryConfig.xAxis.axisLabel.fontSize" />
               </div>
             </div>
             <!-- / 标签大小 -->
@@ -562,7 +563,7 @@
       </a-collapse-panel>
       <!-- / X坐标轴 -->
 
-      <a-collapse-panel v-if="showYAxis" header="Y坐标轴" key="3">
+      <a-collapse-panel v-if="showYAxis" header="Y坐标轴" key="3" class="visible-collapse-panel">
 
         <div class="comment-template__item">
           <p class="comment-template__leading">显示:</p>
@@ -851,15 +852,16 @@
                   @change="change()"/>
               </div>
             </div>
-            <!-- / 刻度颜色 -->
+            <!-- / 标签颜色 -->
 
             <div class="comment-template__item">
               <p class="comment-template__leading">标签大小:</p>
               <div class="comment-template__inner">
-                <a-input
-                  type="number"
+                <a-slider
+                  :min="6"
+                  :max="32"
                   @change="change"
-                  v-model.number="config.proprietaryConfig.yAxis.axisLabel.fontSize" />
+                  v-model="config.proprietaryConfig.yAxis.axisLabel.fontSize" />
               </div>
             </div>
             <!-- / 标签大小 -->

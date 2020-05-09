@@ -40,7 +40,8 @@ export default class PieProprietaryConfig {
       roseType: this.roseType === 'none' ? undefined : this.roseType,
       radius: [this.radius.outside, this.radius.inside],
       itemStyle: this.pieItemStyle.getOption(),
-      label: this.pieLabel.getOption()
+      label: this.pieLabel.getOption(),
+      labelLine: { show: this.pieLabel.show }
     })
   }
 }
