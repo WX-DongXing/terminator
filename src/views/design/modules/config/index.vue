@@ -118,17 +118,18 @@ export default {
 
   &__content {
     position: relative;
-    display: flex;
-    flex-flow: row nowrap;
-    justify-content: center;
-    align-items: center;
     height: 100%;
     box-shadow: -4px 8px 8px 0 rgba(0, 0, 0, 0.12);
     z-index: 2;
   }
 
   &__none {
+    display: flex;
+    flex-flow: column nowrap;
+    justify-content: center;
+    align-items: center;
     width: 100%;
+    height: 100%;
     text-align: center;
 
     i {

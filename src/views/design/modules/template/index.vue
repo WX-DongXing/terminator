@@ -322,7 +322,7 @@ export default {
     justify-content: space-evenly;
     align-content: flex-start;
     box-sizing: border-box;
-    min-height: calc(100vh - 102px);
+    height: calc(100vh - 102px);
     box-shadow: 4px 8px 8px 0 rgba(0, 0, 0, .12);
     z-index: 2;
     overflow: auto;
