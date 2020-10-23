@@ -137,7 +137,8 @@
         <!-- E 画板 -->
 
       </pane>
-      <pane min-size="25" size="25" class="timeline">
+      <pane min-size="25" size="35" class="timeline">
+        <Timeline @select="(widget) => select$.next({ el: 'widget', widget })" />
       </pane>
     </splitpanes>
 
@@ -159,6 +160,7 @@ import PerfectScrollbar from 'perfect-scrollbar'
 import { Splitpanes, Pane } from 'splitpanes'
 import { ScreenMutations } from '@/store/modules/screen'
 import { downloadFile } from '@/utils'
+import Timeline from '../timeline'
 import View from '@/model/view'
 import WidgetModel from '@/model/widget'
 import ViewService from '../config/view'
@@ -172,6 +174,7 @@ import 'splitpanes/dist/splitpanes.css'
 export default {
   name: 'Screen',
   components: {
+    Timeline,
     Wrapper,
     Widget,
     Splitpanes,
@@ -692,5 +695,7 @@ export default {
 }
 .timeline {
   background: white !important;
+  border-left: 1px solid #DADCE0;
+  border-right: 1px solid #DADCE0;
 }
 </style>

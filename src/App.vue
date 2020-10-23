@@ -75,7 +75,7 @@ export default {
 
   &--horizontal > .splitpanes__splitter:before {
     width: 100%;
-    top: -2px;
+    top: -4px;
     bottom: -2px;
   }
 }

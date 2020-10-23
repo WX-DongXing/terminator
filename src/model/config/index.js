@@ -18,15 +18,19 @@ const elementProprietaryConfigFactory = Factory.createElementProprietaryConfigFa
 
 export default class Config {
   constructor ({
-    category, type, commonConfig, proprietaryConfig, dataConfig
+    category, type, commonConfig, proprietaryConfig,
+    dataConfig, icon, name
   }) {
     this.category = category
+    this.icon = icon
     this.type = type
+    this.name = name
     this.commonConfig = new CommonConfig(commonConfig || {})
     this.proprietaryConfig = this.getProprietaryConfigFactory(category).create({
       type,
       proprietaryConfig
     })
+    this.isExpaned = false
     this.dataConfig = new DataConfig({
       widgetType: type,
       ...dataConfig

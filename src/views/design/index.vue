@@ -117,6 +117,7 @@ export default {
   flex: none;
   width: 320px;
   background: white;
+  overflow: hidden;
 }
 
 /* panel 过度动画 */
