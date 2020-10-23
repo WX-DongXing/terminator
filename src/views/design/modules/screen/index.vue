@@ -16,6 +16,28 @@
       </div>
       <div class="screen__bar">
         <div class="screen__front">
+          <!-- S 比例条 -->
+          <div class="scale-bar">
+            <a-tooltip placement="top">
+              <template slot="title">
+                自动比例：{{ isAutoResize ? '已开启' : '已关闭' }}
+              </template>
+              <a-switch
+                size="small"
+                v-model="isAutoResize"
+                @change="() => isAutoResize && change$.next({ type: 'resize' })" />
+            </a-tooltip>
+            <a-slider
+              class="scale-bar__slider"
+              @change="() => change$.next({ type: 'scale', value: scale })"
+              :disabled="isAutoResize"
+              :min="0"
+              :max="2"
+              :step="0.01"
+              v-model="scale" />
+            <p class="scale-bar__number">缩放比：{{ scale.toFixed(2) }}</p>
+          </div>
+          <!-- E 比例条 -->
         </div>
         <div class="screen__back">
 
@@ -83,57 +105,41 @@
       </div>
     </div>
 
-    <!-- S 画板 -->
-    <div
-      ref="page"
-      class="page"
-      @click.self="() => select$.next({ el: 'view' })">
+    <splitpanes class="split" horizontal @resized="isAutoResize && change$.next({ type: 'resize' })">
+      <pane class="page">
+        <!-- S 画板 -->
+        <div
+          ref="page"
+          class="page"
+          @click.self="() => select$.next({ el: 'view' })">
 
-      <div class="gauge" ref="gauge"></div>
-      <!-- / 标尺 -->
+          <div class="gauge" ref="gauge"></div>
+          <!-- / 标尺 -->
 
-      <div ref="view" class="view">
+          <div ref="view" class="view">
 
-        <Widget
-          v-for="widget in widgets"
-          :widget="widget"
-          :key="widget.widgetId"
-          :ref="widget.widgetId"
-          @select="(selectWidget) => select$.next({ el: 'widget', widget: selectWidget })"
-        />
-        <!-- / 部件渲染 -->
+            <Widget
+              v-for="widget in widgets"
+              :widget="widget"
+              :key="widget.widgetId"
+              :ref="widget.widgetId"
+              @select="(selectWidget) => select$.next({ el: 'widget', widget: selectWidget })"
+            />
+            <!-- / 部件渲染 -->
 
-        <Wrapper ref="wrapper" v-stream:adjust="adjust$" />
-        <!-- / 选择指示器 -->
+            <Wrapper ref="wrapper" v-stream:adjust="adjust$" />
+            <!-- / 选择指示器 -->
 
-      </div>
-      <!-- / 视图 -->
+          </div>
+          <!-- / 视图 -->
 
-    </div>
-    <!-- E 画板 -->
+        </div>
+        <!-- E 画板 -->
 
-    <!-- S 比例条 -->
-    <div class="scale-bar">
-      <a-tooltip placement="top">
-        <template slot="title">
-          自动比例：{{ isAutoResize ? '已开启' : '已关闭' }}
-        </template>
-        <a-switch
-          size="small"
-          v-model="isAutoResize"
-          @change="() => isAutoResize && change$.next({ type: 'resize' })" />
-      </a-tooltip>
-      <a-slider
-        class="scale-bar__slider"
-        @change="() => change$.next({ type: 'scale', value: scale })"
-        :disabled="isAutoResize"
-        :min="0"
-        :max="2"
-        :step="0.01"
-        v-model="scale" />
-      <p class="scale-bar__number">缩放比：{{ scale.toFixed(2) }}</p>
-    </div>
-    <!-- E 比例条 -->
+      </pane>
+      <pane min-size="25" size="25" class="timeline">
+      </pane>
+    </splitpanes>
 
   </div>
 </template>
@@ -150,6 +156,7 @@ import { mapState, mapGetters, mapMutations } from 'vuex'
 import anime from 'animejs'
 import _ from 'lodash'
 import PerfectScrollbar from 'perfect-scrollbar'
+import { Splitpanes, Pane } from 'splitpanes'
 import { ScreenMutations } from '@/store/modules/screen'
 import { downloadFile } from '@/utils'
 import View from '@/model/view'
@@ -160,12 +167,15 @@ import Widget from '@/components/Widget'
 import AdjustMixins from '@/components/Wrapper/AdjustMixins'
 import WrapperService from '@/components/Wrapper/WrapperService'
 import 'perfect-scrollbar/css/perfect-scrollbar.css'
+import 'splitpanes/dist/splitpanes.css'
 
 export default {
   name: 'Screen',
   components: {
     Wrapper,
-    Widget
+    Widget,
+    Splitpanes,
+    Pane
   },
   mixins: [AdjustMixins],
   // 选择器调整事件流
@@ -621,6 +631,15 @@ export default {
   }
 }
 
+.split {
+  position: relative;
+  height: 100%;
+  box-sizing: border-box;
+  padding: 0;
+  overflow: auto;
+  background: #f1f1f1;
+}
+
 .page {
   position: relative;
   height: 100%;
@@ -645,7 +664,7 @@ export default {
   padding: 0 16px;
   height: 48px;
   background: white;
-  border: 2px solid whitesmoke;
+  //border: 2px solid whitesmoke;
   border-bottom: none;
   z-index: 3;
 
@@ -670,5 +689,8 @@ export default {
   0 1px 1px 0 rgba(0,0,0,.14), 0 1px 3px 0 rgba(0,0,0,.12);
   transform-origin: 0 0;
   overflow: hidden;
+}
+.timeline {
+  background: white !important;
 }
 </style>

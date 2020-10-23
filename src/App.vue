@@ -43,4 +43,40 @@ export default {
   background-color: #b9b9bd;
   border-radius: 5px;
 }
+
+.splitpanes {
+
+  * > &__splitter {
+    position: relative;
+    min-width: 0 !important;
+    min-height: 0 !important;
+  }
+
+  &__splitter:before {
+    position: absolute;
+    content: '';
+    left: 0;
+    top: 0;
+    transition: opacity 0.4s;
+    background-color: #40a9ff;
+    opacity: 0;
+    z-index: 1;
+  }
+
+  &__splitter:before {
+    opacity: 1;
+  }
+
+  &--vertical > .splitpanes__splitter:before {
+    height: 100%;
+    left: -2px;
+    right: -2px;
+  }
+
+  &--horizontal > .splitpanes__splitter:before {
+    width: 100%;
+    top: -2px;
+    bottom: -2px;
+  }
+}
 </style>
