@@ -8,15 +8,18 @@
 import _ from 'lodash'
 import uuid from 'uuid/v4'
 import Config from '../config'
+import AnimateProps from '@/model/animateProps'
 
 export default class Widget {
   constructor ({
     widgetId = 'widget-' + uuid(),
     config = {},
+    animateProps = {},
     render = null
   }) {
     this.widgetId = widgetId
     this.config = new Config(config)
+    this.animateProps = new AnimateProps({ ...config, ...animateProps })
     this.render = render
   }
 
