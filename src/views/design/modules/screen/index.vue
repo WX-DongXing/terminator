@@ -1,9 +1,7 @@
 /**
 * 视图及操作
-* Author: dong xing
 * Date: 2019/11/13
 * Time: 1:44 下午
-* Email: dong.xing@outlook.com
 */
 <template>
   <div class="screen">
@@ -106,6 +104,9 @@
         <Wrapper ref="wrapper" v-stream:adjust="adjust$" />
         <!-- / 选择指示器 -->
 
+        <Selector ref="selector" />
+        <!-- / 部件多选器 -->
+
       </div>
       <!-- / 视图 -->
 
@@ -144,7 +145,9 @@ import {
 } from 'rxjs'
 import {
   startWith, mapTo, takeWhile,
-  pluck, map, filter
+  pluck, map, filter, takeUntil,
+  // eslint-disable-next-line no-unused-vars
+  mergeMap, withLatestFrom, tap, switchMap, first
 } from 'rxjs/operators'
 import { mapState, mapGetters, mapMutations } from 'vuex'
 import anime from 'animejs'
@@ -156,6 +159,7 @@ import View from '@/model/view'
 import WidgetModel from '@/model/widget'
 import ViewService from '../config/view'
 import Wrapper from '@/components/Wrapper'
+import Selector from '@/components/Selector'
 import Widget from '@/components/Widget'
 import AdjustMixins from '@/components/Wrapper/AdjustMixins'
 import WrapperService from '@/components/Wrapper/WrapperService'
@@ -165,7 +169,8 @@ export default {
   name: 'Screen',
   components: {
     Wrapper,
-    Widget
+    Widget,
+    Selector
   },
   mixins: [AdjustMixins],
   // 选择器调整事件流
@@ -191,7 +196,9 @@ export default {
     // 滚动条
     perfectScrollBar: null,
     // 视图配置
-    viewOption: null
+    viewOption: null,
+    // 视图信息
+    rect: null
   }),
   mounted () {
     const { platform } = navigator
@@ -326,6 +333,45 @@ export default {
         if (eventType !== 'MOVE') {
           this.activeWidget.render.resize()
         }
+      })
+
+    const mouseDown$ = fromEvent(window, 'mousedown')
+    const mouseMove$ = fromEvent(window, 'mousemove')
+    const mouseUp$ = fromEvent(window, 'mouseup')
+
+    // alt键盘事件监听
+    mouseDown$
+      .pipe(
+        takeWhile(_ => this.isSubscribed),
+        filter(event => event.altKey),
+        tap(_ => (this.rect = this.$refs.view.getBoundingClientRect())),
+        map(_ => mouseMove$.pipe(takeUntil(mouseUp$))),
+        switchMap(move$ => merge(mouseUp$.pipe(first()), move$)),
+        withLatestFrom(mouseDown$, (move, down) => ([down, move])),
+        tap(([down, move]) => {
+          const { x, y } = this.rect
+          const { pageX: downPageX, pageY: downPageY } = down
+          const { pageX: movePageX, pageY: movePageY } = move
+          const translateX = (downPageX - x) / this.scale
+          const translateY = (downPageY - y) / this.scale
+          // Todo with in scope 只有在视图区域中方可操作
+          anime.set(this.$refs.selector.$el, {
+            display: 'block',
+            translateX: (movePageX - downPageX) > 0 ? translateX : translateX + (movePageX - downPageX),
+            translateY: (movePageY - downPageY) > 0 ? translateY : translateY + (movePageY - downPageY),
+            width: Math.abs(movePageX - downPageX) / this.scale,
+            height: Math.abs(movePageY - downPageY) / this.scale
+          })
+        }),
+        filter(([_, event]) => event.type === 'mouseup')
+      )
+      .subscribe(_ => {
+        console.log(this.widgets)
+        // anime.set(this.$refs.selector.$el, {
+        //   display: 'none',
+        //   width: 0,
+        //   height: 0
+        // })
       })
   },
   computed: {
