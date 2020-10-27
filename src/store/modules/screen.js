@@ -10,6 +10,7 @@ export const ScreenMutations = {
   SET_VIEW: 'SET_VIEW[设置视图对象]',
   ADD_WIDGET: 'ADD_WIDGET[添加部件]',
   REMOVE_WIDGET: 'REMOVE_WIDGET[移除部件]',
+  UPDATE_WIDGET: 'UPDATE_WIDGET[更新部件]',
   ACTIVATE_WIDGET: 'ACTIVATE_WIDGET[设置激活的部件]',
   MODIFY_TOPOLOGY_EDITABLE_STATUS: 'MODIFY_TOPOLOGY_EDITABLE_STATUS[修改拓扑图可编辑状态]',
   ACTIVATE_NODE: 'ACTIVATE_NODE[设置激活的节点]',
@@ -67,6 +68,11 @@ export default {
       anime.set(document.getElementById('wrapper'), {
         display: 'none'
       })
+    },
+    // 更新指定部件信息
+    [ScreenMutations.UPDATE_WIDGET] (state, payload) {
+      const { index, widget } = payload
+      state.view.widgets.splice(index, 1, widget)
     },
     // 设置激活的部件，并修改widgets中的部件
     [ScreenMutations.ACTIVATE_WIDGET] (state, payload) {

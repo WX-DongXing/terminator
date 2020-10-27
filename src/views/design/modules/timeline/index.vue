@@ -16,25 +16,30 @@
         >
           <div class="timeline__row">
             <div class="timeline__icon" @click="handleExpand(widget)">
-              <a-icon :type="widget.config.isExpanded ? 'down' : 'right'" />
+              <a-icon type="right" :class="[widget.config.isExpanded ? 'timeline__icon--down' : 'timeline__icon--right']" />
             </div>
             <div class="timeline__logo" @click="handleSelect(widget)">
               <a-icon :type="widget.config.icon" />
               <span>{{ widget.config.name }}</span>
             </div>
           </div>
-          <div class="timeline__expand" @click="handleSelect(widget)" v-if="widget.config.isExpanded"></div>
+          <transition name="timeline-expand">
+            <div class="timeline__expand" @click="handleSelect(widget)" v-if="widget.config.isExpanded"></div>
+          </transition>
         </div>
       </div>
-      <div class="timeline__area"></div>
+      <div class="timeline__area" ref="area">
+        <canvas id="board" />
+      </div>
     </div>
   </div>
 </template>
 
 <script>
+import { fromEvent, Subject, merge } from 'rxjs'
+import { fabric } from 'fabric'
 import { mapGetters, mapMutations, mapState } from 'vuex'
 import { ScreenMutations } from '@/store/modules/screen'
-import _ from 'lodash'
 
 export default {
   name: 'Timeline',
@@ -42,10 +47,18 @@ export default {
     ...mapState('screen', ['activeWidget', 'view']),
     ...mapGetters('screen', ['widgets'])
   },
+  data () {
+    return {
+      canvas: null,
+      isSubscribed: true,
+      canvasRect: null,
+      panelResize$: new Subject()
+    }
+  },
   methods: {
     ...mapMutations('screen', {
       activateWidget: ScreenMutations.ACTIVATE_WIDGET,
-      setView: ScreenMutations.SET_VIEW
+      updateWidget: ScreenMutations.UPDATE_WIDGET
     }),
     /**
      * 选择激活的部件
@@ -61,17 +74,41 @@ export default {
      */
     handleExpand (widget) {
       const index = this.widgets.findIndex(item => item.widgetId === widget.widgetId)
-      const { render } = widget
-      const targetWidget = Object.assign(_.cloneDeep(widget), render)
-      targetWidget.config.isExpanded = !widget.config.isExpanded
-      this.widgets[index] = targetWidget
-      this.setView({
-        view: {
-          ...this.view,
-          widgets: this.widgets
-        }
-      })
+      widget.config.isExpanded = !widget.config.isExpanded
+      this.updateWidget({ index, widget })
+    },
+    /**
+     * 面板resize事件
+     * @param event
+     */
+    panelResize (event) {
+      this.panelResize$.next(event)
     }
+  },
+  mounted () {
+    merge(
+      this.panelResize$.asObservable(),
+      fromEvent(window, 'resize')
+    )
+      .pipe()
+      .subscribe(res => {
+        this.canvasRect = this.$refs.area.getBoundingClientRect()
+        const { width, height } = this.canvasRect
+        this.canvas.setDimensions({ width, height })
+      })
+
+    const { width, height } = this.$refs.area.getBoundingClientRect()
+    this.canvas = new fabric.Canvas('board', {
+      width,
+      height
+    })
+    const rect = new fabric.Rect({
+      width: 100,
+      height: 100,
+      fill: 'red'
+    })
+    this.canvas.add(rect)
+    console.log(this.canvas)
   }
 }
 </script>
@@ -163,7 +200,17 @@ export default {
     cursor: pointer;
 
     i {
+      font-size: 12px;
       margin: 0 8px;
+      transition: all 0.24s;
+    }
+
+    &--right {
+      transform: rotate(0);
+    }
+
+    &--down {
+      transform: rotate(90deg);
     }
   }
 
@@ -179,12 +226,27 @@ export default {
 
   &__expand {
     min-height: 40px;
+    height: 100%;
   }
 
   &__area {
     width: 100%;
     height: 100%;
     background: rgba(0, 0, 0, .06);
+
+    canvas {
+      width: 100%;
+      height: 100%;
+    }
   }
+}
+
+.timeline-expand-enter-active, .timeline-expand-leave-active {
+  transition: height 0.24s;
+  height: 100%;
+}
+
+.timeline-expand-enter, .timeline-expand-leave-to {
+  height: 0;
 }
 </style>

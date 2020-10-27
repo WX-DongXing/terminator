@@ -105,7 +105,7 @@
       </div>
     </div>
 
-    <splitpanes class="split" horizontal @resized="isAutoResize && change$.next({ type: 'resize' })">
+    <splitpanes class="split" horizontal @resize="panelResize" @resized="panelResized">
       <pane class="page">
         <!-- S 画板 -->
         <div
@@ -138,7 +138,7 @@
 
       </pane>
       <pane min-size="25" size="35" class="timeline">
-        <Timeline @select="(widget) => select$.next({ el: 'widget', widget })" />
+        <Timeline @select="(widget) => select$.next({ el: 'widget', widget })" ref="timeline" />
       </pane>
     </splitpanes>
 
@@ -350,6 +350,20 @@ export default {
       setView: ScreenMutations.SET_VIEW,
       activateWidget: ScreenMutations.ACTIVATE_WIDGET
     }),
+    /**
+     * 面板resize事件
+     * @param event
+     */
+    panelResize (event) {
+      this.$refs.timeline.panelResize(event)
+    },
+    /**
+     * 面板resized事件
+     * @param event
+     */
+    panelResized (event) {
+      this.isAutoResize && this.change$.next({ type: 'resize' })
+    },
     /**
      * 左右panel展开与否
      * @param type 左右panel
