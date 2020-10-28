@@ -27,6 +27,7 @@
             <div class="timeline__expand" @click="handleSelect(widget)" v-if="widget.config.isExpanded"></div>
           </transition>
         </div>
+        <prop-control v-model="option" />
       </div>
       <div class="timeline__area" ref="area">
         <canvas id="board" />
@@ -40,9 +41,13 @@ import { fromEvent, Subject, merge } from 'rxjs'
 import { fabric } from 'fabric'
 import { mapGetters, mapMutations, mapState } from 'vuex'
 import { ScreenMutations } from '@/store/modules/screen'
+import PropControl from '@/components/PropControl'
 
 export default {
   name: 'Timeline',
+  components: {
+    PropControl
+  },
   computed: {
     ...mapState('screen', ['activeWidget', 'view']),
     ...mapGetters('screen', ['widgets'])
@@ -52,7 +57,13 @@ export default {
       canvas: null,
       isSubscribed: true,
       canvasRect: null,
-      panelResize$: new Subject()
+      panelResize$: new Subject(),
+      option: {
+        name: 'Z方向位移',
+        value: 0,
+        type: 'width',
+        timelines: []
+      }
     }
   },
   methods: {
@@ -109,6 +120,9 @@ export default {
     })
     this.canvas.add(rect)
     console.log(this.canvas)
+  },
+  beforeDestroy () {
+    this.isSubscribed = false
   }
 }
 </script>
