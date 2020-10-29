@@ -67,6 +67,10 @@ export default {
       canvas: null,
       isSubscribed: true,
       panelResize$: new Subject(),
+      rect: null,
+      dragLeftState: null,
+      dragRightState: null,
+      dragCenterState: null,
       option: {
         name: 'Z方向位移',
         value: 0,
@@ -104,9 +108,203 @@ export default {
      */
     panelResize (event) {
       this.panelResize$.next(event)
+    },
+    initDragState () {
+      const { width } = this.rect
+      this.dragLeftState = {
+        x: 25,
+        y: 4
+      }
+      this.dragRightState = {
+        x: width - 12,
+        y: 4
+      }
+      this.dragCenterState = {
+        x: width - 18,
+        y: 4,
+        width: width - 36
+      }
+    },
+    /**
+     * 添加拖动槽
+     */
+    addDragGroove () {
+      const { width } = this.rect
+      // 拖拽栏背景颜色
+      const dragRectBack = new fabric.Rect({
+        width,
+        height: 20,
+        fill: 'rgba(0, 0, 0, .12)',
+        selectable: false,
+        hoverCursor: 'default',
+        strokeWidth: 0,
+        selection: false
+      })
+      const groveLeftHalfCircle = new fabric.Circle({
+        radius: 6,
+        left: 24,
+        top: 4,
+        startAngle: 0,
+        endAngle: Math.PI,
+        strokeWidth: 0,
+        fill: 'rgba(0, 0, 0, .12)',
+        angle: 90
+      })
+      const groveRightHalfCircle = new fabric.Circle({
+        radius: 6,
+        left: width - 12,
+        top: 4,
+        startAngle: Math.PI,
+        endAngle: Math.PI * 2,
+        strokeWidth: 0,
+        fill: 'rgba(0, 0, 0, .12)',
+        angle: 90
+      })
+      const groveCenterRect = new fabric.Rect({
+        width: width - 36,
+        height: 12,
+        top: 4,
+        left: 18,
+        fill: 'rgba(0, 0, 0, .12)',
+        strokeWidth: 0
+      })
+      const groveGroup = new fabric.Group([
+        groveLeftHalfCircle,
+        groveRightHalfCircle,
+        groveCenterRect
+      ], {
+        selectable: false,
+        hoverCursor: 'default'
+      })
+      this.canvas.add(
+        dragRectBack,
+        groveGroup
+      )
+      this.canvas.renderAll()
+    },
+    /**
+     * 添加拖动条
+     */
+    addDragBar () {
+      const { width } = this.rect
+      const dragLeftHalfCircle = new fabric.Circle({
+        radius: 6,
+        left: 25,
+        top: 4,
+        startAngle: 0,
+        endAngle: Math.PI,
+        strokeWidth: 0,
+        fill: '#40a9ff',
+        angle: 90,
+        lockMovementY: true,
+        hasControls: false,
+        hasBorders: false,
+        selection: false,
+        hoverCursor: 'e-resize'
+      })
+      const dragRightHalfCircle = new fabric.Circle({
+        radius: 6,
+        left: width - 12,
+        top: 4,
+        startAngle: Math.PI,
+        endAngle: Math.PI * 2,
+        strokeWidth: 0,
+        fill: '#40a9ff',
+        angle: 90,
+        lockMovementY: true,
+        hasControls: false,
+        hasBorders: false,
+        selection: false,
+        hoverCursor: 'e-resize'
+      })
+      const dragCenterRect = new fabric.Rect({
+        width: width - 36,
+        height: 12,
+        top: 4,
+        left: 18,
+        fill: '#f6f6f6',
+        strokeWidth: 0,
+        lockMovementY: true,
+        hasControls: false,
+        hasBorders: false,
+        selection: false,
+        hoverCursor: 'move'
+      })
+
+      dragLeftHalfCircle.on('moving', (event) => {
+        const { target } = event.transform
+        let left
+        if (target.left < 25) {
+          left = 25
+          dragLeftHalfCircle.lockMovementX = true
+          dragLeftHalfCircle.set({ left })
+        } else if (target.left >= 25 && target.left < this.dragRightState.x) {
+          left = target.left
+          dragCenterRect.set({ left: left - 6, width: this.dragRightState.x - left })
+        } else {
+          left = this.dragRightState.x
+          dragLeftHalfCircle.lockMovementX = true
+          dragLeftHalfCircle.set({ left })
+        }
+        this.dragLeftState.x = left
+        this.canvas.renderAll()
+      })
+
+      dragLeftHalfCircle.on('mouseup', (event) => {
+        dragLeftHalfCircle.lockMovementX = false
+        this.dragCenterState.width = dragCenterRect.width
+      })
+
+      dragRightHalfCircle.on('moving', (event) => {
+        const { target } = event.transform
+        let left
+        if (target.left > this.rect.width - 12) {
+          left = this.rect.width - 12
+          dragRightHalfCircle.lockMovementX = true
+          dragRightHalfCircle.set({ left })
+        } else if (target.left < this.rect.width - 12 && target.left > this.dragLeftState.x + 6) {
+          left = target.left
+          dragCenterRect.set({ width: left - this.dragLeftState.x })
+        } else {
+          left = this.dragLeftState.x
+          dragRightHalfCircle.lockMovementX = true
+          dragRightHalfCircle.set({ left })
+        }
+        this.dragRightState.x = left
+      })
+
+      dragRightHalfCircle.on('mouseup', (event) => {
+        dragRightHalfCircle.lockMovementX = false
+        this.dragCenterState.width = dragCenterRect.width
+      })
+
+      dragCenterRect.on('moving', (event) => {
+        const { left, width } = dragCenterRect
+        dragLeftHalfCircle.set({ left: left + 6 })
+        dragRightHalfCircle.set({ left: left + width + 6 })
+      })
+
+      dragCenterRect.on('mouseup', (event) => {
+        Object.assign(this.dragLeftState, dragLeftHalfCircle)
+        Object.assign(this.dragRightState, dragRightHalfCircle)
+        Object.assign(this.dragCenterState, dragCenterRect)
+      })
+
+      this.canvas.add(
+        dragLeftHalfCircle,
+        dragRightHalfCircle,
+        dragCenterRect
+      )
+      this.canvas.renderAll()
     }
   },
   mounted () {
+    const { height } = this.$refs.widgets.getBoundingClientRect()
+    const { width } = this.$refs.area.getBoundingClientRect()
+    this.rect = { height, width }
+
+    this.initDragState()
+
     merge(
       this.panelResize$.asObservable(),
       fromEvent(window, 'resize')
@@ -115,22 +313,16 @@ export default {
       .subscribe(res => {
         const { height } = this.$refs.widgets.getBoundingClientRect()
         const { width } = this.$refs.area.getBoundingClientRect()
+        this.rect = { height, width }
         this.canvas.setDimensions({ width, height })
       })
 
-    const { height } = this.$refs.widgets.getBoundingClientRect()
-    const { width } = this.$refs.area.getBoundingClientRect()
     this.canvas = new fabric.Canvas('board', {
-      width,
-      height
+      ...this.rect
     })
-    const rect = new fabric.Rect({
-      width: 100,
-      height: 100,
-      fill: 'red'
-    })
-    this.canvas.add(rect)
-    console.log(this.canvas)
+    this.addDragGroove()
+    this.addDragBar()
+    console.log(this.canvas.getObjects())
   },
   beforeDestroy () {
     this.isSubscribed = false
