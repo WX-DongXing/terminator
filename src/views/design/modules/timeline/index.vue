@@ -4,14 +4,14 @@
       <span>动画调度</span>
     </div>
     <div class="timeline__content">
-      <div class="timeline__widgets">
+      <div class="timeline__widgets" ref="widgets">
         <div
           class="timeline__widget"
           v-for="(widget, index) in widgets"
           :key="widget.widgetId"
           :class="[
             index % 2 === 0 ? 'timeline__widget--even' : 'timeline__widget--odd',
-            activeWidget.widgetId === widget.widgetId && 'timeline__widget--active'
+            activeWidgetId === widget.widgetId && 'timeline__widget--active'
           ]"
         >
           <div class="timeline__row">
@@ -24,10 +24,17 @@
             </div>
           </div>
           <transition name="timeline-expand">
-            <div class="timeline__expand" @click="handleSelect(widget)" v-if="widget.config.isExpanded"></div>
+            <div class="timeline__expand" @click="handleSelect(widget)" v-if="widget.config.isExpanded">
+              <prop-control
+                v-for="(prop, i) in widget.animateProps.props"
+                :prop="prop"
+                :prop-index="i"
+                :widget-index="index"
+                :key="prop.type"
+              />
+            </div>
           </transition>
         </div>
-        <prop-control v-model="option" />
       </div>
       <div class="timeline__area" ref="area">
         <canvas id="board" />
@@ -50,13 +57,15 @@ export default {
   },
   computed: {
     ...mapState('screen', ['activeWidget', 'view']),
-    ...mapGetters('screen', ['widgets'])
+    ...mapGetters('screen', ['widgets']),
+    activeWidgetId () {
+      return this.activeWidget ? this.activeWidget.widgetId : null
+    }
   },
   data () {
     return {
       canvas: null,
       isSubscribed: true,
-      canvasRect: null,
       panelResize$: new Subject(),
       option: {
         name: 'Z方向位移',
@@ -87,6 +96,7 @@ export default {
       const index = this.widgets.findIndex(item => item.widgetId === widget.widgetId)
       widget.config.isExpanded = !widget.config.isExpanded
       this.updateWidget({ index, widget })
+      setTimeout(() => this.panelResize(), 100)
     },
     /**
      * 面板resize事件
@@ -103,12 +113,13 @@ export default {
     )
       .pipe()
       .subscribe(res => {
-        this.canvasRect = this.$refs.area.getBoundingClientRect()
-        const { width, height } = this.canvasRect
+        const { height } = this.$refs.widgets.getBoundingClientRect()
+        const { width } = this.$refs.area.getBoundingClientRect()
         this.canvas.setDimensions({ width, height })
       })
 
-    const { width, height } = this.$refs.area.getBoundingClientRect()
+    const { height } = this.$refs.widgets.getBoundingClientRect()
+    const { width } = this.$refs.area.getBoundingClientRect()
     this.canvas = new fabric.Canvas('board', {
       width,
       height
@@ -150,18 +161,16 @@ export default {
   }
 
   &__content {
-    display: flex;
-    flex-flow: row nowrap;
-    justify-content: space-between;
     height: 100%;
     width: 100%;
     overflow: auto;
   }
 
   &__widgets {
-    flex: none;
-    width: 240px;
-    height: 100%;
+    float: left;
+    width: 260px;
+    min-height: 100%;
+    padding-bottom: 16px;
   }
 
   &__widget {
@@ -241,16 +250,18 @@ export default {
   &__expand {
     min-height: 40px;
     height: 100%;
+    padding-left: 22px;
   }
 
   &__area {
-    width: 100%;
+    float: right;
+    width: calc(100% - 260px);
     height: 100%;
-    background: rgba(0, 0, 0, .06);
 
     canvas {
       width: 100%;
       height: 100%;
+      background: rgba(0, 0, 0, .06);
     }
   }
 }

@@ -73,6 +73,7 @@ export default {
     [ScreenMutations.UPDATE_WIDGET] (state, payload) {
       const { index, widget } = payload
       state.view.widgets.splice(index, 1, widget)
+      widget.render.resize()
     },
     // 设置激活的部件，并修改widgets中的部件
     [ScreenMutations.ACTIVATE_WIDGET] (state, payload) {

@@ -19,7 +19,7 @@ export default class Widget {
   }) {
     this.widgetId = widgetId
     this.config = new Config(config)
-    this.animateProps = new AnimateProps({ ...config, ...animateProps })
+    this.animateProps = new AnimateProps({ ...config.commonConfig, ...animateProps })
     this.render = render
   }
 

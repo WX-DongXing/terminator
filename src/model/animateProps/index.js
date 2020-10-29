@@ -1,3 +1,5 @@
+import _ from 'lodash'
+
 class Props {
   constructor ({
     name,
@@ -30,23 +32,25 @@ const PropsNames = new Map([
   ['skewY', 'Y方向倾斜']
 ])
 
+const SpecialProps = ['width', 'height', 'top', 'left']
+
 export default class AnimateProps {
   constructor ({
-    width,
-    height,
-    top,
-    left,
-    scaleX,
-    scaleY,
-    scaleZ,
-    translateX,
-    translateY,
-    translateZ,
-    rotateX,
-    rotateY,
-    rotateZ,
-    skewX,
-    skewY
+    width = 0,
+    height = 0,
+    top = 0,
+    left = 0,
+    scaleX = 1,
+    scaleY = 1,
+    scaleZ = 1,
+    translateX = 0,
+    translateY = 0,
+    translateZ = 0,
+    rotateX = 0,
+    rotateY = 0,
+    rotateZ = 0,
+    skewX = 0,
+    skewY = 0
   }) {
     this.width = width
     this.height = height
@@ -66,13 +70,26 @@ export default class AnimateProps {
     this.props = this.getProps()
   }
 
+  /**
+   * 获取配置属性列表
+   * @returns {Props[]}
+   */
   getProps () {
-    return Object.entries(this).map(([key, value]) => {
+    return Object.entries(_.omit(this, ['props'])).map(([key, value]) => {
       return new Props({
         name: PropsNames.get(key),
         type: key.toString(),
         value
       })
     })
+  }
+
+  /**
+   * 同步配置
+   * @param commonConfig
+   */
+  syncSpecialProps (commonConfig) {
+    Object.assign(this, _.pick(commonConfig, SpecialProps))
+    this.props = this.getProps()
   }
 }

@@ -4,17 +4,17 @@
  * @time: 17:23
  */
 <template>
-  <div class="prop-control" v-if="option">
-    <p>{{ option.name }}:</p>
+  <div class="prop-control" v-if="prop.type">
+    <p>{{ prop.name }}:</p>
     <input
       type="text"
-      v-model.number="option.value"
+      v-model.number="prop.value"
       ref="input"
     />
     <div class="prop-control__part">
       <a-icon type="left-circle" @click="$emit('preTimePoint')" />
       <span
-        :class="[option.timelines.length > 0 ? 'prop-control__point prop-control__point--active' : 'prop-control__point']"
+        :class="[prop.timeline.length > 0 ? 'prop-control__point prop-control__point--active' : 'prop-control__point']"
         @click="$emit('toggleTimePoint')">
       </span>
       <a-icon type="right-circle" @click="$emit('nextTimePoint')" />
@@ -23,29 +23,42 @@
 </template>
 
 <script>
+import anime from 'animejs'
 import key from 'keymaster'
 import { fromEvent } from 'rxjs'
 import {
   takeWhile, tap, takeUntil, mergeMap,
   pairwise, map
 } from 'rxjs/operators'
+import { mapState, mapMutations, mapGetters } from 'vuex'
+import { ScreenMutations } from '@/store/modules/screen'
+
+const SpecialList = ['width', 'height', 'top', 'left']
 
 export default {
   name: 'PropControl',
   props: {
-    option: {
+    prop: {
       type: Object,
-      default: () => null
+      default: () => ({})
+    },
+    propIndex: {
+      type: Number,
+      default: 0
+    },
+    widgetIndex: {
+      type: Number,
+      default: 0
     }
-  },
-  model: {
-    prop: 'option',
-    event: 'change'
   },
   data () {
     return {
       isSubscribed: true
     }
+  },
+  computed: {
+    ...mapState('screen', ['activeWidget']),
+    ...mapGetters('screen', ['widgets', 'scale'])
   },
   mounted () {
     const inputDown$ = fromEvent(this.$refs.input, 'mousedown')
@@ -63,10 +76,31 @@ export default {
         map(([pre, cur]) => cur.pageX - pre.pageX > 0 ? 1 : -1)
       )
       .subscribe(value => {
-        const changeValue = +((this.option.value + value * (key.shift ? 1 : 0.1)).toFixed(1))
-        this.option.value = changeValue > 0 ? changeValue : 0
-        this.$emit('change', this.option)
+        const changeValue = +((this.prop.value + value * (key.shift ? 2 : 0.5)).toFixed(1))
+        this.prop.value = changeValue > 0 ? changeValue : 0
+        this.updateIndexWidget()
       })
+  },
+  methods: {
+    ...mapMutations('screen', {
+      updateWidget: ScreenMutations.UPDATE_WIDGET
+    }),
+    updateIndexWidget () {
+      const widget = this.widgets[this.widgetIndex]
+      if (SpecialList.includes(this.prop.type)) {
+        const { type, value } = this.prop
+        const targetProp = { [type]: value }
+        Object.assign(widget.animateProps, targetProp)
+        Object.assign(widget.config.commonConfig, targetProp)
+      }
+      widget.animateProps.props.splice(this.propIndex, 1, this.prop)
+      const widgetDom = document.getElementById(widget.widgetId)
+      const { type, value } = this.prop
+      anime.set(widgetDom, {
+        [type]: value
+      })
+      this.updateWidget({ index: this.widgetIndex, widget })
+    }
   },
   beforeDestroy () {
     this.isSubscribed = false
@@ -83,6 +117,7 @@ export default {
   height: 36px;
   box-sizing: border-box;
   padding: 0 12px;
+  color: #000000A6;
 
   p {
     flex: none;
@@ -101,6 +136,7 @@ export default {
     border-top: 1px solid transparent;
     border-bottom: 1px solid rgba(0, 0, 0, .12);
     margin: 0 8px;
+    background: transparent;
   }
 
   &__part {

@@ -138,7 +138,11 @@
 
       </pane>
       <pane min-size="25" size="35" class="timeline">
+
+        <!-- S 时间轴 -->
         <Timeline @select="(widget) => select$.next({ el: 'widget', widget })" ref="timeline" />
+        <!-- E 时间轴 -->
+
       </pane>
     </splitpanes>
 
@@ -327,6 +331,8 @@ export default {
           // 更新部件位置信息
           const widget = _.cloneDeep(this.activeWidget)
           Object.assign(widget.config.commonConfig, widgetPositionState)
+          // 更新动画配置中的属性
+          widget.animateProps.syncSpecialProps(widget.config.commonConfig)
           this.activateWidget({ widget })
           return
         }
