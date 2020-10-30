@@ -112,16 +112,16 @@ export default {
     initDragState () {
       const { width } = this.rect
       this.dragLeftState = {
-        x: 25,
-        y: 4
+        left: 24,
+        top: 4
       }
       this.dragRightState = {
-        x: width - 12,
-        y: 4
+        left: width - 12,
+        top: 4
       }
       this.dragCenterState = {
-        x: width - 18,
-        y: 4,
+        left: 18,
+        top: 4,
         width: width - 36
       }
     },
@@ -147,6 +147,7 @@ export default {
         startAngle: 0,
         endAngle: Math.PI,
         strokeWidth: 0,
+        borderColor: 'red',
         fill: 'rgba(0, 0, 0, .12)',
         angle: 90
       })
@@ -187,9 +188,22 @@ export default {
      */
     addDragBar () {
       const { width } = this.rect
+      const dragCenterRect = new fabric.Rect({
+        width: width - 36,
+        height: 12,
+        top: 4,
+        left: 18,
+        fill: 'white',
+        strokeWidth: 0,
+        lockMovementY: true,
+        hasControls: false,
+        hasBorders: true,
+        selection: false,
+        hoverCursor: 'move'
+      })
       const dragLeftHalfCircle = new fabric.Circle({
         radius: 6,
-        left: 25,
+        left: 24,
         top: 4,
         startAngle: 0,
         endAngle: Math.PI,
@@ -217,65 +231,61 @@ export default {
         selection: false,
         hoverCursor: 'e-resize'
       })
-      const dragCenterRect = new fabric.Rect({
-        width: width - 36,
-        height: 12,
-        top: 4,
-        left: 18,
-        fill: '#f6f6f6',
-        strokeWidth: 0,
-        lockMovementY: true,
-        hasControls: false,
-        hasBorders: false,
-        selection: false,
-        hoverCursor: 'move'
-      })
 
       dragLeftHalfCircle.on('moving', (event) => {
-        const { target } = event.transform
-        let left
-        if (target.left < 25) {
-          left = 25
-          dragLeftHalfCircle.lockMovementX = true
-          dragLeftHalfCircle.set({ left })
-        } else if (target.left >= 25 && target.left < this.dragRightState.x) {
-          left = target.left
-          dragCenterRect.set({ left: left - 6, width: this.dragRightState.x - left })
+        const { target: { left } } = event.transform
+        let currentLeft
+        if (left < 24) {
+          currentLeft = 24
+          dragLeftHalfCircle.set({
+            left: currentLeft,
+            lockMovementX: true
+          })
+        } else if (left >= 24 && left < this.dragRightState.left - 12) {
+          currentLeft = left
+          dragCenterRect.set({ left: left - 6, width: this.dragRightState.left - left })
         } else {
-          left = this.dragRightState.x
-          dragLeftHalfCircle.lockMovementX = true
-          dragLeftHalfCircle.set({ left })
+          currentLeft = this.dragRightState.left - 12
+          dragLeftHalfCircle.set({
+            left: currentLeft,
+            lockMovementX: true
+          })
         }
-        this.dragLeftState.x = left
-        this.canvas.renderAll()
+        this.dragLeftState.left = currentLeft
       })
 
-      dragLeftHalfCircle.on('mouseup', (event) => {
+      dragLeftHalfCircle.on('mouseup', () => {
         dragLeftHalfCircle.lockMovementX = false
-        this.dragCenterState.width = dragCenterRect.width
+        Object.assign(this.dragLeftState, dragLeftHalfCircle)
+        Object.assign(this.dragCenterState, dragCenterRect)
       })
 
       dragRightHalfCircle.on('moving', (event) => {
-        const { target } = event.transform
-        let left
-        if (target.left > this.rect.width - 12) {
-          left = this.rect.width - 12
-          dragRightHalfCircle.lockMovementX = true
-          dragRightHalfCircle.set({ left })
-        } else if (target.left < this.rect.width - 12 && target.left > this.dragLeftState.x + 6) {
-          left = target.left
-          dragCenterRect.set({ width: left - this.dragLeftState.x })
+        const { target: { left } } = event.transform
+        let currentLeft
+        if (left > this.rect.width - 12) {
+          currentLeft = this.rect.width - 12
+          dragRightHalfCircle.set({
+            left: currentLeft,
+            lockMovementX: true
+          })
+        } else if (left <= this.rect.width - 12 && left >= this.dragLeftState.left + 12) {
+          currentLeft = left
+          dragCenterRect.set({ width: left - this.dragLeftState.left })
         } else {
-          left = this.dragLeftState.x
-          dragRightHalfCircle.lockMovementX = true
-          dragRightHalfCircle.set({ left })
+          currentLeft = this.dragLeftState.left + 12
+          dragRightHalfCircle.set({
+            left: currentLeft,
+            lockMovementX: true
+          })
         }
-        this.dragRightState.x = left
+        this.dragRightState.left = currentLeft
       })
 
       dragRightHalfCircle.on('mouseup', (event) => {
         dragRightHalfCircle.lockMovementX = false
-        this.dragCenterState.width = dragCenterRect.width
+        Object.assign(this.dragRightState, dragRightHalfCircle)
+        Object.assign(this.dragCenterState, dragCenterRect)
       })
 
       dragCenterRect.on('moving', (event) => {
@@ -291,9 +301,9 @@ export default {
       })
 
       this.canvas.add(
+        dragCenterRect,
         dragLeftHalfCircle,
-        dragRightHalfCircle,
-        dragCenterRect
+        dragRightHalfCircle
       )
       this.canvas.renderAll()
     }
@@ -322,7 +332,6 @@ export default {
     })
     this.addDragGroove()
     this.addDragBar()
-    console.log(this.canvas.getObjects())
   },
   beforeDestroy () {
     this.isSubscribed = false
