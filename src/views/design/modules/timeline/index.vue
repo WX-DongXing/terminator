@@ -367,7 +367,7 @@ export default {
       this.canvas.renderAll()
     },
     /**
-     * 添加时间刻度
+     * 添加时间刻度条
      */
     addTimeScale () {
       const { width, height } = this.rect
@@ -394,7 +394,7 @@ export default {
         angle: 180
       })
 
-      const scaleDragLine = new fabric.Line([0, 0, 0, height], {
+      this.scaleDragLine = new fabric.Line([0, 0, 0, height], {
         strokeWidth: 1,
         left: 17.5,
         top: 38,
@@ -403,7 +403,7 @@ export default {
 
       const dragScaleGroup = new fabric.Group([
         scaleDragTriangle,
-        scaleDragLine
+        this.scaleDragLine
       ], {
         lockMovementY: true,
         hasControls: false,
@@ -422,7 +422,6 @@ export default {
         this.setScreenState({
           time: currentTime
         })
-        console.log(currentTime)
       })
 
       this.canvas.add(
@@ -568,7 +567,9 @@ export default {
     flex: none;
     height: 60px;
     box-sizing: border-box;
-    padding: 20px 12px 12px;
+    padding: 0 12px;
+    border-top: 20px solid #40a9ff;
+    border-bottom: 1px solid #D9D9D9;
 
     p {
       margin: 0;
