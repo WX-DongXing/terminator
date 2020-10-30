@@ -4,10 +4,28 @@
       <div class="timeline__title">
         <span>动画调度</span>
       </div>
-      <div class="timeline__time"></div>
+      <div class="timeline__time">
+        <span>{{ timeScale }}</span>
+      </div>
     </div>
     <div class="timeline__content">
       <div class="timeline__widgets" ref="widgets">
+        <div class="timeline__icons">
+          <a-icon
+            :type="isPlay ? 'pause-circle' : 'play-circle'"
+            :class="[isPlay && 'timeline__icons--active']"
+            @click="handlePlay"
+          />
+          <a-icon
+            type="rollback"
+            @click="handleRollBack"
+          />
+          <a-icon
+            type="retweet"
+            :class="[loop && 'timeline__icons--active']"
+            @click="handleLoop"
+          />
+        </div>
         <div
           class="timeline__widget"
           v-for="(widget, index) in widgets"
@@ -47,6 +65,7 @@
 </template>
 
 <script>
+import moment from 'moment'
 import { fromEvent, Subject, merge } from 'rxjs'
 import { fabric } from 'fabric'
 import { mapGetters, mapMutations, mapState } from 'vuex'
@@ -59,10 +78,16 @@ export default {
     PropControl
   },
   computed: {
-    ...mapState('screen', ['activeWidget', 'view']),
+    ...mapState('screen', [
+      'activeWidget', 'view', 'maxTime',
+      'time', 'startTime', 'endTime'
+    ]),
     ...mapGetters('screen', ['widgets']),
     activeWidgetId () {
       return this.activeWidget ? this.activeWidget.widgetId : null
+    },
+    timeScale () {
+      return moment(this.time).format('mm:ss:SS')
     }
   },
   data () {
@@ -74,18 +99,15 @@ export default {
       dragLeftState: null,
       dragRightState: null,
       dragCenterState: null,
-      option: {
-        name: 'Z方向位移',
-        value: 0,
-        type: 'width',
-        timelines: []
-      }
+      loop: false,
+      isPlay: false
     }
   },
   methods: {
     ...mapMutations('screen', {
       activateWidget: ScreenMutations.ACTIVATE_WIDGET,
-      updateWidget: ScreenMutations.UPDATE_WIDGET
+      updateWidget: ScreenMutations.UPDATE_WIDGET,
+      setScreenState: ScreenMutations.SET_SCREEN_STATE
     }),
     /**
      * 选择激活的部件
@@ -112,6 +134,26 @@ export default {
     panelResize (event) {
       this.panelResize$.next(event)
     },
+    /**
+     * 设置播放
+     */
+    handlePlay () {
+      this.isPlay = !this.isPlay
+    },
+    /**
+     * 设置刻度控制器归零
+     */
+    handleRollBack () {
+    },
+    /**
+     * 设置循环
+     */
+    handleLoop () {
+      this.loop = !this.loop
+    },
+    /**
+     * 初始化拖拽栏状态
+     */
     initDragState () {
       const { width } = this.rect
       this.dragLeftState = {
@@ -332,7 +374,7 @@ export default {
       // 刻度栏背景颜色
       const scaleRectBack = new fabric.Rect({
         width,
-        height: 42,
+        height: 40,
         top: 20,
         fill: 'rgba(0, 0, 0, .06)',
         selectable: false,
@@ -352,8 +394,6 @@ export default {
         angle: 180
       })
 
-      console.log(height)
-
       const scaleDragLine = new fabric.Line([0, 0, 0, height], {
         strokeWidth: 1,
         left: 17.5,
@@ -371,9 +411,70 @@ export default {
         selection: false
       })
 
+      dragScaleGroup.on('moving', (event) => {
+        const { target: { left } } = event.transform
+        let currentTime = (left - 12) * this.maxTime / (this.rect.width - 36)
+        if (currentTime <= 0) {
+          currentTime = 0
+        } else if (currentTime >= this.maxTime) {
+          currentTime = this.maxTime
+        }
+        this.setScreenState({
+          time: currentTime
+        })
+        console.log(currentTime)
+      })
+
       this.canvas.add(
         scaleRectBack,
         dragScaleGroup
+      )
+      this.canvas.renderAll()
+    },
+    /**
+     * 添加时间刻度文本
+     */
+    addTimeScaleText () {
+      const { width } = this.rect
+      const bottomLine = new fabric.Line([0, 0, width - 36, 0], {
+        strokeWidth: 1,
+        left: 18,
+        top: 59,
+        stroke: '#2c3e50',
+        hoverCursor: 'default',
+        selectable: false,
+        selection: false
+      })
+
+      const ticks = new Array(6).fill(null).map((_, index) => {
+        const left = (width - 36) / 5 * index
+        const position = { top: 54, left: left + 18 }
+        const textPosition = { top: 40, left: left + 12 }
+        return [
+          new fabric.Text(`${index * 2}s`, {
+            strokeWidth: 0,
+            fill: '#2c3e50',
+            hoverCursor: 'default',
+            selectable: false,
+            selection: false,
+            fontSize: 12,
+            fontFamily: 'Avenir", Helvetica, Arial, sans-serif',
+            ...textPosition
+          }),
+          new fabric.Line([0, 0, 0, 5], {
+            strokeWidth: 1,
+            stroke: '#2c3e50',
+            hoverCursor: 'default',
+            selectable: false,
+            selection: false,
+            ...position
+          })
+        ]
+      })
+
+      this.canvas.add(
+        bottomLine,
+        ...ticks.flat()
       )
       this.canvas.renderAll()
     }
@@ -403,6 +504,7 @@ export default {
     this.addDragGroove()
     this.addDragBar()
     this.addTimeScale()
+    this.addTimeScaleText()
   },
   beforeDestroy () {
     this.isSubscribed = false
@@ -445,12 +547,41 @@ export default {
     width: 100%;
     box-sizing: border-box;
     padding: 0 12px;
+
+    span {
+      font-size: 12px;
+      font-weight: normal;
+    }
   }
 
   &__content {
     height: 100%;
     width: 100%;
     overflow: auto;
+  }
+
+  &__icons {
+    display: flex;
+    flex-flow: row nowrap;
+    justify-content: space-between;
+    align-items: center;
+    flex: none;
+    height: 60px;
+    box-sizing: border-box;
+    padding: 20px 12px 12px;
+
+    p {
+      margin: 0;
+    }
+
+    i {
+      cursor: pointer;
+      font-size: 16px;
+    }
+
+    &--active {
+      color: #40a9ff;
+    }
   }
 
   &__widgets {
