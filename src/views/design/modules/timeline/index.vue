@@ -1,7 +1,10 @@
 <template>
   <div class="timeline">
     <div class="timeline__info">
-      <span>动画调度</span>
+      <div class="timeline__title">
+        <span>动画调度</span>
+      </div>
+      <div class="timeline__time"></div>
     </div>
     <div class="timeline__content">
       <div class="timeline__widgets" ref="widgets">
@@ -197,7 +200,7 @@ export default {
         strokeWidth: 0,
         lockMovementY: true,
         hasControls: false,
-        hasBorders: true,
+        hasBorders: false,
         selection: false,
         hoverCursor: 'move'
       })
@@ -289,12 +292,26 @@ export default {
       })
 
       dragCenterRect.on('moving', (event) => {
-        const { left, width } = dragCenterRect
-        dragLeftHalfCircle.set({ left: left + 6 })
-        dragRightHalfCircle.set({ left: left + width + 6 })
+        const { target: { left } } = event.transform
+        if (left < 18) {
+          dragCenterRect.set({
+            lockMovementX: true,
+            left: 18
+          })
+        }
+        if (this.dragCenterState.width + left > this.rect.width - 18) {
+          dragCenterRect.set({
+            lockMovementX: true,
+            left
+          })
+        }
+        const { left: rectLeft, width } = dragCenterRect
+        dragLeftHalfCircle.set({ left: rectLeft + 6 })
+        dragRightHalfCircle.set({ left: rectLeft + width + 6 })
       })
 
       dragCenterRect.on('mouseup', (event) => {
+        dragCenterRect.lockMovementX = false
         Object.assign(this.dragLeftState, dragLeftHalfCircle)
         Object.assign(this.dragRightState, dragRightHalfCircle)
         Object.assign(this.dragCenterState, dragCenterRect)
@@ -304,6 +321,59 @@ export default {
         dragCenterRect,
         dragLeftHalfCircle,
         dragRightHalfCircle
+      )
+      this.canvas.renderAll()
+    },
+    /**
+     * 添加时间刻度
+     */
+    addTimeScale () {
+      const { width, height } = this.rect
+      // 刻度栏背景颜色
+      const scaleRectBack = new fabric.Rect({
+        width,
+        height: 42,
+        top: 20,
+        fill: 'rgba(0, 0, 0, .06)',
+        selectable: false,
+        hoverCursor: 'default',
+        strokeWidth: 0,
+        selection: false
+      })
+
+      const scaleDragTriangle = new fabric.Triangle({
+        width: 12,
+        height: 12,
+        top: 32,
+        left: 18,
+        fill: '#40a9ff',
+        originX: 'center',
+        originY: 'center',
+        angle: 180
+      })
+
+      console.log(height)
+
+      const scaleDragLine = new fabric.Line([0, 0, 0, height], {
+        strokeWidth: 1,
+        left: 17.5,
+        top: 38,
+        stroke: '#40a9ff'
+      })
+
+      const dragScaleGroup = new fabric.Group([
+        scaleDragTriangle,
+        scaleDragLine
+      ], {
+        lockMovementY: true,
+        hasControls: false,
+        hasBorders: false,
+        selection: false
+      })
+
+      this.canvas.add(
+        scaleRectBack,
+        dragScaleGroup
       )
       this.canvas.renderAll()
     }
@@ -332,6 +402,7 @@ export default {
     })
     this.addDragGroove()
     this.addDragBar()
+    this.addTimeScale()
   },
   beforeDestroy () {
     this.isSubscribed = false
@@ -355,10 +426,25 @@ export default {
     flex: none;
     height: 43px;
     width: 100%;
-    box-sizing: border-box;
-    padding: 0 12px;
     border-bottom: 1px solid #D9D9D9;
     font-weight: bold;
+  }
+
+  &__title {
+    flex: none;
+    width: 260px;
+    box-sizing: border-box;
+    padding: 0 12px;
+  }
+
+  &__time {
+    display: flex;
+    flex-flow: row nowrap;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    box-sizing: border-box;
+    padding: 0 12px;
   }
 
   &__content {
