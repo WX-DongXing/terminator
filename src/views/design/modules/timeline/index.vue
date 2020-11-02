@@ -100,7 +100,8 @@ export default {
       dragRightState: null,
       dragCenterState: null,
       loop: false,
-      isPlay: false
+      isPlay: false,
+      groups: []
     }
   },
   methods: {
@@ -401,17 +402,18 @@ export default {
         stroke: '#40a9ff'
       })
 
-      const dragScaleGroup = new fabric.Group([
+      this.dragScaleGroup = new fabric.Group([
         scaleDragTriangle,
         this.scaleDragLine
       ], {
+        centeredRotation: false,
         lockMovementY: true,
         hasControls: false,
         hasBorders: false,
         selection: false
       })
 
-      dragScaleGroup.on('moving', (event) => {
+      this.dragScaleGroup.on('moving', (event) => {
         const { target: { left } } = event.transform
         let currentTime = (left - 12) * this.maxTime / (this.rect.width - 36)
         if (currentTime <= 0) {
@@ -426,8 +428,9 @@ export default {
 
       this.canvas.add(
         scaleRectBack,
-        dragScaleGroup
+        this.dragScaleGroup
       )
+      this.canvas.moveTo(this.dragScaleGroup, 1000)
       this.canvas.renderAll()
     },
     /**
@@ -476,6 +479,85 @@ export default {
         ...ticks.flat()
       )
       this.canvas.renderAll()
+    },
+    /**
+     * 添加点位条
+     * @param animateProps
+     * @param isExpanded
+     * @param index
+     */
+    addPointBar (animateProps, isExpanded, index) {
+      let group = this.groups[index]
+      let top = 60
+      const isExpandedList = this.widgets.map(widget => widget.config.isExpanded ? 1 : 0).slice(0, index)
+      if (isExpandedList.length > 0) {
+        top += isExpandedList.reduce((acc, cur) => {
+          const height = cur ? 15 * 36 + 40 : 40
+          acc += height
+          return acc
+        }, 0)
+      }
+      if (!group) {
+        const { width } = this.rect
+        const firstBar = new fabric.Rect({
+          top: 0,
+          width,
+          height: 40,
+          fill: 'white',
+          selectable: false,
+          hoverCursor: 'default',
+          strokeWidth: 0,
+          selection: false
+        })
+        const bars = animateProps.props.map((prop, index) => {
+          const line = new fabric.Line([0, 0, width, 0], {
+            strokeWidth: 1,
+            left: 0,
+            top: 0,
+            stroke: 'white',
+            selection: false
+          })
+          const rect = new fabric.Rect({
+            width,
+            height: 39,
+            top: 1,
+            fill: 'rgb(205, 205, 205)',
+            selectable: false,
+            hoverCursor: 'default',
+            strokeWidth: 0,
+            selection: false
+          })
+          return new fabric.Group([
+            line, rect
+          ], {
+            top: 40 + 36 * index,
+            selectable: false,
+            hoverCursor: 'default',
+            strokeWidth: 0,
+            selection: false,
+            visible: false
+          })
+        })
+
+        group = new fabric.Group([
+          firstBar,
+          ...bars
+        ], {
+          top,
+          left: 0,
+          hoverCursor: 'default',
+          selection: false,
+          selectable: false
+        })
+        this.groups.push(group)
+        this.canvas.add(group)
+      } else {
+        const [, ...bars] = group.getObjects()
+        group.set('top', top)
+        bars.forEach(bar => {
+          bar.set('visible', isExpanded)
+        })
+      }
     }
   },
   mounted () {
@@ -504,6 +586,13 @@ export default {
     this.addDragBar()
     this.addTimeScale()
     this.addTimeScaleText()
+  },
+  watch: {
+    widgets (v) {
+      v.forEach(({ animateProps, config: { isExpanded } }, index) => {
+        this.addPointBar(animateProps, isExpanded, index)
+      })
+    }
   },
   beforeDestroy () {
     this.isSubscribed = false
