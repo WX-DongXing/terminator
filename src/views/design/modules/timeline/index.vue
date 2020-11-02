@@ -52,6 +52,7 @@
                 :prop-index="i"
                 :widget-index="index"
                 :key="prop.type"
+                @recordTime="(prop) => handleRecordTime(prop, i, index)"
               />
             </div>
           </transition>
@@ -65,6 +66,7 @@
 </template>
 
 <script>
+import _ from 'lodash'
 import moment from 'moment'
 import { fromEvent, Subject, merge } from 'rxjs'
 import { fabric } from 'fabric'
@@ -151,6 +153,21 @@ export default {
      */
     handleLoop () {
       this.loop = !this.loop
+    },
+    /**
+     * 记录时间点位
+     */
+    handleRecordTime (prop, index, widgetIndex) {
+      const widget = this.widgets[widgetIndex]
+      const currentProps = _.cloneDeep(prop)
+      if (prop.timeline.length === 0) {
+        const initProp = { time: +this.time.toFixed(2), ..._.omit(currentProps, ['timeline']) }
+        currentProps.timeline.push(initProp)
+      } else {
+        currentProps.timeline = []
+      }
+      widget.animateProps.props.splice(index, 1, currentProps)
+      this.updateWidget({ index: widgetIndex, widget })
     },
     /**
      * 初始化拖拽栏状态

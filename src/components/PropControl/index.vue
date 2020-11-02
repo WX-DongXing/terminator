@@ -15,7 +15,7 @@
       <a-icon type="left-circle" @click="$emit('preTimePoint')" />
       <span
         :class="[prop.timeline.length > 0 ? 'prop-control__point prop-control__point--active' : 'prop-control__point']"
-        @click="$emit('toggleTimePoint')">
+        @click="$emit('recordTime', prop)">
       </span>
       <a-icon type="right-circle" @click="$emit('nextTimePoint')" />
     </div>
@@ -23,6 +23,7 @@
 </template>
 
 <script>
+import _ from 'lodash'
 import anime from 'animejs'
 import key from 'keymaster'
 import { fromEvent } from 'rxjs'
@@ -57,7 +58,7 @@ export default {
     }
   },
   computed: {
-    ...mapState('screen', ['activeWidget']),
+    ...mapState('screen', ['activeWidget', 'time']),
     ...mapGetters('screen', ['widgets', 'scale'])
   },
   mounted () {
@@ -86,6 +87,13 @@ export default {
       updateWidget: ScreenMutations.UPDATE_WIDGET
     }),
     updateIndexWidget () {
+      console.log(this.prop, +this.time.toFixed(2))
+      const index = this.prop.timeline.findIndex(item => item.time === +this.time.toFixed(2))
+      if (index !== -1) {
+        this.prop.timeline.splice(index, 1, Object.assign(this.prop.timeline[index], { value: this.prop.value }))
+      } else {
+        this.prop.timeline.push({ time: +this.time.toFixed(2), ..._.omit(this.prop, ['timeline']) })
+      }
       const widget = this.widgets[this.widgetIndex]
       if (SpecialList.includes(this.prop.type)) {
         const { type, value } = this.prop
