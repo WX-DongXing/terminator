@@ -544,8 +544,28 @@ export default {
             strokeWidth: 0,
             selection: false
           })
+          const points = new fabric.Group([
+            ...prop.timeline.map(item => {
+              return new fabric.Rect({
+                width: 8,
+                height: 8,
+                originX: 'center',
+                originY: 'center',
+                angle: 45,
+                xr: 3,
+                xy: 3,
+                top: 20,
+                left: (width - 36) / this.maxTime * item.time + 18,
+                fill: '#40a9ff',
+                lockMovementY: true,
+                hasControls: false,
+                hasBorders: false,
+                selection: false
+              })
+            })
+          ])
           return new fabric.Group([
-            line, rect
+            line, rect, points
           ], {
             top: 40 + 36 * index,
             selectable: false,
@@ -566,12 +586,40 @@ export default {
           selection: false,
           selectable: false
         })
-        this.groups.push(group)
         this.canvas.add(group)
+        this.groups.push(group)
       } else {
+        const { width } = this.rect
         const [, ...bars] = group.getObjects()
         group.set('top', top)
-        bars.forEach(bar => {
+        bars.forEach((bar, index) => {
+          const [,, points] = bar.getObjects()
+          const prop = animateProps.props[index]
+          if (prop.timeline.length > 0) {
+            points.getObjects().forEach(point => {
+              console.log('remove')
+              points.remove(point)
+            })
+            const pointItems = prop.timeline.map(item => {
+              return new fabric.Rect({
+                width: 8,
+                height: 8,
+                originX: 'center',
+                originY: 'center',
+                angle: 45,
+                top: 20,
+                left: (width - 36) / this.maxTime * item.time + 18,
+                fill: '#40a9ff',
+                lockMovementY: true,
+                hasControls: false,
+                hasBorders: false,
+                selection: false
+              })
+            })
+            pointItems.forEach(point => {
+              this.canvas.add(point)
+            })
+          }
           bar.set('visible', isExpanded)
         })
       }
