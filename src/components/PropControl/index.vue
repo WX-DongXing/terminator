@@ -87,7 +87,6 @@ export default {
       updateWidget: ScreenMutations.UPDATE_WIDGET
     }),
     updateIndexWidget () {
-      console.log(this.prop, +this.time.toFixed(2))
       const index = this.prop.timeline.findIndex(item => item.time === +this.time.toFixed(2))
       if (index !== -1) {
         this.prop.timeline.splice(index, 1, Object.assign(this.prop.timeline[index], { value: this.prop.value }))

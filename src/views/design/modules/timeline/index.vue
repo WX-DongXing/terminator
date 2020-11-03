@@ -447,7 +447,7 @@ export default {
         scaleRectBack,
         this.dragScaleGroup
       )
-      this.canvas.moveTo(this.dragScaleGroup, 1000)
+      this.canvas.bringToFront(this.dragScaleGroup)
       this.canvas.renderAll()
     },
     /**
@@ -691,6 +691,7 @@ export default {
       v.forEach(({ animateProps, config: { isExpanded } }, index) => {
         this.addPointBar(animateProps, isExpanded, index)
       })
+      this.canvas.bringToFront(this.dragScaleGroup)
     }
   },
   beforeDestroy () {
