@@ -499,9 +499,9 @@ export default {
     },
     /**
      * 添加点位条
-     * @param animateProps
-     * @param isExpanded
-     * @param index
+     * @param animateProps 动画属性
+     * @param isExpanded 是否展开
+     * @param index 部件index
      */
     addPointBar (animateProps, isExpanded, index) {
       let group = this.groups[index]
@@ -538,7 +538,7 @@ export default {
             width,
             height: 39,
             top: 1,
-            fill: 'rgb(205, 205, 205)',
+            fill: 'rgb(220,220,220)',
             selectable: false,
             hoverCursor: 'default',
             strokeWidth: 0,
@@ -600,6 +600,41 @@ export default {
         })
         const renderedPoints = this.canvas.getObjects().filter(item => Object.prototype.toString.call(item.stateProperties) === '[object Object]')
         this.canvas.remove(...renderedPoints)
+        // 统一标记点
+        const props = animateProps.props
+          .flatMap(prop => prop.timeline)
+          .reduce((acc, cur) => {
+            let target = cur
+            for (const item of acc) {
+              if (cur.time === item.time) {
+                target = null
+                break
+              }
+            }
+            target && acc.push(target)
+            return acc
+          }, [])
+        const headerPoints = props.map(prop => {
+          return new fabric.Rect({
+            width: 8,
+            height: 8,
+            originX: 'center',
+            originY: 'center',
+            angle: 45,
+            top: top + 20,
+            left: (width - 36) / this.maxTime * prop.time + 18,
+            fill: '#40a9ff',
+            lockMovementY: true,
+            hasControls: false,
+            hasBorders: false,
+            selection: false,
+            stateProperties: {
+              widgetId: this.widgets[index].widgetId,
+              ...prop
+            }
+          })
+        })
+        this.canvas.add(...headerPoints)
         const points = animateProps.props.flatMap((prop, i) => {
           return prop.timeline.map(item => new fabric.Rect({
             width: 8,
