@@ -95,7 +95,7 @@ export default {
         state.activeWidget = payload.widget
       }
       // 生成动画时间轴
-      state.activeWidget.generateTimeline()
+      state.activeWidget.generateTimeline && state.activeWidget.generateTimeline()
     },
     // 修改拓扑图可编辑状态
     [ScreenMutations.MODIFY_TOPOLOGY_EDITABLE_STATUS] (state, payload) {

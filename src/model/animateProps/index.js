@@ -29,7 +29,8 @@ const PropsNames = new Map([
   ['rotateY', 'Y方向旋转'],
   ['rotateZ', 'Z方向旋转'],
   ['skewX', 'X方向倾斜'],
-  ['skewY', 'Y方向倾斜']
+  ['skewY', 'Y方向倾斜'],
+  ['perspective', '透视距离']
 ])
 
 const SpecialProps = ['width', 'height', 'top', 'left']
@@ -50,7 +51,8 @@ export default class AnimateProps {
     rotateY = 0,
     rotateZ = 0,
     skewX = 0,
-    skewY = 0
+    skewY = 0,
+    perspective = 600
   }) {
     this.width = width
     this.height = height
@@ -67,6 +69,7 @@ export default class AnimateProps {
     this.rotateZ = rotateZ
     this.skewX = skewX
     this.skewY = skewY
+    this.perspective = perspective
     this.props = this.getProps()
   }
 

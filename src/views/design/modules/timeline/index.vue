@@ -58,6 +58,7 @@
           </transition>
         </div>
       </div>
+
       <div class="timeline__area" ref="area">
         <canvas id="board" />
       </div>
@@ -67,6 +68,7 @@
 
 <script>
 import _ from 'lodash'
+import anime from 'animejs'
 import moment from 'moment'
 import { fromEvent, Subject, merge } from 'rxjs'
 import { fabric } from 'fabric'
@@ -103,7 +105,8 @@ export default {
       dragCenterState: null,
       loop: false,
       isPlay: false,
-      groups: []
+      groups: [],
+      timer: null
     }
   },
   methods: {
@@ -143,10 +146,10 @@ export default {
     handlePlay () {
       this.isPlay = !this.isPlay
       if (this.isPlay) {
-        console.log('play')
+        this.timer.play()
         this.widgets.forEach(widget => widget.play())
       } else {
-        console.log('pause')
+        this.timer.pause()
         this.widgets.forEach(widget => widget.pause())
       }
     },
@@ -154,6 +157,8 @@ export default {
      * 设置刻度控制器归零
      */
     handleRollBack () {
+      this.timer.pause()
+      this.timer.seek(0)
       // 停止动画并设置为最初的状态
       if (this.widgets && this.widgets.length > 0) {
         this.widgets.forEach(widget => {
@@ -213,6 +218,24 @@ export default {
         top: 4,
         width: width - 36
       }
+    },
+    /**
+     * 初始化计时器
+     */
+    initTimer () {
+      this.timer = anime.timeline({
+        duration: this.maxTime || 10000,
+        easing: 'linear',
+        direction: 'normal',
+        loop: false,
+        autoplay: false,
+        update: (anim) => {
+          const left = (this.rect.width - 36) / 100 * anim.progress + 11.5
+          this.dragScaleGroup.set('left', left)
+          this.dragScaleGroup.setCoords()
+          this.canvas.renderAll()
+        }
+      }).add({ opacity: 0 })
     },
     /**
      * 添加拖动槽
@@ -689,7 +712,10 @@ export default {
     const { width } = this.$refs.area.getBoundingClientRect()
     this.rect = { height, width }
 
+    // 初始化拖拽状态
     this.initDragState()
+    // 初始化定时器
+    this.initTimer()
 
     merge(
       this.panelResize$.asObservable(),

@@ -42,7 +42,6 @@ export default class Widget {
    * 生成动画时间轴配置
    */
   generateTimeline () {
-    const arr = []
     this.animation = anime.timeline({
       targets: `#${this.widgetId}`,
       duration: store.state.screen.maxTime || 10000, // Can be inherited
@@ -55,10 +54,8 @@ export default class Widget {
     if (animatedProps && animatedProps.length > 0) {
       animatedProps.forEach(({ time, animateProp }) => {
         this.animation.add(animateProp, time)
-        arr.push({ animateProp, time })
       })
     }
-    console.log('animation: ', arr)
   }
 
   play () {
