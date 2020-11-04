@@ -10,6 +10,7 @@
       type="text"
       v-model.number="prop.value"
       ref="input"
+      @input="updateIndexWidget"
     />
     <div class="prop-control__part">
       <a-icon type="left-circle" @click="$emit('preTimePoint')" />
@@ -77,7 +78,7 @@ export default {
         map(([pre, cur]) => cur.pageX - pre.pageX > 0 ? 1 : -1)
       )
       .subscribe(value => {
-        const changeValue = +((this.prop.value + value * (key.shift ? 2 : 0.5)).toFixed(1))
+        const changeValue = +((this.prop.value + value * (key.shift ? 5 : 1)).toFixed(1))
         this.prop.value = changeValue > 0 ? changeValue : 0
         this.updateIndexWidget()
       })
@@ -87,11 +88,15 @@ export default {
       updateWidget: ScreenMutations.UPDATE_WIDGET
     }),
     updateIndexWidget () {
-      const index = this.prop.timeline.findIndex(item => item.time === +this.time.toFixed(2))
-      if (index !== -1) {
-        this.prop.timeline.splice(index, 1, Object.assign(this.prop.timeline[index], { value: this.prop.value }))
-      } else {
-        this.prop.timeline.push({ time: +this.time.toFixed(2), ..._.omit(this.prop, ['timeline']) })
+      // 如果当前时间轴不为空，那么表示已开启此属性的记录
+      if (this.prop.timeline && this.prop.timeline.length > 0) {
+        // 在当前时间轴中寻找与此刻时间相同的对象
+        const index = this.prop.timeline.findIndex(item => item.time === +this.time.toFixed(2))
+        if (index !== -1) {
+          this.prop.timeline.splice(index, 1, Object.assign(this.prop.timeline[index], { value: this.prop.value }))
+        } else {
+          this.prop.timeline.push({ time: +this.time.toFixed(2), ..._.omit(this.prop, ['timeline']) })
+        }
       }
       const widget = this.widgets[this.widgetIndex]
       if (SpecialList.includes(this.prop.type)) {

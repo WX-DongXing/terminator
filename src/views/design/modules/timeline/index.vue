@@ -52,7 +52,7 @@
                 :prop-index="i"
                 :widget-index="index"
                 :key="prop.type"
-                @recordTime="(prop) => handleRecordTime(prop, i, index)"
+                @recordTime="prop => handleRecordTime(prop, i, index)"
               />
             </div>
           </transition>
@@ -142,11 +142,33 @@ export default {
      */
     handlePlay () {
       this.isPlay = !this.isPlay
+      if (this.isPlay) {
+        console.log('play')
+        this.widgets.forEach(widget => widget.play())
+      } else {
+        console.log('pause')
+        this.widgets.forEach(widget => widget.pause())
+      }
     },
     /**
      * 设置刻度控制器归零
      */
     handleRollBack () {
+      // 停止动画并设置为最初的状态
+      if (this.widgets && this.widgets.length > 0) {
+        this.widgets.forEach(widget => {
+          widget.pause()
+          widget.seek(0)
+        })
+      }
+      this.dragScaleGroup.set('left', 11.5)
+      // 重新计算坐标
+      this.dragScaleGroup.setCoords()
+      this.canvas.renderAll()
+      this.setScreenState({
+        time: 0
+      })
+      this.isPlay = false
     },
     /**
      * 设置循环
@@ -161,8 +183,12 @@ export default {
       const widget = this.widgets[widgetIndex]
       const currentProps = _.cloneDeep(prop)
       if (prop.timeline.length === 0) {
-        const initProp = { time: +this.time.toFixed(2), ..._.omit(currentProps, ['timeline']) }
-        currentProps.timeline.push(initProp)
+        const initProp = { time: 0, ..._.omit(currentProps, ['timeline']) }
+        const secondProp = { time: +this.time.toFixed(2), ..._.omit(currentProps, ['timeline']) }
+        currentProps.timeline.push(...[
+          initProp,
+          secondProp
+        ])
       } else {
         currentProps.timeline = []
       }
@@ -307,6 +333,7 @@ export default {
         } else if (left >= 24 && left < this.dragRightState.left - 12) {
           currentLeft = left
           dragCenterRect.set({ left: left - 6, width: this.dragRightState.left - left })
+          dragCenterRect.setCoords()
         } else {
           currentLeft = this.dragRightState.left - 12
           dragLeftHalfCircle.set({
@@ -315,6 +342,7 @@ export default {
           })
         }
         this.dragLeftState.left = currentLeft
+        dragLeftHalfCircle.setCoords()
       })
 
       dragLeftHalfCircle.on('mouseup', () => {
@@ -335,6 +363,7 @@ export default {
         } else if (left <= this.rect.width - 12 && left >= this.dragLeftState.left + 12) {
           currentLeft = left
           dragCenterRect.set({ width: left - this.dragLeftState.left })
+          dragCenterRect.setCoords()
         } else {
           currentLeft = this.dragLeftState.left + 12
           dragRightHalfCircle.set({
@@ -343,6 +372,7 @@ export default {
           })
         }
         this.dragRightState.left = currentLeft
+        dragRightHalfCircle.setCoords()
       })
 
       dragRightHalfCircle.on('mouseup', (event) => {
@@ -368,6 +398,9 @@ export default {
         const { left: rectLeft, width } = dragCenterRect
         dragLeftHalfCircle.set({ left: rectLeft + 6 })
         dragRightHalfCircle.set({ left: rectLeft + width + 6 })
+        dragCenterRect.setCoords()
+        dragLeftHalfCircle.setCoords()
+        dragRightHalfCircle.setCoords()
       })
 
       dragCenterRect.on('mouseup', (event) => {
@@ -423,6 +456,7 @@ export default {
         scaleDragTriangle,
         this.scaleDragLine
       ], {
+        height: height + 24,
         centeredRotation: false,
         lockMovementY: true,
         hasControls: false,
@@ -441,6 +475,9 @@ export default {
         this.setScreenState({
           time: currentTime
         })
+        if (this.widgets && this.widgets.length > 0) {
+          this.widgets.forEach(widget => widget.seek(currentTime))
+        }
       })
 
       this.canvas.add(
@@ -600,20 +637,8 @@ export default {
         })
         const renderedPoints = this.canvas.getObjects().filter(item => Object.prototype.toString.call(item.stateProperties) === '[object Object]')
         this.canvas.remove(...renderedPoints)
-        // 统一标记点
-        const props = animateProps.props
-          .flatMap(prop => prop.timeline)
-          .reduce((acc, cur) => {
-            let target = cur
-            for (const item of acc) {
-              if (cur.time === item.time) {
-                target = null
-                break
-              }
-            }
-            target && acc.push(target)
-            return acc
-          }, [])
+        // 合并标记点
+        const props = animateProps.mergeProps()
         const headerPoints = props.map(prop => {
           return new fabric.Rect({
             width: 8,

@@ -7,8 +7,10 @@
 */
 import _ from 'lodash'
 import uuid from 'uuid/v4'
+import anime from 'animejs'
 import Config from '../config'
 import AnimateProps from '@/model/animateProps'
+import store from '@/store'
 
 export default class Widget {
   constructor ({
@@ -21,6 +23,7 @@ export default class Widget {
     this.config = new Config(config)
     this.animateProps = new AnimateProps({ ...config.commonConfig, ...animateProps })
     this.render = render
+    this.animation = null
   }
 
   /**
@@ -33,5 +36,44 @@ export default class Widget {
       widgetId,
       config: _.cloneDeep(config)
     }
+  }
+
+  /**
+   * 生成动画时间轴配置
+   */
+  generateTimeline () {
+    const arr = []
+    this.animation = anime.timeline({
+      targets: `#${this.widgetId}`,
+      duration: store.state.screen.maxTime || 10000, // Can be inherited
+      easing: 'linear', // Can be inherited
+      direction: 'normal', // Is not inherited
+      loop: false, // Is not inherited,
+      autoplay: false
+    })
+    const animatedProps = this.animateProps.flatProps()
+    if (animatedProps && animatedProps.length > 0) {
+      animatedProps.forEach(({ time, animateProp }) => {
+        this.animation.add(animateProp, time)
+        arr.push({ animateProp, time })
+      })
+    }
+    console.log('animation: ', arr)
+  }
+
+  play () {
+    this.animation && this.animation.play()
+  }
+
+  pause () {
+    this.animation && this.animation.pause()
+  }
+
+  restart () {
+    this.animation && this.animation.restart()
+  }
+
+  seek (timeStamp) {
+    this.animation && this.animation.seek(timeStamp || 1)
   }
 }

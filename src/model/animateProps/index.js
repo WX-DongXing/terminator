@@ -92,4 +92,42 @@ export default class AnimateProps {
     Object.assign(this, _.pick(commonConfig, SpecialProps))
     this.props = this.getProps()
   }
+
+  /**
+   * 合并动画属性
+   */
+  mergeProps () {
+    return this.props
+      .flatMap(prop => prop.timeline)
+      .reduce((acc, cur) => {
+        const collage = acc.find(item => item.time === cur.time)
+        if (collage) {
+          Object.assign(collage.propsObject, { [cur.type]: cur.value })
+        } else {
+          acc.push({ time: cur.time, propsObject: { [cur.type]: cur.value } })
+        }
+        return acc
+      }, [])
+  }
+
+  /**
+   * 打平动画属性
+   */
+  flatProps () {
+    return _.cloneDeep(this.props).map(prop => {
+      prop.timeline = prop.timeline.sort((a, b) => a.time - b.time)
+        .map(({ type, value, time }, index, timeline) => {
+          return {
+            time: index - 1 < 0 ? 0 : (index - 1 === 0 ? 1 : timeline[index - 1].time),
+            animateProp: {
+              [type]: value,
+              duration: index === 0
+                ? 1
+                : time - timeline[index - 1].time
+            }
+          }
+        })
+      return prop
+    }).flatMap(prop => prop.timeline)
+  }
 }
