@@ -35,7 +35,7 @@ export default {
   props: {
     widget: {
       type: Object,
-      default: () => ({})
+      default: () => new Widget()
     },
     onlyShow: {
       type: Boolean,
@@ -81,6 +81,13 @@ export default {
     // 如果在编辑状态，将渲染的元素更新至部件
     !this.onlyShow && this.activateWidget({
       widget: this.selectWidget
+    })
+
+    setTimeout(() => {
+      // 生成动画配置
+      Widget.prototype.generateTimeline.call(this.widget)
+      // 执行动画
+      this.widget.animation.play()
     })
   },
   methods: {

@@ -52,7 +52,8 @@ export default class AnimateProps {
     rotateZ = 0,
     skewX = 0,
     skewY = 0,
-    perspective = 600
+    perspective = 600,
+    props = null
   }) {
     this.width = width
     this.height = height
@@ -70,7 +71,7 @@ export default class AnimateProps {
     this.skewX = skewX
     this.skewY = skewY
     this.perspective = perspective
-    this.props = this.getProps()
+    this.props = props || this.getProps()
   }
 
   /**

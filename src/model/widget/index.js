@@ -31,10 +31,11 @@ export default class Widget {
    * @returns {*}
    */
   getOption () {
-    const { widgetId, config } = this
+    const { widgetId, config, animateProps } = this
     return {
       widgetId,
-      config: _.cloneDeep(config)
+      config: _.cloneDeep(config),
+      animateProps: _.cloneDeep(animateProps)
     }
   }
 

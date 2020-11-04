@@ -79,7 +79,7 @@ export default {
       )
       .subscribe(value => {
         const changeValue = +((this.prop.value + value * (key.shift ? 5 : 1)).toFixed(1))
-        this.prop.value = changeValue > 0 ? changeValue : 0
+        this.prop.value = changeValue
         this.updateIndexWidget()
       })
   },

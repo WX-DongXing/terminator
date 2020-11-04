@@ -137,7 +137,7 @@
         <!-- E 画板 -->
 
       </pane>
-      <pane min-size="25" size="80" class="timeline">
+      <pane min-size="25" size="45" class="timeline">
 
         <!-- S 时间轴 -->
         <Timeline @select="(widget) => select$.next({ el: 'widget', widget })" ref="timeline" />
