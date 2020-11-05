@@ -856,7 +856,7 @@ class ImageStyle {
     y = 0,
     width = 7127.6,
     height = 2890,
-    image = 'https://www.echartsjs.com/zh/images/asf_logo.svg'
+    image = 'https://echarts.apache.org/zh/images/asf_logo.svg'
   }) {
     this.x = x
     this.y = y

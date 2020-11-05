@@ -712,6 +712,7 @@ export default {
   0 1px 1px 0 rgba(0,0,0,.14), 0 1px 3px 0 rgba(0,0,0,.12);
   transform-origin: 0 0;
   overflow: hidden;
+  perspective: 1200px;
 }
 .timeline {
   background: white !important;

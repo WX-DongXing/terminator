@@ -80,7 +80,7 @@ export default {
       state.view.widgets.splice(index, 1, widget)
       widget.render.resize()
       // 部件生成动画时间轴
-      widget.generateTimeline()
+      widget.generateTimeline && widget.generateTimeline()
     },
     // 设置激活的部件，并修改widgets中的部件
     [ScreenMutations.ACTIVATE_WIDGET] (state, payload) {
@@ -95,7 +95,9 @@ export default {
         state.activeWidget = payload.widget
       }
       // 生成动画时间轴
-      state.activeWidget.generateTimeline && state.activeWidget.generateTimeline()
+      if (state.activeWidget && state.activeWidget.generateTimeline) {
+        state.activeWidget.generateTimeline()
+      }
     },
     // 修改拓扑图可编辑状态
     [ScreenMutations.MODIFY_TOPOLOGY_EDITABLE_STATUS] (state, payload) {

@@ -30,7 +30,7 @@ const PropsNames = new Map([
   ['rotateZ', 'Z方向旋转'],
   ['skewX', 'X方向倾斜'],
   ['skewY', 'Y方向倾斜'],
-  ['perspective', '透视距离']
+  ['opacity', '不透明度']
 ])
 
 const SpecialProps = ['width', 'height', 'top', 'left']
@@ -41,6 +41,7 @@ export default class AnimateProps {
     height = 0,
     top = 0,
     left = 0,
+    opacity = 1,
     scaleX = 1,
     scaleY = 1,
     scaleZ = 1,
@@ -52,13 +53,13 @@ export default class AnimateProps {
     rotateZ = 0,
     skewX = 0,
     skewY = 0,
-    perspective = 600,
     props = null
   }) {
     this.width = width
     this.height = height
     this.top = top
     this.left = left
+    this.opacity = opacity
     this.scaleX = scaleX
     this.scaleY = scaleY
     this.scaleZ = scaleZ
@@ -70,7 +71,6 @@ export default class AnimateProps {
     this.rotateZ = rotateZ
     this.skewX = skewX
     this.skewY = skewY
-    this.perspective = perspective
     this.props = props || this.getProps()
   }
 
@@ -127,7 +127,7 @@ export default class AnimateProps {
               [type]: value,
               duration: index === 0
                 ? 1
-                : time - timeline[index - 1].time
+                : (time - timeline[index - 1].time) || 1
             }
           }
         })

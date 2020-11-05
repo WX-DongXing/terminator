@@ -569,7 +569,7 @@ export default {
       const isExpandedList = this.widgets.map(widget => widget.config.isExpanded ? 1 : 0).slice(0, index)
       if (isExpandedList.length > 0) {
         top += isExpandedList.reduce((acc, cur) => {
-          const height = cur ? 15 * 36 + 40 : 40
+          const height = cur ? 16 * 36 + 40 : 40
           acc += height
           return acc
         }, 0)
@@ -580,7 +580,7 @@ export default {
           top: 0,
           width,
           height: 40,
-          fill: 'white',
+          fill: 'transparent',
           selectable: false,
           hoverCursor: 'default',
           strokeWidth: 0,
@@ -658,8 +658,6 @@ export default {
         bars.forEach(bar => {
           bar.set('visible', isExpanded)
         })
-        const renderedPoints = this.canvas.getObjects().filter(item => Object.prototype.toString.call(item.stateProperties) === '[object Object]')
-        this.canvas.remove(...renderedPoints)
         // 合并标记点
         const props = animateProps.mergeProps()
         const headerPoints = props.map(prop => {
@@ -683,6 +681,7 @@ export default {
           })
         })
         this.canvas.add(...headerPoints)
+
         const points = animateProps.props.flatMap((prop, i) => {
           return prop.timeline.map(item => new fabric.Rect({
             width: 8,
@@ -703,7 +702,9 @@ export default {
             }
           }))
         })
-        isExpanded && this.canvas.add(...points)
+        if (isExpanded) {
+          this.canvas.add(...points)
+        }
       }
     }
   },
@@ -739,6 +740,8 @@ export default {
   },
   watch: {
     widgets (v) {
+      const renderedPoints = this.canvas.getObjects().filter(item => Object.prototype.toString.call(item.stateProperties) === '[object Object]')
+      this.canvas.remove(...renderedPoints)
       v.forEach(({ animateProps, config: { isExpanded } }, index) => {
         this.addPointBar(animateProps, isExpanded, index)
       })
