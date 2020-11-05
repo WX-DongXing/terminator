@@ -579,8 +579,8 @@ export default {
         const firstBar = new fabric.Rect({
           top: 0,
           width,
-          height: 40,
-          fill: 'transparent',
+          height: 39,
+          fill: 'rgb(250,250,250)',
           selectable: false,
           hoverCursor: 'default',
           strokeWidth: 0,
@@ -615,7 +615,6 @@ export default {
             visible: false
           })
         })
-
         group = new fabric.Group([
           firstBar,
           ...bars
