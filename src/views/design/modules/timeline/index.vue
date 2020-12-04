@@ -6,6 +6,7 @@
       </div>
       <div class="timeline__time">
         <span>{{ timeScale }}</span>
+        <a-input v-model="maxTimeScale" size="small" />
       </div>
     </div>
     <div class="timeline__content">
@@ -92,6 +93,20 @@ export default {
     },
     timeScale () {
       return moment(this.time).format('mm:ss:SS')
+    },
+    maxTimeScale: {
+      get () {
+        return moment(this.maxTime).format('mm:ss:SS')
+      },
+      set (time) {
+        const pattern = /^([0-5][0-9]):([0-5][0-9]):([0-9][0-9])$/
+        if (pattern.test(time)) {
+          const [, mm, ss, SS] = time.match(pattern)
+          const maxTime = +mm * 60 * 1000 + +ss * 1000 + +SS * 10
+          this.timer.duration = maxTime
+          this.setMaxTime({ maxTime })
+        }
+      }
     }
   },
   data () {
@@ -113,7 +128,8 @@ export default {
     ...mapMutations('screen', {
       activateWidget: ScreenMutations.ACTIVATE_WIDGET,
       updateWidget: ScreenMutations.UPDATE_WIDGET,
-      setScreenState: ScreenMutations.SET_SCREEN_STATE
+      setScreenState: ScreenMutations.SET_SCREEN_STATE,
+      setMaxTime: ScreenMutations.SET_MAX_TIME
     }),
     /**
      * 选择激活的部件
@@ -234,6 +250,9 @@ export default {
           this.dragScaleGroup.set('left', left)
           this.dragScaleGroup.setCoords()
           this.canvas.renderAll()
+          this.setScreenState({
+            time: (+anim.progress.toFixed(1) / 100) * this.maxTime
+          })
         }
       }).add({ opacity: 0 })
     },
@@ -525,7 +544,7 @@ export default {
         selection: false
       })
 
-      const ticks = new Array(6).fill(null).map((_, index) => {
+      this.ticks = new Array(6).fill(null).map((_, index) => {
         const left = (width - 36) / 5 * index
         const position = { top: 54, left: left + 18 }
         const textPosition = { top: 40, left: left + 12 }
@@ -553,7 +572,7 @@ export default {
 
       this.canvas.add(
         bottomLine,
-        ...ticks.flat()
+        ...this.ticks.flat()
       )
       this.canvas.renderAll()
     },
@@ -745,6 +764,14 @@ export default {
         this.addPointBar(animateProps, isExpanded, index)
       })
       this.canvas.bringToFront(this.dragScaleGroup)
+    },
+    maxTimeScale () {
+      const unitWidth = this.rect.width / this.maxTime
+      const unitSecond = Math.floor(this.maxTime / 5000)
+      const remainWidth = this.rect.width - unitSecond * unitWidth * 5 * 1000
+      const realUnitWidth = unitSecond * 1000 * unitWidth
+      console.log(unitWidth, unitSecond, this.rect.width, remainWidth, realUnitWidth)
+      // this.canvas.remove(...this.ticks.flat())
     }
   },
   beforeDestroy () {
@@ -792,6 +819,10 @@ export default {
     span {
       font-size: 12px;
       font-weight: normal;
+    }
+
+    input {
+      width: 78px;
     }
   }
 

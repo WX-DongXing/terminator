@@ -18,7 +18,8 @@ export const ScreenMutations = {
   RESET_TOPOLOGY_STATE: 'RESET_TOPOLOGY_STATE[重置拓扑状态]',
   SET_EDGE_CONFIG: 'SET_EDGE_CONFIG[设置边配置]',
   UPDATE_TOPOLOGY_CONFIG: 'UPDATE_TOPOLOGY_CONFIG[更新拓扑节点配置]',
-  SET_SCREEN_STATE: 'SET_SCREEN_STATE[设置screen状态]'
+  SET_SCREEN_STATE: 'SET_SCREEN_STATE[设置screen状态]',
+  SET_MAX_TIME: 'SET_MAX_TIME[设置最大时间]'
 }
 
 export default {
@@ -132,6 +133,17 @@ export default {
     // 设置screen状态
     [ScreenMutations.SET_SCREEN_STATE] (state, payload) {
       Object.assign(state, payload)
+    },
+    // 设置最大
+    [ScreenMutations.SET_MAX_TIME] (state, payload) {
+      Object.assign(state, {
+        maxTime: payload.maxTime
+      })
+      state.view.widgets.forEach(widget => {
+        if (widget.animation) {
+          widget.animation.duration = payload.maxTime
+        }
+      })
     }
   },
   actions: {
