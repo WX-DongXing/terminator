@@ -32,3 +32,10 @@ $ yarn serve
 * 图标打包大小优化
 * 地图部件支持
 * 动态数据支持
+
+## 感谢
+
+<a href="https://www.jetbrains.com/?from=terminator" style="cursor: pointer">
+<img src="./docs/jetbrains.png" width="240" alt="">
+</a>
+
