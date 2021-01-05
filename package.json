@@ -14,7 +14,7 @@
     "ant-design-vue": "^1.5.1",
     "core-js": "^3.3.2",
     "echarts": "^4.4.0",
-    "lodash": "^4.17.15",
+    "lodash": "^4.17.19",
     "moment": "^2.24.0",
     "perfect-scrollbar": "^1.5.0",
     "rxjs": "^6.5.3",
