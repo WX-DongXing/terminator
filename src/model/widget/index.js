@@ -22,12 +22,13 @@ export default class Widget {
 
   /**
    * 获取部件配置
+   * @param param
    * @returns {*}
    */
-  getOption () {
+  getOption ({ mode }) {
     const { widgetId, config } = this
     return {
-      widgetId,
+      widgetId: mode && mode === 'preview' ? widgetId + '-preview' : widgetId,
       config: _.cloneDeep(config)
     }
   }

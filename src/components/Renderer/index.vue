@@ -112,8 +112,8 @@ export default {
 
 <style scoped lang="less">
 .renderer {
-  width: 100%;
-  height: 100%;
+  width: 100vw;
+  height: 100vh;
 
   &__content {
     width: 100%;

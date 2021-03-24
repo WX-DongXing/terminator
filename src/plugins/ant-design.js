@@ -3,7 +3,7 @@ import {
   Button, Tooltip, Slider, Switch, Icon,
   Input, Tabs, Select, Popconfirm, Collapse,
   Radio, Upload, Pagination, Tag, Dropdown, Menu,
-  message
+  Drawer, message
 } from 'ant-design-vue'
 import 'ant-design-vue/dist/antd.css'
 
@@ -23,5 +23,6 @@ Vue.use(Pagination)
 Vue.use(Tag)
 Vue.use(Dropdown)
 Vue.use(Menu)
+Vue.use(Drawer)
 
 Vue.prototype.$message = message

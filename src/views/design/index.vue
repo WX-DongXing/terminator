@@ -11,6 +11,7 @@
     <div class="header">
       <p>Terminator - 数据可视化设计器</p>
     </div>
+
     <div class="content">
       <transition name="panel">
         <div class="left" v-show="leftPanelExpand">
@@ -26,33 +27,62 @@
         </div>
       </transition>
     </div>
+
+    <a-drawer
+      title="预览"
+      placement="top"
+      height="100vh"
+      width="100vw"
+      destroy-on-close
+      :visible="visible"
+      :header-style="{ display: 'none' }"
+      :body-style="{ padding: 0 }"
+      @close="() => this.visible = false"
+    >
+      <Renderer :view="option" />
+    </a-drawer>
   </div>
 </template>
 
 <script>
+import { mapState } from 'vuex'
 import Screen from './modules/screen/index'
 import Template from './modules/template/index'
 import Config from './modules/config/index'
+import View from '@/model/view'
+import Renderer from '@/components/Renderer'
 
 export default {
   name: 'Design',
   components: {
     Screen,
     Template,
-    Config
+    Config,
+    Renderer
   },
   data: () => ({
     // 左区域展开
     leftPanelExpand: true,
     // 左区域展开
-    rightPanelExpand: true
+    rightPanelExpand: true,
+    // 是否显示预览
+    visible: false
   }),
+  computed: {
+    ...mapState('screen', ['view']),
+    option () {
+      return this.view instanceof View && this.view.getOption({ mode: 'preview' })
+    }
+  },
   methods: {
     leftPanelControl (control) {
       this.leftPanelExpand = control
     },
     rightPanelControl (control) {
       this.rightPanelExpand = control
+    },
+    preview () {
+      this.visible = true
     }
   }
 }

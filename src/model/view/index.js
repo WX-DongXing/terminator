@@ -54,15 +54,16 @@ export default class View {
 
   /**
    * 获取视图配置
+   * @param params
    * @returns {{widgets: *[], config: Config}}
    */
-  getOption () {
+  getOption (params) {
     const { id, name, config, widgets } = this
     return {
       id,
       name,
       config,
-      widgets: widgets.map(widget => widget.getOption())
+      widgets: widgets.map(widget => widget.getOption(params))
     }
   }
 }

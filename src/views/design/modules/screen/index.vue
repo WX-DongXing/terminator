@@ -85,14 +85,12 @@
               <a-button type="link" icon="save" @click="save" />
             </a-tooltip>
 
-            <router-link to="/preview">
-              <a-tooltip>
-                <template slot="title">
-                  预览
-                </template>
-                <a-button type="link" icon="eye" />
-              </a-tooltip>
-            </router-link>
+            <a-tooltip>
+              <template slot="title">
+                预览
+              </template>
+              <a-button type="link" icon="eye" @click="preview" />
+            </a-tooltip>
 
           </a-button-group>
         </div>
@@ -544,6 +542,12 @@ export default {
      */
     save () {
       this.viewOptions = this.view.getOption()
+    },
+    /**
+     * 预览
+     */
+    preview () {
+      this.$parent.preview()
     },
     /**
      * 导入视图配置
