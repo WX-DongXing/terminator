@@ -140,6 +140,13 @@
       </pane>
       <pane min-size="25" size="45" class="timeline">
 
+        <animation-timeline
+          :widgets="widgets"
+          :fields="fields"
+          @onSelect="handleSelect"
+          @onUpdate="handleUpdate"
+          ref="timeline" />
+
       </pane>
     </splitpanes>
 
@@ -208,7 +215,16 @@ export default {
     // 视图配置
     viewOption: null,
     // 视图信息
-    rect: null
+    rect: null,
+    // timeline 组件字段配置
+    fields: {
+      name: 'config.type',
+      key: 'widgetId',
+      width: 'config.commonConfig.width',
+      height: 'config.commonConfig.height',
+      top: 'config.commonConfig.top',
+      left: 'config.commonConfig.left'
+    }
   }),
   mounted () {
     const { platform } = navigator
@@ -377,11 +393,6 @@ export default {
       )
       .subscribe(_ => {
         console.log(this.widgets)
-        // anime.set(this.$refs.selector.$el, {
-        //   display: 'none',
-        //   width: 0,
-        //   height: 0
-        // })
       })
   },
   computed: {
@@ -394,10 +405,27 @@ export default {
       activateWidget: ScreenMutations.ACTIVATE_WIDGET
     }),
     /**
+     * 选中部件
+     */
+    handleSelect (widget) {
+      this.activateWidget({ widget })
+      // 选择器选中该部件
+      this.select$.next({ el: 'widget', widget })
+    },
+    /**
+     * timeline update
+     */
+    handleUpdate ({ transition, key }) {
+      this.activateWidget({ widget: { widgetId: key, transition } })
+      // 选择器选中该部件
+      this.select$.next({ el: 'widget', widget: this.activeWidget })
+    },
+    /**
      * 面板resize事件
      * @param event
      */
     panelResize (event) {
+      this.$refs.timeline.resize()
     },
     /**
      * 面板resized事件
@@ -548,6 +576,8 @@ export default {
      */
     preview () {
       this.$parent.preview()
+      // console.log(this.$animateParams)
+      // this.$animate.play()
     },
     /**
      * 导入视图配置

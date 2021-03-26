@@ -71,7 +71,7 @@ export default {
   computed: {
     ...mapState('screen', ['view']),
     option () {
-      return this.view instanceof View && this.view.getOption({ mode: 'preview' })
+      return this.view instanceof View && this.view.getOption()
     }
   },
   methods: {

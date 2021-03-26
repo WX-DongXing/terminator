@@ -13,11 +13,13 @@ export default class Widget {
   constructor ({
     widgetId = 'widget-' + uuid(),
     config = {},
-    render = null
+    render = null,
+    transition
   }) {
     this.widgetId = widgetId
     this.config = new Config(config)
     this.render = render
+    this.transition = transition
   }
 
   /**
@@ -26,9 +28,10 @@ export default class Widget {
    * @returns {*}
    */
   getOption ({ mode }) {
-    const { widgetId, config } = this
+    const { widgetId, config, transition } = this
     return {
-      widgetId: mode && mode === 'preview' ? widgetId + '-preview' : widgetId,
+      transition,
+      widgetId: (mode && mode === 'preview') ? widgetId + '-preview' : widgetId,
       config: _.cloneDeep(config)
     }
   }

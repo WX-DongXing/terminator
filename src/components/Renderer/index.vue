@@ -103,6 +103,10 @@ export default {
           scaleY: this.scale[1]
         })
       })
+
+    this.$nextTick(() => {
+      this.$animate.play()
+    })
   },
   beforeDestroy () {
     this.isSubscribed = false

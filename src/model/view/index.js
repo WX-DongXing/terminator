@@ -57,7 +57,7 @@ export default class View {
    * @param params
    * @returns {{widgets: *[], config: Config}}
    */
-  getOption (params) {
+  getOption (params = {}) {
     const { id, name, config, widgets } = this
     return {
       id,

@@ -261,7 +261,7 @@ export default {
      * 复制部件
      */
     copyWidget () {
-      const { config } = this.activeWidget
+      const { config, transition } = _.cloneDeep(this.activeWidget)
       const { commonConfig: { top, left, zIndex } } = config
       const copyConfig = _.cloneDeep(config)
       Object.assign(copyConfig.commonConfig, {
@@ -269,7 +269,7 @@ export default {
         left: left + 48,
         zIndex: zIndex + 1
       })
-      const copyWidget = new Widget({ config: copyConfig })
+      const copyWidget = new Widget({ config: copyConfig, transition })
       // 将复制的部件添加入部件列表中
       this.addWidget({ widget: copyWidget })
       // 选择器选中该部件
