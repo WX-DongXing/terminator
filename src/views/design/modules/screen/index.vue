@@ -402,23 +402,24 @@ export default {
   methods: {
     ...mapMutations('screen', {
       setView: ScreenMutations.SET_VIEW,
-      activateWidget: ScreenMutations.ACTIVATE_WIDGET
+      activateWidget: ScreenMutations.ACTIVATE_WIDGET,
+      updateTransition: ScreenMutations.UPDATE_TRANSITION
     }),
     /**
      * 选中部件
      */
     handleSelect (widget) {
-      this.activateWidget({ widget })
+      // this.activateWidget({ widget })
       // 选择器选中该部件
-      this.select$.next({ el: 'widget', widget })
+      // this.select$.next({ el: 'widget', widget })
     },
     /**
      * timeline update
      */
-    handleUpdate ({ transition, key }) {
-      this.activateWidget({ widget: { widgetId: key, transition } })
+    handleUpdate (option) {
+      this.updateTransition(option)
       // 选择器选中该部件
-      this.select$.next({ el: 'widget', widget: this.activeWidget })
+      // this.select$.next({ el: 'widget', widget: this.activeWidget })
     },
     /**
      * 面板resize事件

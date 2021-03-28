@@ -3,6 +3,7 @@ import Vuex from 'vuex'
 import anime from 'animejs'
 import _ from 'lodash'
 import Edge from '@/model/edges'
+import Widget from '@/model/widget'
 
 Vue.use(Vuex)
 
@@ -16,7 +17,8 @@ export const ScreenMutations = {
   ACTIVATE_EDGE: 'ACTIVATE_EDGE[设置激活的边]',
   RESET_TOPOLOGY_STATE: 'RESET_TOPOLOGY_STATE[重置拓扑状态]',
   SET_EDGE_CONFIG: 'SET_EDGE_CONFIG[设置边配置]',
-  UPDATE_TOPOLOGY_CONFIG: 'UPDATE_TOPOLOGY_CONFIG[更新拓扑节点配置]'
+  UPDATE_TOPOLOGY_CONFIG: 'UPDATE_TOPOLOGY_CONFIG[更新拓扑节点配置]',
+  UPDATE_TRANSITION: 'UPDATE_TRANSITION[更新动画配置]'
 }
 
 export default {
@@ -110,6 +112,21 @@ export default {
     // 设置边配置
     [ScreenMutations.SET_EDGE_CONFIG] (state, payload) {
       state.edgeConfig = payload.edgeConfig
+    },
+    // 更新动画配置
+    [ScreenMutations.UPDATE_TRANSITION] (state, payload) {
+      const { key, transition } = payload
+      const index = state.view.widgets.findIndex(widget => widget.widgetId === key)
+      if (~index) {
+        const { render, ...other } = state.view.widgets[index]
+        const widget = new Widget({
+          ..._.cloneDeep(other),
+          render,
+          transition
+        })
+        state.activeWidget = widget
+        state.view.widgets.splice(index, 1, widget)
+      }
     }
   },
   actions: {

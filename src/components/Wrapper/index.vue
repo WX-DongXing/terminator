@@ -269,7 +269,8 @@ export default {
         left: left + 48,
         zIndex: zIndex + 1
       })
-      const copyWidget = new Widget({ config: copyConfig, transition })
+      const copyWidget = new Widget({ config: copyConfig })
+      Object.assign(copyWidget, { transition: { ...transition, key: copyWidget.widgetId } })
       // 将复制的部件添加入部件列表中
       this.addWidget({ widget: copyWidget })
       // 选择器选中该部件

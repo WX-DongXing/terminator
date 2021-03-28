@@ -854,9 +854,9 @@ class ImageStyle {
   constructor ({
     x = 0,
     y = 0,
-    width = 7127.6,
-    height = 2890,
-    image = 'https://www.echartsjs.com/zh/images/asf_logo.svg'
+    width = 748,
+    height = 870,
+    image = 'https://cdn.jsdelivr.net/gh/apache/echarts-website@asf-site/zh/images/index-home-pie.png'
   }) {
     this.x = x
     this.y = y

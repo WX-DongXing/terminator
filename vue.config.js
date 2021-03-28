@@ -8,12 +8,10 @@ const devCDN = {
   },
   js: [
     {
-      url: 'https://cdnjs.cloudflare.com/ajax/libs/ace/1.4.9/ace.js',
-      sri: 'sha256-CvwZRDTGSAw2IQybkwEsxuHuo7SaVRIX+fofIG6G4Pk='
+      url: 'https://cdn.bootcdn.net/ajax/libs/ace/1.4.9/ace.js'
     },
     {
-      url: 'https://cdnjs.cloudflare.com/ajax/libs/ace/1.4.9/mode-json.min.js',
-      sri: 'sha256-oMH6MIx8AGl0OseaL8vGcdSb9ons1Jprkf4xXAyzvNc='
+      url: 'https://cdn.bootcdn.net/ajax/libs/ace/1.4.9/mode-json.min.js'
     }
   ]
 }
@@ -30,6 +28,7 @@ const prodCDN = {
     ace: 'ace'
   },
   prefetch: [
+    'https://cdn.bootcdn.net',
     'https://cdn.jsdelivr.net',
     'https://cdnjs.cloudflare.com',
     'https://gw.alipayobjects.com'
@@ -49,12 +48,10 @@ const prodCDN = {
       sri: 'sha256-FRU9P9NftDIPZJdSnb3SaUNLNoymsH+ZjSyknLfCstk='
     },
     {
-      url: 'https://cdnjs.cloudflare.com/ajax/libs/ace/1.4.9/ace.js',
-      sri: 'sha256-CvwZRDTGSAw2IQybkwEsxuHuo7SaVRIX+fofIG6G4Pk='
+      url: 'https://cdn.bootcdn.net/ajax/libs/ace/1.4.9/ace.js'
     },
     {
-      url: 'https://cdnjs.cloudflare.com/ajax/libs/ace/1.4.9/mode-json.min.js',
-      sri: 'sha256-oMH6MIx8AGl0OseaL8vGcdSb9ons1Jprkf4xXAyzvNc='
+      url: 'https://cdn.bootcdn.net/ajax/libs/ace/1.4.9/mode-json.min.js'
     },
     {
       url: 'https://cdn.jsdelivr.net/npm/echarts@4.7.0/dist/echarts.common.min.js',
@@ -78,7 +75,7 @@ module.exports = {
   },
   // 打包部署至github
   publicPath: process.env.NODE_ENV === 'production'
-    ? '/'
+    ? '/terminator'
     : '/',
   chainWebpack: config => {
     config.plugin('html').tap(args => {
