@@ -14,6 +14,7 @@
         v-if="view.widgets.length > 0"
         v-for="widget in view.widgets"
         :widget="widget"
+        v-transition="widget"
         :key="widget.widgetId"
         :ref="widget.widgetId"
         @select="() => $emit('change', { el: 'widget', widget })"
@@ -103,10 +104,6 @@ export default {
           scaleY: this.scale[1]
         })
       })
-
-    this.$nextTick(() => {
-      this.$animate.play()
-    })
   },
   beforeDestroy () {
     this.isSubscribed = false

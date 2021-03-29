@@ -29,9 +29,10 @@ export default class Widget {
    */
   getOption ({ mode }) {
     const { widgetId, config, transition } = this
+    const key = (mode && mode === 'preview') ? widgetId + '-preview' : widgetId
     return {
-      transition,
-      widgetId: (mode && mode === 'preview') ? widgetId + '-preview' : widgetId,
+      transition: { ...transition, key },
+      widgetId: key,
       config: _.cloneDeep(config)
     }
   }

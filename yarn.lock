@@ -9288,10 +9288,10 @@ vue-ace-editor-valid@^0.1.5:
     core-js "^3.6.4"
     vue "^2.6.11"
 
-vue-animation-timeline@^0.2.4:
-  version "0.2.4"
-  resolved "https://registry.npmjs.org/vue-animation-timeline/-/vue-animation-timeline-0.2.4.tgz#4ce3f127be6d03cba69b09dc2eb7ad079a77828b"
-  integrity sha512-grduUq0cRAJwBy+JMyiDgIw3xTSLWH/3j224Cwyk5x5YDxRPNvMnLpIGzaBOAyRLflnUX2YMIy40tg1Ee96S3w==
+vue-animation-timeline@^0.2.5:
+  version "0.2.5"
+  resolved "https://registry.npmjs.org/vue-animation-timeline/-/vue-animation-timeline-0.2.5.tgz#d676c888e7ccec301a5f6eae2a586b7ff31088a5"
+  integrity sha512-6Muv0ezH8UIC00FNEs2kaXj5eMQxT3sEdWuMpcVTZ8snt6CI5zuGOjE96HuM1x+lFWbEnrZtBoH5SMgM/jgtHQ==
   dependencies:
     "@antv/g-canvas" "^0.4.15"
     "@vue/composition-api" "^1.0.0-beta.20"
