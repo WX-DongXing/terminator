@@ -408,18 +408,18 @@ export default {
     /**
      * 选中部件
      */
-    handleSelect (widget) {
-      // this.activateWidget({ widget })
+    handleSelect (item) {
+      const widget = this.widgets.find(widget => widget.widgetId === item.widgetId)
+      // 激活部件
+      this.activateWidget({ widget })
       // 选择器选中该部件
-      // this.select$.next({ el: 'widget', widget })
+      this.select$.next({ el: 'widget', widget })
     },
     /**
      * timeline update
      */
     handleUpdate (option) {
       this.updateTransition(option)
-      // 选择器选中该部件
-      // this.select$.next({ el: 'widget', widget: this.activeWidget })
     },
     /**
      * 面板resize事件

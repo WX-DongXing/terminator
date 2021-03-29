@@ -27,10 +27,12 @@
         <a-menu slot="overlay" class="wrapper__menu">
           <a-menu-item key="1" class="wrapper__menu--primary" @click="copyWidget"><a-icon type="copy" />复制部件</a-menu-item>
           <a-menu-item key="2" class="wrapper__menu--primary" @click="copyConfig"><a-icon type="snippets" />复制配置</a-menu-item>
-          <a-menu-item key="3" :disabled="!isAllowAsync" :class="[isAllowAsync ? 'wrapper__menu--primary': '']" @click="syncConfig"><a-icon type="sync" />同步配置</a-menu-item>
-          <a-menu-item key="4" class="wrapper__menu--danger" @click="deleteWidget"><a-icon type="delete" />删除</a-menu-item>
+          <a-menu-item key="3" class="wrapper__menu--primary" @click="copyTransition"><a-icon type="thunderbolt" />复制动画</a-menu-item>
+          <a-menu-item key="4" :disabled="!isAllowAsync" :class="[isAllowAsync ? 'wrapper__menu--primary': '']" @click="syncConfig"><a-icon type="sync" />同步配置</a-menu-item>
+          <a-menu-item key="5" :disabled="!transition" :class="[transition ? 'wrapper__menu--primary': '']" @click="syncTransition"><a-icon type="sync" />同步动画</a-menu-item>
+          <a-menu-item key="6" class="wrapper__menu--danger" @click="deleteWidget"><a-icon type="delete" />删除</a-menu-item>
           <a-menu-divider />
-          <a-menu-item key="5"><a-icon type="close" />取消</a-menu-item>
+          <a-menu-item key="7"><a-icon type="close" />取消</a-menu-item>
         </a-menu>
       </a-dropdown>
     </div>
@@ -46,9 +48,11 @@ import {
   first
 } from 'rxjs/operators'
 import anime from 'animejs'
+import { mapMutations } from 'vuex'
 import AdjustMixins from './AdjustMixins'
 import Widget from '@/model/widget'
 import WrapperService from '@/components/Wrapper/WrapperService'
+import { ScreenMutations } from '@/store/modules/screen'
 
 export default {
   name: 'Wrapper',
@@ -56,6 +60,7 @@ export default {
     isSubscribed: true,
     originalState: null,
     config: null,
+    transition: null,
     wrapperService: new WrapperService()
   }),
   mixins: [AdjustMixins],
@@ -238,6 +243,9 @@ export default {
     }
   },
   methods: {
+    ...mapMutations('screen', {
+      updateTransition: ScreenMutations.UPDATE_TRANSITION
+    }),
     /**
      * 设置
      * @param display
@@ -283,6 +291,12 @@ export default {
       this.config = _.cloneDeep(this.activeWidget.config)
     },
     /**
+     * 复制动画配置
+     */
+    copyTransition () {
+      this.transition = _.cloneDeep(this.activeWidget.transition)
+    },
+    /**
      * 同步配置
      */
     syncConfig () {
@@ -300,6 +314,15 @@ export default {
       })
       this.$nextTick(() => {
         render.setConfig(this.config)
+      })
+    },
+    /**
+     * 同步动画
+     */
+    syncTransition () {
+      this.updateTransition({
+        key: this.activeWidget.widgetId,
+        transition: Object.assign(this.transition, { key: this.activeWidget.widgetId })
       })
     },
     /**
