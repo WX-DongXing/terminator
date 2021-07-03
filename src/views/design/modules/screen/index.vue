@@ -82,7 +82,12 @@
               <template slot="title">
                 保存
               </template>
-              <a-button type="link" icon="save" @click="save" />
+              <a-popconfirm placement="top" ok-text="保存" cancel-text="取消" @confirm="save">
+                <template slot="title">
+                  <a-input placeholder="应用名称" v-model="appName" />
+                </template>
+                <a-button type="link" icon="save" />
+              </a-popconfirm>
             </a-tooltip>
 
             <a-tooltip>
@@ -91,6 +96,8 @@
               </template>
               <a-button type="link" icon="eye" @click="preview" />
             </a-tooltip>
+
+            <a-button type="link" @click="() => $refs.app.open()">应用列表</a-button>
 
           </a-button-group>
         </div>
@@ -102,6 +109,10 @@
         <a-button v-else type="link" icon="setting">配置</a-button>
       </div>
     </div>
+
+    <!-- S 应用列表弹框 -->
+    <APPModal ref="app"/>
+    <!-- E 应用列表弹框 -->
 
     <splitpanes class="split" horizontal @resize="panelResize" @resized="panelResized">
       <pane class="page">
@@ -157,6 +168,7 @@
 import _ from 'lodash'
 import anime from 'animejs'
 import PerfectScrollbar from 'perfect-scrollbar'
+import Fingerprint from '@fingerprintjs/fingerprintjs'
 import {
   fromEvent, merge, Subject, zip
 } from 'rxjs'
@@ -169,6 +181,7 @@ import { mapState, mapGetters, mapMutations } from 'vuex'
 import { Splitpanes, Pane } from 'splitpanes'
 import { ScreenMutations } from '@/store/modules/screen'
 import { downloadFile } from '@/utils'
+import { saveApp } from '@/services'
 import View from '@/model/view'
 import WidgetModel from '@/model/widget'
 import ViewService from '../config/view'
@@ -177,6 +190,7 @@ import Selector from '@/components/Selector'
 import Widget from '@/components/Widget'
 import AdjustMixins from '@/components/Wrapper/AdjustMixins'
 import WrapperService from '@/components/Wrapper/WrapperService'
+import APPModal from '@/components/APPModal'
 import 'perfect-scrollbar/css/perfect-scrollbar.css'
 import 'splitpanes/dist/splitpanes.css'
 
@@ -187,7 +201,8 @@ export default {
     Widget,
     Selector,
     Splitpanes,
-    Pane
+    Pane,
+    APPModal
   },
   mixins: [AdjustMixins],
   // 选择器调整事件流
@@ -224,8 +239,15 @@ export default {
       height: 'config.commonConfig.height',
       top: 'config.commonConfig.top',
       left: 'config.commonConfig.left'
-    }
+    },
+    appName: '未命名应用'
   }),
+  async created () {
+    const fpPromise = Fingerprint.load()
+    const fp = await fpPromise
+    const finger = await fp.get()
+    this.setVisitorId(finger)
+  },
   mounted () {
     const { platform } = navigator
     // 如果是 windows 平台，美化滚动条
@@ -397,13 +419,14 @@ export default {
   },
   computed: {
     ...mapState('screen', ['view', 'activeWidget', 'topologyEditable']),
-    ...mapGetters('screen', ['widgets'])
+    ...mapGetters('screen', ['widgets', 'visitorId'])
   },
   methods: {
     ...mapMutations('screen', {
       setView: ScreenMutations.SET_VIEW,
       activateWidget: ScreenMutations.ACTIVATE_WIDGET,
-      updateTransition: ScreenMutations.UPDATE_TRANSITION
+      updateTransition: ScreenMutations.UPDATE_TRANSITION,
+      setVisitorId: ScreenMutations.SET_VISITOR_ID
     }),
     /**
      * 选中部件
@@ -569,16 +592,25 @@ export default {
     /**
      * 保存视图配置
      */
-    save () {
-      this.viewOptions = this.view.getOption()
+    async save () {
+      try {
+        const setting = this.view.getOption()
+        if (!this.appName) {
+          this.$message.error('保存失败，请命名应用！')
+          return
+        }
+        const { appName: name, visitorId } = this
+        await saveApp({ name, visitorId, setting })
+        this.$message.success('已保存！')
+      } catch (e) {
+        this.$message.error(e)
+      }
     },
     /**
      * 预览
      */
     preview () {
       this.$parent.preview()
-      // console.log(this.$animateParams)
-      // this.$animate.play()
     },
     /**
      * 导入视图配置

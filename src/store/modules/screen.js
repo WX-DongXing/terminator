@@ -18,7 +18,8 @@ export const ScreenMutations = {
   RESET_TOPOLOGY_STATE: 'RESET_TOPOLOGY_STATE[重置拓扑状态]',
   SET_EDGE_CONFIG: 'SET_EDGE_CONFIG[设置边配置]',
   UPDATE_TOPOLOGY_CONFIG: 'UPDATE_TOPOLOGY_CONFIG[更新拓扑节点配置]',
-  UPDATE_TRANSITION: 'UPDATE_TRANSITION[更新动画配置]'
+  UPDATE_TRANSITION: 'UPDATE_TRANSITION[更新动画配置]',
+  SET_VISITOR_ID: 'SET_VISITOR_ID[设置参观者id]'
 }
 
 export default {
@@ -39,7 +40,9 @@ export default {
     // 激活的拓扑边
     activeEdge: null,
     // 边配置
-    edgeConfig: new Edge({})
+    edgeConfig: new Edge({}),
+    // 参观者id
+    visitorId: ''
   },
   getters: {
     // 视图中所有部件对象
@@ -49,6 +52,10 @@ export default {
     // 画板缩放比例
     scale (state) {
       return state.view.scale || 1
+    },
+    // 参观者id
+    visitorId (state) {
+      return state.visitorId
     }
   },
   mutations: {
@@ -127,6 +134,10 @@ export default {
         state.activeWidget = widget
         state.view.widgets.splice(index, 1, widget)
       }
+    },
+    // 设置参观者id
+    [ScreenMutations.SET_VISITOR_ID] (state, payload) {
+      state.visitorId = payload.visitorId
     }
   },
   actions: {
