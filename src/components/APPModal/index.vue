@@ -27,7 +27,7 @@
 
 <script>
 import moment from 'moment'
-import { mapGetters, mapMutations } from 'vuex'
+import { mapGetters, mapMutations, mapState } from 'vuex'
 import { ScreenMutations } from '@/store/modules/screen'
 import WidgetModel from '@/model/widget'
 import View from '@/model/view'
@@ -78,9 +78,8 @@ export default {
     }
   },
   computed: {
-    ...mapGetters('screen', [
-      'visitorId'
-    ])
+    ...mapState('screen', ['view']),
+    ...mapGetters('screen', ['visitorId'])
   },
   methods: {
     ...mapMutations('screen', {
@@ -125,7 +124,12 @@ export default {
     handleOpen ({ setting }) {
       this.visible = false
       setting.widgets = setting.widgets.map(config => new WidgetModel(config))
-      this.setView({ view: new View(setting) })
+      this.setView({
+        view: new View({
+          ...this.view,
+          ...setting
+        })
+      })
     }
   },
   watch: {
