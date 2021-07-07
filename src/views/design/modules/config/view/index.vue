@@ -186,10 +186,12 @@
           <div class="comment-template__item">
             <p class="comment-template__leading">尺寸:</p>
             <div class="comment-template__inner">
-              <a-input
-                type="number"
-                v-model.number="gridSize"
-                @change="handleChangeGridSize" />
+              <a-slider
+                @change="handleChangeGridSize"
+                :min="0"
+                :max="100"
+                :step="5"
+                v-model.number="gridSize"/>
             </div>
           </div>
           <!-- / 高 -->
