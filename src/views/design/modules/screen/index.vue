@@ -126,6 +126,7 @@
           <!-- / 标尺 -->
 
           <div ref="view" class="view">
+            <div :class="['grid', { 'grid-show': isGrid }]"></div>
 
             <Widget
               v-for="widget in widgets"
@@ -418,7 +419,7 @@ export default {
       })
   },
   computed: {
-    ...mapState('screen', ['view', 'activeWidget', 'topologyEditable']),
+    ...mapState('screen', ['view', 'activeWidget', 'topologyEditable', 'isGrid']),
     ...mapGetters('screen', ['widgets', 'visitorId'])
   },
   methods: {
@@ -822,4 +823,30 @@ export default {
   transform-origin: 0 0;
   overflow: hidden;
 }
+
+</style>
+
+<style>
+:root {
+  --grid-color: rgba(0, 0, 0, .18);
+  --grid-size: 20px;
+}
+
+.grid {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: transparent;
+  pointer-events: none;
+}
+
+.grid-show {
+   background-image: linear-gradient(var(--grid-color) 1px, transparent 1px),
+   linear-gradient(90deg, var(--grid-color) 1px, transparent 1px);
+   background-size: var(--grid-size) var(--grid-size), var(--grid-size) var(--grid-size), var(--grid-size) var(--grid-size), var(--grid-size) var(--grid-size);
+   background-position:-2px -2px, -2px -2px, -1px -1px, -1px -1px;
+}
+
 </style>

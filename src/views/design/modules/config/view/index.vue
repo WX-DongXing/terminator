@@ -172,6 +172,31 @@
         </a-collapse-panel>
         <!-- E 屏幕截图 -->
 
+        <!-- S 网格 -->
+        <a-collapse-panel header="网格" key="5">
+
+          <div class="comment-template__item">
+            <p class="comment-template__leading">网格:</p>
+            <div class="comment-template__inner comment-template__end">
+              <a-switch size="small" checked-children="开" un-checked-children="关" v-model="isGrid" @change="handleSwitch" />
+            </div>
+          </div>
+          <!-- / 宽 -->
+
+          <div class="comment-template__item">
+            <p class="comment-template__leading">尺寸:</p>
+            <div class="comment-template__inner">
+              <a-input
+                type="number"
+                v-model.number="gridSize"
+                @change="handleChangeGridSize" />
+            </div>
+          </div>
+          <!-- / 高 -->
+
+        </a-collapse-panel>
+        <!-- E 网格 -->
+
       </a-collapse>
 
     </div>
@@ -203,8 +228,10 @@ export default {
       end: 'rgba(0, 0, 0, 1)',
       angle: 180
     },
-    activeKey: [1, 2, 3, 4],
-    viewService: new ViewService()
+    activeKey: [1, 2, 3, 4, 5],
+    viewService: new ViewService(),
+    isGrid: false,
+    gridSize: 20
   }),
   mounted () {
     // Todo 之后连接数据库后，做成上传，暂时将以本地 base64 图片储存，图片质量太大但是会有很大的性能问题
@@ -233,7 +260,8 @@ export default {
   },
   methods: {
     ...mapMutations('screen', {
-      setView: ScreenMutations.SET_VIEW
+      setView: ScreenMutations.SET_VIEW,
+      updateState: ScreenMutations.UPDATE_STATE
     }),
     /**
      * 单一颜色更改
@@ -260,6 +288,19 @@ export default {
         Object.assign(this.config.proprietaryConfig, { backgroundColor })
       }
       this.change()
+    },
+    /**
+     * 开启网格
+     */
+    handleSwitch () {
+      this.updateState({ isGrid: this.isGrid })
+    },
+    /**
+     * 修改网格尺寸
+     */
+    handleChangeGridSize () {
+      document.documentElement.style.setProperty('--grid-size', `${this.gridSize}px`)
+      this.updateState({ gridSize: this.gridSize })
     },
     change () {
       this.setView({

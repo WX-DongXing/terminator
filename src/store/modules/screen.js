@@ -19,7 +19,8 @@ export const ScreenMutations = {
   SET_EDGE_CONFIG: 'SET_EDGE_CONFIG[设置边配置]',
   UPDATE_TOPOLOGY_CONFIG: 'UPDATE_TOPOLOGY_CONFIG[更新拓扑节点配置]',
   UPDATE_TRANSITION: 'UPDATE_TRANSITION[更新动画配置]',
-  SET_VISITOR_ID: 'SET_VISITOR_ID[设置参观者id]'
+  SET_VISITOR_ID: 'SET_VISITOR_ID[设置参观者id]',
+  UPDATE_STATE: 'UPDATE_STATE[更新state]'
 }
 
 export default {
@@ -42,7 +43,11 @@ export default {
     // 边配置
     edgeConfig: new Edge({}),
     // 参观者id
-    visitorId: ''
+    visitorId: '',
+    // 是否为网格布局
+    isGrid: false,
+    // 网格尺寸
+    gridSize: 20
   },
   getters: {
     // 视图中所有部件对象
@@ -138,6 +143,10 @@ export default {
     // 设置参观者id
     [ScreenMutations.SET_VISITOR_ID] (state, payload) {
       state.visitorId = payload.visitorId
+    },
+    // 更新state值
+    [ScreenMutations.UPDATE_STATE] (state, payload) {
+      Object.assign(state, payload)
     }
   },
   actions: {
