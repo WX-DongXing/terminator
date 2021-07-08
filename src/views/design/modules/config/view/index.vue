@@ -187,11 +187,12 @@
             <p class="comment-template__leading">尺寸:</p>
             <div class="comment-template__inner">
               <a-slider
-                @change="handleChangeGridSize"
                 :min="0"
                 :max="100"
-                :step="5"
-                v-model.number="gridSize"/>
+                :step="2"
+                v-model.number="gridSize"
+                @change="handleChangeGridSize"
+              />
             </div>
           </div>
           <!-- / 高 -->

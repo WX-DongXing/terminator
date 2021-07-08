@@ -67,6 +67,8 @@ export default {
     cloneNode: null,
     xDistance: 0,
     yDistance: 0,
+    xOffset: 0,
+    yOffset: 0,
     viewUp$: null,
     templates: TEMPLATES,
     nodes: NODES,
@@ -84,7 +86,7 @@ export default {
     this.documentUp$ = fromEvent(document, 'mouseup')
   },
   computed: {
-    ...mapState('screen', ['view', 'activeWidget', 'topologyEditable']),
+    ...mapState('screen', ['view', 'activeWidget', 'topologyEditable', 'isGrid', 'gridSize']),
     ...mapGetters('screen', ['widgets', 'scale'])
   },
   mounted () {
@@ -98,10 +100,15 @@ export default {
         filter(() => !this.topologyEditable),
         tap(({ event }) => {
           this.cloneTemplate = event.target.cloneNode(true)
+          const { rect, parent } = this.view
           const { x, y } = event.target.getBoundingClientRect()
           const { pageX, pageY } = event
-          this.xDistance = Math.abs(pageX - x)
-          this.yDistance = Math.abs(pageY - y)
+          Object.assign(this, {
+            xDistance: Math.abs(pageX - x),
+            yDistance: Math.abs(pageY - y),
+            yOffset: parent.scrollTop - rect.y,
+            xOffset: parent.scrollLeft - rect.x
+          })
           anime.set(this.cloneTemplate, {
             position: 'fixed',
             margin: 0,
@@ -118,12 +125,33 @@ export default {
         tap(({ event, data }) => {
           const { pageX, pageY } = event
           const { width, height } = data
-          // 设置克隆节点的位置
-          anime.set(this.cloneTemplate, {
-            transformOrigin: '0 0',
-            top: pageY - this.yDistance,
-            left: pageX - this.xDistance
-          })
+          const top = pageY - this.yDistance
+          const left = pageX - this.xDistance
+          const primaryTop = top + this.yOffset
+          const primaryLeft = left + this.xOffset
+
+          if (this.isGrid && this.isWithinScope(event)) {
+            const uintSize = this.gridSize * this.scale
+            const xCount = Math.floor(primaryLeft / uintSize)
+            const yCount = Math.floor(primaryTop / uintSize)
+
+            // 设置克隆节点的位置
+            anime.set(this.cloneTemplate, {
+              transformOrigin: '0 0',
+              top: yCount * uintSize - this.yOffset,
+              left: xCount * uintSize - this.xOffset
+            })
+          }
+
+          if (!this.isGrid || !this.isWithinScope(event)) {
+            // 设置克隆节点的位置
+            anime.set(this.cloneTemplate, {
+              transformOrigin: '0 0',
+              top,
+              left
+            })
+          }
+
           // 设置克隆节点在视图区域的动画效果
           anime({
             targets: this.cloneTemplate,

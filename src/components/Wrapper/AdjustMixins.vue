@@ -19,7 +19,7 @@ export default {
     height: 0
   }),
   computed: {
-    ...mapState('screen', ['view', 'activeWidget'])
+    ...mapState('screen', ['view', 'activeWidget', 'isGrid', 'gridSize'])
   },
   methods: {
     ...mapMutations('screen', {
@@ -45,10 +45,19 @@ export default {
       } = originalState
       switch (eventType) {
         case 'MOVE':
-          anime.set(target, {
-            top: top + position.top / scale,
-            left: left + position.left / scale
-          })
+          if (this.isGrid) {
+            const yCount = Math.floor((top + position.top / scale) / this.gridSize)
+            const xCount = Math.floor((left + position.left / scale) / this.gridSize)
+            anime.set(target, {
+              top: yCount * this.gridSize,
+              left: xCount * this.gridSize
+            })
+          } else {
+            anime.set(target, {
+              top: top + position.top / scale,
+              left: left + position.left / scale
+            })
+          }
           break
         case 'SINGLE':
           switch (type) {
